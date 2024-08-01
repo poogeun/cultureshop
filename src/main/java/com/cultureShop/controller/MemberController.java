@@ -21,13 +21,13 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping(value = "/new")
-    public String memberForm(Model model) {
+    public String memberForm(Model model){
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "member/memberForm";
     }
 
     @PostMapping(value = "/new")
-    public String memberForm(@Valid MemberFormDto memberFormDto) {
+    public String memberForm(@Valid MemberFormDto memberFormDto){
         Member member = Member.createMember(memberFormDto, passwordEncoder);
         memberService.saveMember(member);
         return "redirect:/";
