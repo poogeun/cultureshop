@@ -17,7 +17,14 @@
             var errorMessage = [[${errorMessage}]];
             if(errorMessage != null){
                 alert(errorMessage);
-                }
+            }
+        });
+
+        var checkbox = $('#checkYn');
+        $('form').on('submit', function() {
+            if (!checkbox.is(':checked')) {
+                checkbox.val('N');
+            }
         });
     </script>
 </th:block>
@@ -53,6 +60,12 @@
             <label th:for="tel">전화번호</label>
             <input type="text" th:field="*{tel}" class="form-control" placeholder="전화번호를 입력해주세요.">
             <p th:if="${#fields.hasErrors('tel')}" th:errors="*{tel}" class="fieldError">Incorrect date</p>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" th:field="*{checkYn}" id="checkYn" value="Y" name="checkYn">
+            <label class="form-check-label" for="checkYn">
+                개인정보수집 및 이용동의(필수)
+            </label>
         </div>
         <div style="text-align: center">
             <button type="submit" class="btn btn-primary">회원가입</button>
