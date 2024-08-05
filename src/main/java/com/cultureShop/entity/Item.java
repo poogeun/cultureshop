@@ -7,13 +7,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
 @Getter
 @Setter
 @ToString
-public class Item {
+public class Item extends BaseTimeEntity {
 
     @Id
     @Column(name = "item_id")
@@ -52,8 +53,5 @@ public class Item {
     @Column(length = 500)
     private String info; // 취소/교환/반품 안내
 
-    private LocalDateTime regTime; // 등록 시간
-
-    private LocalDateTime updateTime; // 수정 시간
 }
 
