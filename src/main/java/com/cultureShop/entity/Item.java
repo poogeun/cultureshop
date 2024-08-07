@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.modelmapper.ModelMapper;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,8 +33,11 @@ public class Item extends BaseTimeEntity {
     @Column
     private String address; // 주소
 
-    @Column(nullable = false, length = 50)
-    private String period; // 기간
+    @Column
+    private LocalDate startDay; // 시작일
+
+    @Column
+    private LocalDate endDay; // 종료일
 
     @Column(nullable = false, length = 50)
     private String category; // 카테고리

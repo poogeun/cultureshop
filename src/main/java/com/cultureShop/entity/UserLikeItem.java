@@ -7,17 +7,17 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "like_item")
-public class LikeItem {
+@Table(name = "user_like_item")
+public class UserLikeItem {
 
     @Id
     @GeneratedValue
-    @Column(name = "like_item_id")
+    @Column(name = "user_like_item_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "like_id")
-    private Like like;
+    @JoinColumn(name = "user_like_id")
+    private UserLike userLike;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")

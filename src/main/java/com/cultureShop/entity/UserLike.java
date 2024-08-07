@@ -1,20 +1,19 @@
 package com.cultureShop.entity;
 
-import com.cultureShop.repository.MemberRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "like")
+@Table(name = "user_like")
 @Getter
 @Setter
 @ToString
-public class Like {
+public class UserLike {
 
     @Id
-    @Column(name = "like_id")
+    @Column(name = "user_like_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -22,8 +21,8 @@ public class Like {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static Like createLike(Member member) {
-        Like like = new Like();
+    public static UserLike createLike(Member member) {
+        UserLike like = new UserLike();
         like.setMember(member);
         return like;
     }
