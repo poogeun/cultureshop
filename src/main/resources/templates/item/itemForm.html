@@ -66,7 +66,6 @@
             </div>
             <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요">
         </div>
-        <p th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}" class="fieldError">Incorrect data</p>
 
         <div class="col-md-6">
             <div class="input-group-prepend">
@@ -74,6 +73,7 @@
             </div>
             <input type="text" th:field="*{place}" class="form-control" placeholder="장소를 입력하세요">
         </div>
+        <p th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}" class="fieldError">Incorrect data</p>
 
         <div class="col-12">
             <div class="input-group-prepend">
@@ -88,7 +88,6 @@
             </div>
             <input type="date" th:field="*{startDay}" class="form-control" placeholder="시작일을 입력하세요">
         </div>
-        <p th:if="${#fields.hasErrors('startDay')}" th:errors="*{startDay}" class="fieldError">Incorrect data</p>
 
         <div class="col-md-6">
             <div class="input-group-prepend">
@@ -96,7 +95,6 @@
             </div>
             <input type="date" th:field="*{endDay}" class="form-control" placeholder="종료일을 입력하세요">
         </div>
-        <p th:if="${#fields.hasErrors('endDay')}" th:errors="*{endDay}" class="fieldError">Incorrect data</p>
 
         <div class="col-md-6">
             <div class="input-group-prepend">
@@ -104,7 +102,6 @@
             </div>
             <input type="text" th:field="*{price}" class="form-control" placeholder="가격을 입력하세요">
         </div>
-        <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
 
         <div class="col-md-6">
             <div class="input-group-prepend">
@@ -112,6 +109,7 @@
             </div>
             <input type="text" th:field="*{stockNumber}" class="form-control" placeholder="재고를 입력하세요">
         </div>
+        <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
         <p th:if="${#fields.hasErrors('stockNumber')}" th:errors="*{stockNumber}" class="fieldError">Incorrect data</p>
 
         <div class="col-md-6">

@@ -26,11 +26,9 @@ public class ItemFormDto {
 
     private String address;
 
-    @NotBlank(message = "시작일은 필수 입력 값입니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDay;
 
-    @NotBlank(message = "종료일은 필수 입력 값입니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDay;
 
