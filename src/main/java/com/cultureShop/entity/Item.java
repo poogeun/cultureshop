@@ -1,6 +1,7 @@
 package com.cultureShop.entity;
 
 import com.cultureShop.constant.ItemStartStatus;
+import com.cultureShop.dto.ItemFormDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,6 +59,19 @@ public class Item extends BaseTimeEntity {
     @Lob
     @Column(length = 500)
     private String info; // 취소/교환/반품 안내
+
+    public void updateItem(ItemFormDto itemFormDto) {
+        this.itemName = itemFormDto.getItemName();
+        this.place = itemFormDto.getPlace();
+        this.address = itemFormDto.getAddress();
+        this.startDay = itemFormDto.getStartDay();
+        this.endDay = itemFormDto.getEndDay();
+        this.category = itemFormDto.getCategory();
+        this.price = itemFormDto.getPrice();
+        this.itemDetail = itemFormDto.getItemDetail();
+        this.itemStartStatus = itemFormDto.getItemStartStatus();
+        this.info = itemFormDto.getInfo();
+    }
 
 }
 

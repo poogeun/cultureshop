@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "user_like_item")
-public class UserLikeItem {
+public class UserLikeItem extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -19,7 +19,7 @@ public class UserLikeItem {
     @JoinColumn(name = "user_like_id")
     private UserLike userLike;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
