@@ -2,12 +2,15 @@ package com.cultureShop.service;
 
 import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemImgDto;
+import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.ItemImg;
 import com.cultureShop.repository.ItemImgRepository;
 import com.cultureShop.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,5 +76,10 @@ public class ItemService {
             itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
         }
         return item.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
+        return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 }
