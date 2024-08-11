@@ -60,7 +60,7 @@ public class ItemController {
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
             return "item/itemForm";
         }
-        return "redirect:/";
+        return "redirect:/admin/item/new";
     }
 
     @GetMapping(value = "/admin/item/{itemId}")
@@ -94,14 +94,15 @@ public class ItemController {
             model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
             return "item/itemForm";
         }
-        return "redirect:/";
+        return "redirect:/admin/items";
     }
 
     @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page,
                              Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
+
 
         model.addAttribute("items", items);
         model.addAttribute("itemSearchDto", itemSearchDto);

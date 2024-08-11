@@ -150,3 +150,21 @@ header .main-menu .item:hover .item_name {
 .footerInfoDetail p {
     color: #666;
 }
+
+.owl-prev {
+    left: -30px;
+}
+.owl-next {
+    right: -30px;
+}
+.owl-prev, .owl-next {
+    position: absolute;
+    top: 90px;
+}
+.owl-prev span, .owl-next span {
+    font-size: 80px;
+    color: #666;
+}
+.owl-theme , .owl-nav[class*="owl-"]:hover {
+    background: transparent;
+}

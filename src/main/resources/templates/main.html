@@ -3,9 +3,323 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            $(".owl-carousel").owlCarousel({
+                autoplay: true,
+                autoplayhoverpause: true,
+                autoplaytimeout: 100,
+                items: 4,
+                nav: true,
+                loop: true
+            });
+
+            $('#locItem1').show();
+            $('#locItem2').hide();
+
+            $(".radioButton").on("click", function(e) {
+                var $btns = $(".radioButton");
+                var $loc1 = $("#loc1");
+                var $loc2 = $("#loc2"); // loc2를 정의합니다.
+
+                // 모든 버튼의 활성화 상태를 업데이트합니다.
+                $btns.each(function() {
+                    if ($(this).is(e.currentTarget)) {
+                        $(this).addClass("active");
+                    } else {
+                        $(this).removeClass("active");
+                    }
+                });
+
+                if ($(e.currentTarget).is($loc2)) {
+                    $('#locItem2').show();
+                    $('#locItem1').hide();
+                }
+
+            });
+        })
+
+    </script>
+</th:block>
+
+<th:block layout:fragment="css">
+    <style>
+        .bannerLink {
+            position: relative;
+            display: block;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .bannerImg {
+            max-width: 305px;
+            max-height: 407px
+        }
+        .bannerContents {
+            position: absolute;
+            width: calc(100% - 56px);
+            left: 28px;
+            bottom: 28px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .bannerTitle {
+            color: white;
+            line-height: 120%;
+            max-height: 240%;
+            font-size: 25px;
+            font-weight: 700;
+        }
+        .bannerLoc {
+            color: white;
+            font-size: 14px;
+            margin-top: 12px;
+            line-height: 150%;
+        }
+        .bannerDate {
+            color: white;
+            font-size: 14px;
+            line-height: 150%;
+        }
+        .searchBox {
+            width: 50%;
+            margin: 50px auto;
+            height: 50px;
+            background: #fff;
+            border-radius: 25px;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(0, 0, 0, .15);
+        }
+        .searchInput {
+            height: 18px;
+            flex: 1;
+            margin-left: 16px;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 18px;
+            display: flex;
+            align-items: center;
+            text-align: justify;
+            color: #111;
+            border: 0;
+            outline: 0;
+            width: 100%;
+        }
+        .searchButton {
+            margin: 0 16px 0 0;
+            padding: 0;
+        }
+        .radioGroup {
+            margin: 30px 0 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .radioButton {
+            height: 44px;
+            padding: 0 18px;
+            border-radius: 32px;
+            font-size: 15px;
+            font-weight: 400;
+            color: #000;
+            text-align: center;
+            background-color: #fff;
+            border: 1px solid #e8e8e8;
+            line-height: 150%;
+        }
+        .radioButton:hover, .radioButton.active {
+            height: 44px;
+            padding: 0 18px;
+            border-radius: 32px;
+            font-size: 15px;
+            font-weight: 400;
+            color: #fff;
+            text-align: center;
+            background-color: #bbe309;
+            border: 1px solid #e8e8e8;
+            line-height: 150%;
+        }
+        .section_title {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 80px 0 0;
+            width: 100%;
+        }
+        .section_title h2 {
+            font-weight: 700;
+        }
+        .itemGroup {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .locItem {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 290px;
+            gap: 16px;
+            cursor: pointer;
+        }
+        .locImgWrap {
+            position: relative;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .locDetail {
+            display: flex;
+            padding: 0 4px;
+            flex-direction: column;
+            align-items: flex-start;
+            align-self: stretch;
+            height: 100px;
+        }
+        .locDetail_title {
+            line-height: 150%;
+            margin: 0 0 4px;
+            font-size: 17px;
+            font-weight: 700;
+            color: #000;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+        .locDetail_place {
+            font-size: 15px;
+            line-height: 150%;
+            color: #bbe309;
+        }
+        .locDetail_date {
+            font-size: 15px;
+            line-height: 150%;
+
+        }
+    </style>
+</th:block>
+
 <div layout:fragment="content">
 
-    <h1>메인페이지 입니다.</h1>
+    <!-- 배너 -->
+    <div class="container mt-5">
+        <div class="owl-carousel owl-theme">
+            <th:block th:each="exhiItem : ${exhiItems}">
+                <div class="ms-2 me-2">
+                    <div class="bannerLink">
+                        <img th:src="${exhiItem.imgUrl}" alt="${exhiItem.itemName}" class="bannerImg">
+                        <ul class="bannerContents">
+                            <li th:text="${exhiItem.itemName}" class="bannerTitle"></li>
+                            <li th:text="${exhiItem.place}" class="bannerLoc"></li>
+                            <li th:text="${exhiItem.startDay +' ~ '+ exhiItem.endDay}" class="bannerDate"></li>
+                        </ul>
+                    </div>
+                </div>
+            </th:block>
+            <th:block th:each="musItem : ${musItems}">
+                <div class="ms-2 me-2">
+                    <div class="bannerLink">
+                        <img th:src="${musItem.imgUrl}" alt="${musItem.itemName}" class="bannerImg">
+                        <ul class="bannerContents">
+                            <li th:text="${musItem.itemName}" class="bannerTitle"></li>
+                            <li th:text="${musItem.place}" class="bannerLoc"></li>
+                            <li th:text="${musItem.startDay +' ~ '+ musItem.endDay}" class="bannerDate"></li>
+                        </ul>
+                    </div>
+                </div>
+            </th:block>
+            <th:block th:each="festItem : ${festItems}">
+                <div class="ms-2 me-2">
+                    <div class="bannerLink">
+                        <img th:src="${festItem.imgUrl}" alt="${festItem.itemName}" class="bannerImg">
+                        <ul class="bannerContents">
+                            <li th:text="${festItem.itemName}" class="bannerTitle"></li>
+                            <li th:text="${festItem.place}" class="bannerLoc"></li>
+                            <li th:text="${festItem.startDay +' ~ '+ festItem.endDay}" class="bannerDate"></li>
+                        </ul>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+
+    <!-- 검색창 -->
+    <form th:action="@{/search}" method="get">
+        <div class="searchBox">
+            <input name="searchQuery" type="search" class="searchInput" placeholder="검색어를 입력하세요" aria-label="Search">
+            <button type="submit" class="material-symbols-outlined searchButton">search</button>
+        </div>
+    </form>
+
+    <!-- 지역별 -->
+    <section class="LocRec">
+        <div class="section_title">
+            <h2>지역별 추천 상품</h2>
+        </div>
+        <div class="LocRec_content">
+            <div class="radioGroup">
+                <button role="tab" class="radioButton active" id="loc1" aria-label="서울">서울</button>
+                <button role="tab" class="radioButton" id="loc2" aria-label="경기">경기</button>
+                <button role="tab" class="radioButton" id="loc3" aria-label="경상">경상</button>
+                <button role="tab" class="radioButton" id="loc4" aria-label="전라">전라</button>
+                <button role="tab" class="radioButton" id="loc5" aria-label="제주">제주</button>
+                <button role="tab" class="radioButton" id="loc6" aria-label="충청">충청</button>
+            </div>
+            <div class="itemGroup">
+                <div id="locItem1" style="display: flex">
+                    <th:block th:each="seoulItem : ${seoulItems}" id="itemList">
+                        <div class="locItem">
+                            <a>
+                                <div class="locImgWrap">
+                                    <img th:src="${seoulItem.imgUrl}" alt="${seoulItem.itemName}">
+                                </div>
+                                <div class="locDetail">
+                                    <span th:text="${seoulItem.itemName}" class="locDetail_title" ></span>
+                                    <span th:text="${seoulItem.place}" class="locDetail_place"></span>
+                                    <span th:text="${seoulItem.startDay +' ~ '+ seoulItem.endDay}" class="locDetail_date"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div id="locItem2" style="display: flex">
+                    <th:block th:each="kkItem : ${kkItems}">
+                        <div class="locItem">
+                            <a>
+                                <div class="locImgWrap">
+                                    <img th:src="${kkItem.imgUrl}" alt="${kkItem.itemName}">
+                                </div>
+                                <div class="locDetail">
+                                    <span th:text="${kkItem.itemName}" class="locDetail_title"></span>
+                                    <span th:text="${kkItem.place}" class="locDetail_place"></span>
+                                    <span th:text="${kkItem.startDay +' ~ '+ kkItem.endDay}" class="locDetail_date"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
 
 </div>
 

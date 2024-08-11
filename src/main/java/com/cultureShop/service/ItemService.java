@@ -3,6 +3,7 @@ package com.cultureShop.service;
 import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemImgDto;
 import com.cultureShop.dto.ItemSearchDto;
+import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.ItemImg;
 import com.cultureShop.repository.ItemImgRepository;
@@ -81,5 +82,43 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MainItemDto> getSearchItemList(ItemSearchDto itemSearchDto) {
+        return itemRepository.getSearchItemList(itemSearchDto);
+    }
+
+    // 배너에 들어갈 상품
+    public List<MainItemDto> getCategoryItem(String category) {
+
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+
+        // 배너에 쓰일 상품 4개만 가져오기
+        for(int i=0; i<4; i++){
+            Item mainCateItem = categoryItems.get(i);
+            Long itemId = mainCateItem.getId();
+            MainItemDto mainItemDto = itemRepository.findMainItemDto(itemId);
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return mainItemDetails;
+    }
+
+    //  지역별 상품
+    public List<MainItemDto> getAddressItem(String address) {
+
+        List<Item> addressItems = itemRepository.findByAddress(address);
+        List<MainItemDto> itemDetails = new ArrayList<>();
+
+        for(int i=0; i<5; i++) {
+            Item addressItem = addressItems.get(i);
+            Long itemId = addressItem.getId();
+            MainItemDto mainItemDto = itemRepository.findMainItemDto(itemId);
+            itemDetails.add(mainItemDto);
+        }
+
+        return itemDetails;
     }
 }

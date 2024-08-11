@@ -1,5 +1,6 @@
 package com.cultureShop.repository;
 
+import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,16 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
     List<Item> findByItemName(String itemName);
 
     List<Item> findByPriceLessThan(Integer price); // List에 int 안쓰기 때문에 Integer 사용
+
+    List<Item> findByCategoryOrderByRegTimeDesc(String category);
+
+    @Query("select i from Item i where i.address like %:address% order by i.regTime desc")
+    List<Item> findByAddress(String address);
+
+    @Query("select new com.cultureShop.dto.MainItemDto(i.id, i.itemName, i.place, i.address, i.startDay, i.endDay, iti.imgUrl) " +
+            "from Item i, ItemImg iti " +
+            "where iti.item.id = :itemId and i.id = :itemId and iti.repImgYn = 'Y'")
+    MainItemDto findMainItemDto(Long itemId);
 
     // select * from item where price < Integer price order by desc; 내림차순
     List<Item> findByPriceLessThanOrderByPriceDesc(Integer price);
