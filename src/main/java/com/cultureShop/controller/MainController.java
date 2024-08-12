@@ -20,10 +20,7 @@ public class MainController {
     @GetMapping(value = "/")
     public String main(Model model){
 
-
-        List<MainItemDto> exhiItems = itemService.getCategoryItem("exhibition");
-        List<MainItemDto> musItems = itemService.getCategoryItem("museum");
-        List<MainItemDto> festItems = itemService.getCategoryItem("festival");
+        List<MainItemDto> bannerItems = itemService.getBannerItem();
 
         List<MainItemDto> seoulItems = itemService.getAddressItem("서울");
         List<MainItemDto> kkItems = itemService.getAddressItem("경기");
@@ -32,10 +29,12 @@ public class MainController {
         List<MainItemDto> jjItems = itemService.getAddressItem("제주");
         List<MainItemDto> ccItems = itemService.getAddressItem("충청");
 
+        List<MainItemDto> exhiItems = itemService.getCategoryItem("exhibition");
+        List<MainItemDto> musItems = itemService.getCategoryItem("museum");
+        List<MainItemDto> festItems = itemService.getCategoryItem("festival");
 
-        model.addAttribute("exhiItems", exhiItems);
-        model.addAttribute("musItems", musItems);
-        model.addAttribute("festItems", festItems);
+
+        model.addAttribute("bannerItems", bannerItems);
 
         model.addAttribute("seoulItems", seoulItems);
         model.addAttribute("kkItems", kkItems);
@@ -43,6 +42,11 @@ public class MainController {
         model.addAttribute("jrItems", jrItems);
         model.addAttribute("jjItems", jjItems);
         model.addAttribute("ccItems", ccItems);
+
+        model.addAttribute("exhiItems", exhiItems);
+        model.addAttribute("musItems", musItems);
+        model.addAttribute("festItems", festItems);
+
 
         return "main";
     }

@@ -106,41 +106,15 @@
     <!-- 배너 -->
     <div class="container mt-5">
         <div class="owl-carousel owl-theme">
-            <th:block th:each="exhiItem : ${exhiItems}">
+            <th:block th:each="bannerItem : ${bannerItems}">
                 <div class="ms-2 me-2">
                     <div class="bannerLink">
-                        <img th:src="${exhiItem.imgUrl}" alt="${exhiItem.itemName}" class="bannerImg">
+                        <img th:src="${bannerItem.imgUrl}" alt="${bannerItem.itemName}" class="bannerImg">
                         <ul class="bannerContents">
-                            <li th:text="${exhiItem.itemName}" class="bannerTitle"></li>
-                            <li th:if="${exhiItem.place == null}" th:text="${exhiItem.address}" class="bannerLoc"></li>
-                            <li th:unless="${exhiItem.place == null}" th:text="${exhiItem.place}" class="bannerLoc"></li>
-                            <li th:text="${exhiItem.startDay +' ~ '+ exhiItem.endDay}" class="bannerDate"></li>
-                        </ul>
-                    </div>
-                </div>
-            </th:block>
-            <th:block th:each="musItem : ${musItems}">
-                <div class="ms-2 me-2">
-                    <div class="bannerLink">
-                        <img th:src="${musItem.imgUrl}" alt="${musItem.itemName}" class="bannerImg">
-                        <ul class="bannerContents">
-                            <li th:text="${musItem.itemName}" class="bannerTitle"></li>
-                            <li th:if="${musItem.place == null}" th:text="${musItem.address}" class="bannerLoc"></li>
-                            <li th:unless="${musItem.place == null}" th:text="${musItem.place}" class="bannerLoc"></li>
-                            <li th:text="${musItem.startDay +' ~ '+ musItem.endDay}" class="bannerDate"></li>
-                        </ul>
-                    </div>
-                </div>
-            </th:block>
-            <th:block th:each="festItem : ${festItems}">
-                <div class="ms-2 me-2">
-                    <div class="bannerLink">
-                        <img th:src="${festItem.imgUrl}" alt="${festItem.itemName}" class="bannerImg">
-                        <ul class="bannerContents">
-                            <li th:text="${festItem.itemName}" class="bannerTitle"></li>
-                            <li th:if="${festItem.place == null}" th:text="${festItem.address}" class="bannerLoc"></li>
-                            <li th:unless="${festItem.place == null}" th:text="${festItem.place}" class="bannerLoc"></li>
-                            <li th:text="${festItem.startDay +' ~ '+ festItem.endDay}" class="bannerDate"></li>
+                            <li th:text="${bannerItem.itemName}" class="bannerTitle"></li>
+                            <li th:if="${bannerItem.place == null}" th:text="${bannerItem.address}" class="bannerLoc"></li>
+                            <li th:unless="${bannerItem.place == null}" th:text="${bannerItem.place}" class="bannerLoc"></li>
+                            <li th:text="${bannerItem.startDay +' ~ '+ bannerItem.endDay}" class="bannerDate"></li>
                         </ul>
                     </div>
                 </div>
@@ -285,22 +259,83 @@
 
     <!-- 전시회 -->
     <section class="exhiRec">
-        <div class="section_title">
+        <div class="section_title" style="margin-bottom: 30px">
             <h2>전시회 추천 상품</h2>
+        </div>
+        <div class="moreItems">
+            <a class="radioButton">더보기</a>
         </div>
         <div class="itemGroup">
             <div id="exhiRecItems" style="display: flex">
-                <th:block th:each="seoulItem : ${seoulItems}" id="itemList">
+                <th:block th:each="exhiItem : ${exhiItems}" id="itemList">
                     <div class="locItem">
                         <a class="linkLocItem">
                             <div class="locImgWrap">
-                                <img th:src="${seoulItem.imgUrl}" alt="${seoulItem.itemName}">
+                                <img th:src="${exhiItem.imgUrl}" alt="${exhiItem.itemName}">
                             </div>
                             <div class="locDetail">
-                                <span th:text="${seoulItem.itemName}" class="locDetail_title" ></span>
-                                <span th:if="${seoulItem.place == null}" th:text="${seoulItem.address}" class="locDetail_place"></span>
-                                <span th:unless="${seoulItem.place == null}" th:text="${seoulItem.place}" class="locDetail_place"></span>
-                                <span th:text="${seoulItem.startDay +' ~ '+ seoulItem.endDay}" class="locDetail_date"></span>
+                                <span th:text="${exhiItem.itemName}" class="locDetail_title" ></span>
+                                <span th:if="${exhiItem.place == null}" th:text="${exhiItem.address}" class="locDetail_place"></span>
+                                <span th:unless="${exhiItem.place == null}" th:text="${exhiItem.place}" class="locDetail_place"></span>
+                                <span th:text="${exhiItem.startDay +' ~ '+ exhiItem.endDay}" class="locDetail_date"></span>
+                            </div>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
+
+    <!-- 뮤지엄 -->
+    <section class="exhiRec">
+        <div class="section_title" style="margin-bottom: 30px">
+            <h2>뮤지엄 추천 상품</h2>
+        </div>
+        <div class="moreItems">
+            <a class="radioButton">더보기</a>
+        </div>
+        <div class="itemGroup">
+            <div id="musRecItems" style="display: flex">
+                <th:block th:each="musItem : ${musItems}" id="itemList">
+                    <div class="locItem">
+                        <a class="linkLocItem">
+                            <div class="locImgWrap">
+                                <img th:src="${musItem.imgUrl}" alt="${musItem.itemName}">
+                            </div>
+                            <div class="locDetail">
+                                <span th:text="${musItem.itemName}" class="locDetail_title" ></span>
+                                <span th:if="${musItem.place == null}" th:text="${musItem.address}" class="locDetail_place"></span>
+                                <span th:unless="${musItem.place == null}" th:text="${musItem.place}" class="locDetail_place"></span>
+                                <span th:text="${musItem.startDay +' ~ '+ musItem.endDay}" class="locDetail_date"></span>
+                            </div>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
+
+    <!-- 축제/행사 -->
+    <section class="exhiRec">
+        <div class="section_title" style="margin-bottom: 30px">
+            <h2>축제/행사 추천 상품</h2>
+        </div>
+        <div class="moreItems">
+            <a class="radioButton">더보기</a>
+        </div>
+        <div class="itemGroup">
+            <div id="festRecItems" style="display: flex">
+                <th:block th:each="festItem : ${festItems}" id="itemList">
+                    <div class="locItem">
+                        <a class="linkLocItem">
+                            <div class="locImgWrap">
+                                <img th:src="${festItem.imgUrl}" alt="${festItem.itemName}">
+                            </div>
+                            <div class="locDetail">
+                                <span th:text="${festItem.itemName}" class="locDetail_title" ></span>
+                                <span th:if="${festItem.place == null}" th:text="${festItem.address}" class="locDetail_place"></span>
+                                <span th:unless="${festItem.place == null}" th:text="${festItem.place}" class="locDetail_place"></span>
+                                <span th:text="${festItem.startDay +' ~ '+ festItem.endDay}" class="locDetail_date"></span>
                             </div>
                         </a>
                     </div>

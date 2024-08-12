@@ -90,20 +90,19 @@ public class ItemService {
     }
 
     // 배너에 들어갈 상품
-    public List<MainItemDto> getCategoryItem(String category) {
+    public List<MainItemDto> getBannerItem() {
 
-        List<Item> categoryItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
-        List<MainItemDto> mainItemDetails = new ArrayList<>();
+        List<Item> bannerItems = itemRepository.findAll().reversed();
+        List<MainItemDto> bannerItemDetails = new ArrayList<>();
 
-        // 배너에 쓰일 상품 4개만 가져오기
-        for(int i=0; i<4; i++){
-            Item mainCateItem = categoryItems.get(i);
-            Long itemId = mainCateItem.getId();
-            MainItemDto mainItemDto = itemRepository.findMainItemDto(itemId);
-            mainItemDetails.add(mainItemDto);
+        for(int i=0; i<12; i++){
+            Item bannerItem = bannerItems.get(i);
+            Long itemId = bannerItem.getId();
+            MainItemDto bannerItemDetail = itemRepository.findMainItemDto(itemId);
+            bannerItemDetails.add(bannerItemDetail);
         }
 
-        return mainItemDetails;
+        return bannerItemDetails;
     }
 
     //  지역별 상품
@@ -120,5 +119,21 @@ public class ItemService {
         }
 
         return itemDetails;
+    }
+
+    // 카테고리별 상품
+    public List<MainItemDto> getCategoryItem(String category) {
+
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+
+        for(int i=0; i<5; i++){
+            Item mainCateItem = categoryItems.get(i);
+            Long itemId = mainCateItem.getId();
+            MainItemDto mainItemDto = itemRepository.findMainItemDto(itemId);
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return mainItemDetails;
     }
 }

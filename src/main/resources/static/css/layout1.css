@@ -180,7 +180,7 @@ header .main-menu .item:hover .item_name {
 }
 .bannerImg {
     max-width: 305px;
-    max-height: 407px
+    height: 407px
 }
 .bannerContents {
     position: absolute;
@@ -242,6 +242,9 @@ header .main-menu .item:hover .item_name {
     margin: 0 16px 0 0;
     padding: 0;
 }
+section {
+    margin-top: 50px;
+}
 .radioGroup {
     margin: 30px 0 20px;
     width: 100%;
@@ -285,6 +288,10 @@ header .main-menu .item:hover .item_name {
 .section_title h2 {
     font-weight: 700;
 }
+.moreItems {
+    text-align: center;
+    margin-bottom: 20px;
+}
 .itemGroup {
     display: flex;
     flex-direction: row;
@@ -299,13 +306,12 @@ header .main-menu .item:hover .item_name {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 290px;
+    width: 230px;
+    margin-right: 25px;
     gap: 16px;
     cursor: pointer;
 }
-.linkLocItem {
-    margin-right: 10px;
-}
+
 .locImgWrap {
     position: relative;
     width: 100%;
