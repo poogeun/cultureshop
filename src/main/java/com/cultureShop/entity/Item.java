@@ -50,7 +50,7 @@ public class Item extends BaseEntity {
     private int stockNumber; // 재고
 
     @Lob
-    @Column
+    @Column(length = 500)
     private String itemDetail; // 상품상세설명
 
     @Enumerated(EnumType.STRING)

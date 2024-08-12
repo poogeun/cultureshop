@@ -27,6 +27,10 @@ public class MainController {
 
         List<MainItemDto> seoulItems = itemService.getAddressItem("서울");
         List<MainItemDto> kkItems = itemService.getAddressItem("경기");
+        List<MainItemDto> ksItems = itemService.getAddressItem("경상");
+        List<MainItemDto> jrItems = itemService.getAddressItem("전라");
+        List<MainItemDto> jjItems = itemService.getAddressItem("제주");
+        List<MainItemDto> ccItems = itemService.getAddressItem("충청");
 
 
         model.addAttribute("exhiItems", exhiItems);
@@ -35,6 +39,10 @@ public class MainController {
 
         model.addAttribute("seoulItems", seoulItems);
         model.addAttribute("kkItems", kkItems);
+        model.addAttribute("ksItems", ksItems);
+        model.addAttribute("jrItems", jrItems);
+        model.addAttribute("jjItems", jjItems);
+        model.addAttribute("ccItems", ccItems);
 
         return "main";
     }

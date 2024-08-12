@@ -17,11 +17,19 @@
 
             $('#locItem1').show();
             $('#locItem2').hide();
+            $('#locItem3').hide();
+            $('#locItem4').hide();
+            $('#locItem5').hide();
+            $('#locItem6').hide();
 
             $(".radioButton").on("click", function(e) {
                 var $btns = $(".radioButton");
                 var $loc1 = $("#loc1");
-                var $loc2 = $("#loc2"); // loc2를 정의합니다.
+                var $loc2 = $("#loc2");
+                var $loc3 = $("#loc3");
+                var $loc4 = $("#loc4");
+                var $loc5 = $("#loc5");
+                var $loc6 = $("#loc6");
 
                 // 모든 버튼의 활성화 상태를 업데이트합니다.
                 $btns.each(function() {
@@ -32,9 +40,53 @@
                     }
                 });
 
+                if ($(e.currentTarget).is($loc1)) {
+                    $('#locItem1').show();
+                    $('#locItem2').hide();
+                    $('#locItem3').hide();
+                    $('#locItem4').hide();
+                    $('#locItem5').hide();
+                    $('#locItem6').hide();
+                }
                 if ($(e.currentTarget).is($loc2)) {
                     $('#locItem2').show();
                     $('#locItem1').hide();
+                    $('#locItem3').hide();
+                    $('#locItem4').hide();
+                    $('#locItem5').hide();
+                    $('#locItem6').hide();
+                }
+                if ($(e.currentTarget).is($loc3)) {
+                    $('#locItem3').show();
+                    $('#locItem1').hide();
+                    $('#locItem2').hide();
+                    $('#locItem4').hide();
+                    $('#locItem5').hide();
+                    $('#locItem6').hide();
+                }
+                if ($(e.currentTarget).is($loc4)) {
+                    $('#locItem4').show();
+                    $('#locItem1').hide();
+                    $('#locItem2').hide();
+                    $('#locItem3').hide();
+                    $('#locItem5').hide();
+                    $('#locItem6').hide();
+                }
+                if ($(e.currentTarget).is($loc5)) {
+                    $('#locItem5').show();
+                    $('#locItem1').hide();
+                    $('#locItem2').hide();
+                    $('#locItem3').hide();
+                    $('#locItem4').hide();
+                    $('#locItem6').hide();
+                }
+                if ($(e.currentTarget).is($loc6)) {
+                    $('#locItem6').show();
+                    $('#locItem1').hide();
+                    $('#locItem2').hide();
+                    $('#locItem3').hide();
+                    $('#locItem4').hide();
+                    $('#locItem5').hide();
                 }
 
             });
@@ -45,172 +97,7 @@
 
 <th:block layout:fragment="css">
     <style>
-        .bannerLink {
-            position: relative;
-            display: block;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #fff;
-        }
-        .bannerImg {
-            max-width: 305px;
-            max-height: 407px
-        }
-        .bannerContents {
-            position: absolute;
-            width: calc(100% - 56px);
-            left: 28px;
-            bottom: 28px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        .bannerTitle {
-            color: white;
-            line-height: 120%;
-            max-height: 240%;
-            font-size: 25px;
-            font-weight: 700;
-        }
-        .bannerLoc {
-            color: white;
-            font-size: 14px;
-            margin-top: 12px;
-            line-height: 150%;
-        }
-        .bannerDate {
-            color: white;
-            font-size: 14px;
-            line-height: 150%;
-        }
-        .searchBox {
-            width: 50%;
-            margin: 50px auto;
-            height: 50px;
-            background: #fff;
-            border-radius: 25px;
-            position: relative;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(0, 0, 0, .15);
-        }
-        .searchInput {
-            height: 18px;
-            flex: 1;
-            margin-left: 16px;
-            font-style: normal;
-            font-weight: 700;
-            font-size: 15px;
-            line-height: 18px;
-            display: flex;
-            align-items: center;
-            text-align: justify;
-            color: #111;
-            border: 0;
-            outline: 0;
-            width: 100%;
-        }
-        .searchButton {
-            margin: 0 16px 0 0;
-            padding: 0;
-        }
-        .radioGroup {
-            margin: 30px 0 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-        .radioButton {
-            height: 44px;
-            padding: 0 18px;
-            border-radius: 32px;
-            font-size: 15px;
-            font-weight: 400;
-            color: #000;
-            text-align: center;
-            background-color: #fff;
-            border: 1px solid #e8e8e8;
-            line-height: 150%;
-        }
-        .radioButton:hover, .radioButton.active {
-            height: 44px;
-            padding: 0 18px;
-            border-radius: 32px;
-            font-size: 15px;
-            font-weight: 400;
-            color: #fff;
-            text-align: center;
-            background-color: #bbe309;
-            border: 1px solid #e8e8e8;
-            line-height: 150%;
-        }
-        .section_title {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 80px 0 0;
-            width: 100%;
-        }
-        .section_title h2 {
-            font-weight: 700;
-        }
-        .itemGroup {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-        .locItem {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            max-width: 290px;
-            gap: 16px;
-            cursor: pointer;
-        }
-        .locImgWrap {
-            position: relative;
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-        .locDetail {
-            display: flex;
-            padding: 0 4px;
-            flex-direction: column;
-            align-items: flex-start;
-            align-self: stretch;
-            height: 100px;
-        }
-        .locDetail_title {
-            line-height: 150%;
-            margin: 0 0 4px;
-            font-size: 17px;
-            font-weight: 700;
-            color: #000;
-            word-wrap: break-word;
-            word-break: break-all;
-        }
-        .locDetail_place {
-            font-size: 15px;
-            line-height: 150%;
-            color: #bbe309;
-        }
-        .locDetail_date {
-            font-size: 15px;
-            line-height: 150%;
 
-        }
     </style>
 </th:block>
 
@@ -225,7 +112,8 @@
                         <img th:src="${exhiItem.imgUrl}" alt="${exhiItem.itemName}" class="bannerImg">
                         <ul class="bannerContents">
                             <li th:text="${exhiItem.itemName}" class="bannerTitle"></li>
-                            <li th:text="${exhiItem.place}" class="bannerLoc"></li>
+                            <li th:if="${exhiItem.place == null}" th:text="${exhiItem.address}" class="bannerLoc"></li>
+                            <li th:unless="${exhiItem.place == null}" th:text="${exhiItem.place}" class="bannerLoc"></li>
                             <li th:text="${exhiItem.startDay +' ~ '+ exhiItem.endDay}" class="bannerDate"></li>
                         </ul>
                     </div>
@@ -237,7 +125,8 @@
                         <img th:src="${musItem.imgUrl}" alt="${musItem.itemName}" class="bannerImg">
                         <ul class="bannerContents">
                             <li th:text="${musItem.itemName}" class="bannerTitle"></li>
-                            <li th:text="${musItem.place}" class="bannerLoc"></li>
+                            <li th:if="${musItem.place == null}" th:text="${musItem.address}" class="bannerLoc"></li>
+                            <li th:unless="${musItem.place == null}" th:text="${musItem.place}" class="bannerLoc"></li>
                             <li th:text="${musItem.startDay +' ~ '+ musItem.endDay}" class="bannerDate"></li>
                         </ul>
                     </div>
@@ -249,7 +138,8 @@
                         <img th:src="${festItem.imgUrl}" alt="${festItem.itemName}" class="bannerImg">
                         <ul class="bannerContents">
                             <li th:text="${festItem.itemName}" class="bannerTitle"></li>
-                            <li th:text="${festItem.place}" class="bannerLoc"></li>
+                            <li th:if="${festItem.place == null}" th:text="${festItem.address}" class="bannerLoc"></li>
+                            <li th:unless="${festItem.place == null}" th:text="${festItem.place}" class="bannerLoc"></li>
                             <li th:text="${festItem.startDay +' ~ '+ festItem.endDay}" class="bannerDate"></li>
                         </ul>
                     </div>
@@ -284,13 +174,14 @@
                 <div id="locItem1" style="display: flex">
                     <th:block th:each="seoulItem : ${seoulItems}" id="itemList">
                         <div class="locItem">
-                            <a>
+                            <a class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${seoulItem.imgUrl}" alt="${seoulItem.itemName}">
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${seoulItem.itemName}" class="locDetail_title" ></span>
-                                    <span th:text="${seoulItem.place}" class="locDetail_place"></span>
+                                    <span th:if="${seoulItem.place == null}" th:text="${seoulItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${seoulItem.place == null}" th:text="${seoulItem.place}" class="locDetail_place"></span>
                                     <span th:text="${seoulItem.startDay +' ~ '+ seoulItem.endDay}" class="locDetail_date"></span>
                                 </div>
                             </a>
@@ -301,13 +192,14 @@
                 <div id="locItem2" style="display: flex">
                     <th:block th:each="kkItem : ${kkItems}">
                         <div class="locItem">
-                            <a>
+                            <a class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${kkItem.imgUrl}" alt="${kkItem.itemName}">
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${kkItem.itemName}" class="locDetail_title"></span>
-                                    <span th:text="${kkItem.place}" class="locDetail_place"></span>
+                                    <span th:if="${kkItem.place == null}" th:text="${kkItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${kkItem.place == null}" th:text="${kkItem.place}" class="locDetail_place"></span>
                                     <span th:text="${kkItem.startDay +' ~ '+ kkItem.endDay}" class="locDetail_date"></span>
                                 </div>
                             </a>
@@ -315,6 +207,104 @@
                     </th:block>
                 </div>
 
+                <div id="locItem3" style="display: flex">
+                    <th:block th:each="ksItem : ${ksItems}">
+                        <div class="locItem">
+                            <a class="linkLocItem">
+                                <div class="locImgWrap">
+                                    <img th:src="${ksItem.imgUrl}" alt="${ksItem.itemName}">
+                                </div>
+                                <div class="locDetail">
+                                    <span th:text="${ksItem.itemName}" class="locDetail_title"></span>
+                                    <span th:if="${ksItem.place == null}" th:text="${ksItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${ksItem.place == null}" th:text="${ksItem.place}" class="locDetail_place"></span>
+                                    <span th:text="${ksItem.startDay +' ~ '+ ksItem.endDay}" class="locDetail_date"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div id="locItem4" style="display: flex">
+                    <th:block th:each="jrItem : ${jrItems}">
+                        <div class="locItem">
+                            <a class="linkLocItem">
+                                <div class="locImgWrap">
+                                    <img th:src="${jrItem.imgUrl}" alt="${jrItem.itemName}">
+                                </div>
+                                <div class="locDetail">
+                                    <span th:text="${jrItem.itemName}" class="locDetail_title"></span>
+                                    <span th:if="${jrItem.place == null}" th:text="${jrItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${jrItem.place == null}" th:text="${jrItem.place}" class="locDetail_place"></span>
+                                    <span th:text="${jrItem.startDay +' ~ '+ jrItem.endDay}" class="locDetail_date"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div id="locItem5" style="display: flex">
+                    <th:block th:each="jjItem : ${jjItems}">
+                        <div class="locItem">
+                            <a class="linkLocItem">
+                                <div class="locImgWrap">
+                                    <img th:src="${jjItem.imgUrl}" alt="${jjItem.itemName}">
+                                </div>
+                                <div class="locDetail">
+                                    <span th:text="${jjItem.itemName}" class="locDetail_title"></span>
+                                    <span th:if="${jjItem.place == null}" th:text="${jjItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${jjItem.place == null}" th:text="${jjItem.place}" class="locDetail_place"></span>
+                                    <span th:text="${jjItem.startDay +' ~ '+ jjItem.endDay}" class="locDetail_date"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div id="locItem6" style="display: flex">
+                    <th:block th:each="ccItem : ${ccItems}">
+                        <div class="locItem">
+                            <a class="linkLocItem">
+                                <div class="locImgWrap">
+                                    <img th:src="${ccItem.imgUrl}" alt="${ccItem.itemName}">
+                                </div>
+                                <div class="locDetail">
+                                    <span th:text="${ccItem.itemName}" class="locDetail_title"></span>
+                                    <span th:if="${ccItem.place == null}" th:text="${ccItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${ccItem.place == null}" th:text="${ccItem.place}" class="locDetail_place"></span>
+                                    <span th:text="${ccItem.startDay +' ~ '+ ccItem.endDay}" class="locDetail_date"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 전시회 -->
+    <section class="exhiRec">
+        <div class="section_title">
+            <h2>전시회 추천 상품</h2>
+        </div>
+        <div class="itemGroup">
+            <div id="exhiRecItems" style="display: flex">
+                <th:block th:each="seoulItem : ${seoulItems}" id="itemList">
+                    <div class="locItem">
+                        <a class="linkLocItem">
+                            <div class="locImgWrap">
+                                <img th:src="${seoulItem.imgUrl}" alt="${seoulItem.itemName}">
+                            </div>
+                            <div class="locDetail">
+                                <span th:text="${seoulItem.itemName}" class="locDetail_title" ></span>
+                                <span th:if="${seoulItem.place == null}" th:text="${seoulItem.address}" class="locDetail_place"></span>
+                                <span th:unless="${seoulItem.place == null}" th:text="${seoulItem.place}" class="locDetail_place"></span>
+                                <span th:text="${seoulItem.startDay +' ~ '+ seoulItem.endDay}" class="locDetail_date"></span>
+                            </div>
+                        </a>
+                    </div>
+                </th:block>
             </div>
         </div>
     </section>
