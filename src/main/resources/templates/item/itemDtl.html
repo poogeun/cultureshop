@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
+<th:block layout:fragment="css">
+    <style>
+        .itemMain {
+            width: 800px;
+            margin-top: 50px;
+        }
+        .summary {
+            position: relative;
+        }
+        .summaryTop {
+            margin-bottom: 30px;
+        }
+        .prdTitle {
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 150%;
+        }
+        .posterBox {
+            display: inline-block;
+            width: 300px;
+        }
+        .posterBoxImage {
+            width: 300px;
+            height: 400px;
+            border: 1px solid #dadee3;
+        }
+        .itemInfos {
+            display: inline-block;
+            width: 450px;
+            margin-left: 50px;
+            vertical-align: top;
+        }
+        ul {
+            list-style: none;
+        }
+        .itemInfo {
+            margin-top: 20px;
+        }
+        .itemMainBody {
+            position: relative;
+        }
+        .navList {
+            border: 1px solid #dadee3;
+        }
+        .itemContentsDtl .content {
+            margin-bottom: 100px;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="itemMain">
+        <div class="itemMainTop">
+            <div class="summary">
+                <div class="summaryTop">
+                    <span th:if="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
+                          class="badge bg-primary mgb-15">판매중</span>
+                    <span th:unless="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
+                          class="badge bg-primary mgb-15">대기중</span>
+                    <h2 th:text="${item.itemName}" class="prdTitle"></h2>
+                </div>
+                <div class="summaryBody">
+                    <div class="posterBox">
+                        <a class="likeBtn" role="checkbox" href="#">좋아요</a>
+                        <img th:src="${item.imgUrl}" alt="${item.itemName}" class="posterBoxImage">
+                    </div>
+                    <ul class="itemInfos">
+                        <li class="itemInfo">
+                            <strong class="infoLabel">장소</strong>
+                            <div th:text="${item.place}" class="infoDesc"></div>
+                        </li>
+                        <li class="itemInfo">
+                            <strong class="infoLabel">기간</strong>
+                            <div th:text="${item.startDay +' ~ '+ item.endDay}" class="infoDesc"></div>
+                        </li>
+                        <li class="itemInfo">
+                            <strong class="infoLabel">수량</strong>
+                            <div class="infoDesc">
+                                <input type="number" name="count" id="count" value="1" min="1">
+                            </div>
+                        </li>
+                        <li class="itemInfo">
+                            <strong class="infoLabel">가격</strong>
+                            <div name="totalPrice" id="totalPrice" class="infoDesc"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="itemMainBody" class="itemMainBody">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">이용정보</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">판매정보</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">이용후기</a>
+                </li>
+            </ul>
+
+            <div class="itemContentsDtl">
+                <div class="content">
+                    <h3 class="contentTitle">상세 정보</h3>
+                    <div th:text="${item.itemDetail}" class="contentDtl"></div>
+                    <img th:src="${item.imgUrl}" alt="${item.itemName}" class="contentDtl">
+                </div>
+                <div class="content">
+                    <h3 class="contentTitle">판매 정보</h3>
+                    <div th:text="${item.info}" class="contentDtl"></div>
+                </div>
+                <div class="content">
+                    <h3 class="contentTitle">이용 후기</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

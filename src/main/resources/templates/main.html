@@ -108,7 +108,7 @@
         <div class="owl-carousel owl-theme">
             <th:block th:each="bannerItem : ${bannerItems}">
                 <div class="ms-2 me-2">
-                    <div class="bannerLink">
+                    <a th:href="'/item/' + ${bannerItem.id}" class="bannerLink">
                         <img th:src="${bannerItem.imgUrl}" alt="${bannerItem.itemName}" class="bannerImg">
                         <ul class="bannerContents">
                             <li th:text="${bannerItem.itemName}" class="bannerTitle"></li>
@@ -116,7 +116,7 @@
                             <li th:unless="${bannerItem.place == null}" th:text="${bannerItem.place}" class="bannerLoc"></li>
                             <li th:text="${bannerItem.startDay +' ~ '+ bannerItem.endDay}" class="bannerDate"></li>
                         </ul>
-                    </div>
+                    </a>
                 </div>
             </th:block>
         </div>
@@ -148,7 +148,7 @@
                 <div id="locItem1" style="display: flex">
                     <th:block th:each="seoulItem : ${seoulItems}" id="itemList">
                         <div class="locItem">
-                            <a class="linkLocItem">
+                            <a th:href="'/item/' + ${seoulItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${seoulItem.imgUrl}" alt="${seoulItem.itemName}">
                                 </div>
@@ -166,7 +166,7 @@
                 <div id="locItem2" style="display: flex">
                     <th:block th:each="kkItem : ${kkItems}">
                         <div class="locItem">
-                            <a class="linkLocItem">
+                            <a th:href="'/item/' + ${kkItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${kkItem.imgUrl}" alt="${kkItem.itemName}">
                                 </div>
@@ -184,7 +184,7 @@
                 <div id="locItem3" style="display: flex">
                     <th:block th:each="ksItem : ${ksItems}">
                         <div class="locItem">
-                            <a class="linkLocItem">
+                            <a th:href="'/item/' + ${ksItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${ksItem.imgUrl}" alt="${ksItem.itemName}">
                                 </div>
@@ -202,7 +202,7 @@
                 <div id="locItem4" style="display: flex">
                     <th:block th:each="jrItem : ${jrItems}">
                         <div class="locItem">
-                            <a class="linkLocItem">
+                            <a th:href="'/item/' + ${jrItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${jrItem.imgUrl}" alt="${jrItem.itemName}">
                                 </div>
@@ -220,7 +220,7 @@
                 <div id="locItem5" style="display: flex">
                     <th:block th:each="jjItem : ${jjItems}">
                         <div class="locItem">
-                            <a class="linkLocItem">
+                            <a th:href="'/item/' + ${jjItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${jjItem.imgUrl}" alt="${jjItem.itemName}">
                                 </div>
@@ -238,7 +238,7 @@
                 <div id="locItem6" style="display: flex">
                     <th:block th:each="ccItem : ${ccItems}">
                         <div class="locItem">
-                            <a class="linkLocItem">
+                            <a th:href="'/item/' + ${ccItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${ccItem.imgUrl}" alt="${ccItem.itemName}">
                                 </div>
@@ -269,9 +269,9 @@
             <div id="exhiRecItems" style="display: flex">
                 <th:block th:each="exhiItem : ${exhiItems}" id="itemList">
                     <div class="locItem">
-                        <a class="linkLocItem">
+                        <a th:href="'/item/' + ${ccItem.id}" class="linkLocItem">
                             <div class="locImgWrap">
-                                <img th:src="${exhiItem.imgUrl}" alt="${exhiItem.itemName}">
+                                <img th:src="${ccItem.imgUrl}" alt="${exhiItem.itemName}">
                             </div>
                             <div class="locDetail">
                                 <span th:text="${exhiItem.itemName}" class="locDetail_title" ></span>
@@ -298,7 +298,7 @@
             <div id="musRecItems" style="display: flex">
                 <th:block th:each="musItem : ${musItems}" id="itemList">
                     <div class="locItem">
-                        <a class="linkLocItem">
+                        <a th:href="'/item/' + ${musItem.id}" class="linkLocItem">
                             <div class="locImgWrap">
                                 <img th:src="${musItem.imgUrl}" alt="${musItem.itemName}">
                             </div>
@@ -327,7 +327,7 @@
             <div id="festRecItems" style="display: flex">
                 <th:block th:each="festItem : ${festItems}" id="itemList">
                     <div class="locItem">
-                        <a class="linkLocItem">
+                        <a th:href="'/item/' + ${festItem.id}" class="linkLocItem">
                             <div class="locImgWrap">
                                 <img th:src="${festItem.imgUrl}" alt="${festItem.itemName}">
                             </div>
