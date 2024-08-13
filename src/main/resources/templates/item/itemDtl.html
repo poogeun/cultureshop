@@ -7,11 +7,30 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            calculateTotalPrice();
+
+            $("#count").change(function(){
+                calculateTotalPrice();
+            });
+        });
+
+        function calculateTotalPrice(){
+            var count = $("#count").val();
+            var price = $("#price").val();
+            var totalPrice = price * count;
+            $("#totalPrice").html(totalPrice + '원');
+        }
+    </script>
+</th:block>
+
 <th:block layout:fragment="css">
     <style>
         .itemMain {
-            width: 800px;
-            margin-top: 50px;
+            width: 1200px;
+            margin: 50px auto;
         }
         .summary {
             position: relative;
@@ -37,6 +56,7 @@
             display: inline-block;
             width: 450px;
             margin-left: 50px;
+            margin-top: 10px;
             vertical-align: top;
         }
         ul {
@@ -45,14 +65,25 @@
         .itemInfo {
             margin-top: 20px;
         }
+        .resBtn {
+            margin-top: 80px;
+        }
+        #nav {
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
         .itemMainBody {
             position: relative;
+            margin-top: 100px;
         }
         .navList {
             border: 1px solid #dadee3;
         }
         .itemContentsDtl .content {
             margin-bottom: 100px;
+            margin-left: 0;
         }
     </style>
 </th:block>
@@ -70,8 +101,12 @@
                 </div>
                 <div class="summaryBody">
                     <div class="posterBox">
-                        <a class="likeBtn" role="checkbox" href="#">좋아요</a>
-                        <img th:src="${item.imgUrl}" alt="${item.itemName}" class="posterBoxImage">
+                        <a class="likeBtn" role="checkbox" href="#">
+                            <span class="material-symbols-outlined">favorite</span>
+                            <span th:if="${likeCount == 0}">찜 0</span>
+                            <span th:unless="${likeCount == 0}" th:text="${'찜 '+ likeCount}"></span>
+                        </a>
+                        <img th:src="${item.itemImgDtoList[0].imgUrl}" alt="${item.itemName}" class="posterBoxImage">
                     </div>
                     <ul class="itemInfos">
                         <li class="itemInfo">
@@ -83,14 +118,26 @@
                             <div th:text="${item.startDay +' ~ '+ item.endDay}" class="infoDesc"></div>
                         </li>
                         <li class="itemInfo">
+                            <strong class="infoLabel">가격</strong>
+                            <input type="hidden" th:value="${item.price}" id="price" name="price">
+                            <div th:text="${item.price + '원'}" class="infoDesc"></div>
+                        </li>
+                        <li class="itemInfo">
                             <strong class="infoLabel">수량</strong>
                             <div class="infoDesc">
                                 <input type="number" name="count" id="count" value="1" min="1">
                             </div>
                         </li>
-                        <li class="itemInfo">
-                            <strong class="infoLabel">가격</strong>
-                            <div name="totalPrice" id="totalPrice" class="infoDesc"></div>
+                        <li class="resBtn">
+                            <div th:if="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
+                                 class="text-right">
+                                <button type="button" class="btn btn-primary btn-lg" onclick="order()">
+                                    총 <span name="totalPrice" id="totalPrice" class="font-weight-bold"></span> 예매하기</button>
+                            </div>
+                            <div th:unless="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
+                                 class="text-right">
+                                <button type="button" class="btn btn-danger btn-lg">오픈 준비중</button>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -98,7 +145,7 @@
         </div>
 
         <div id="itemMainBody" class="itemMainBody">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" id="nav">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">이용정보</a>
                 </li>
@@ -114,7 +161,7 @@
                 <div class="content">
                     <h3 class="contentTitle">상세 정보</h3>
                     <div th:text="${item.itemDetail}" class="contentDtl"></div>
-                    <img th:src="${item.imgUrl}" alt="${item.itemName}" class="contentDtl">
+                    <img th:src="${item.itemImgDtoList[1].imgUrl}" alt="${item.itemName}" class="contentDtl">
                 </div>
                 <div class="content">
                     <h3 class="contentTitle">판매 정보</h3>

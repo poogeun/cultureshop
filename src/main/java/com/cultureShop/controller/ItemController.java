@@ -3,7 +3,9 @@ package com.cultureShop.controller;
 import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.entity.Item;
+import com.cultureShop.entity.UserLikeItem;
 import com.cultureShop.service.ItemService;
+import com.cultureShop.service.UserLikeItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -29,6 +31,7 @@ import java.util.Optional;
 public class ItemController {
 
     private final ItemService itemService;
+    private final UserLikeItemService userLikeItemService;
 
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model, HttpServletRequest request){
@@ -113,8 +116,13 @@ public class ItemController {
 
     @GetMapping(value = "/item/{itemId}")
     public String itemDtl(@PathVariable("itemId")Long itemId, Model model){
+
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        UserLikeItem likeItem = userLikeItemService.getLikeItem(itemId);
+        int likeCount = likeItem.getCount();
+
         model.addAttribute("item", itemFormDto);
+        model.addAttribute("likeCount", likeCount);
         return "item/itemDtl";
     }
 }

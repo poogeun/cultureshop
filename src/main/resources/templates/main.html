@@ -269,9 +269,9 @@
             <div id="exhiRecItems" style="display: flex">
                 <th:block th:each="exhiItem : ${exhiItems}" id="itemList">
                     <div class="locItem">
-                        <a th:href="'/item/' + ${ccItem.id}" class="linkLocItem">
+                        <a th:href="'/item/' + ${exhiItem.id}" class="linkLocItem">
                             <div class="locImgWrap">
-                                <img th:src="${ccItem.imgUrl}" alt="${exhiItem.itemName}">
+                                <img th:src="${exhiItem.imgUrl}" alt="${exhiItem.itemName}">
                             </div>
                             <div class="locDetail">
                                 <span th:text="${exhiItem.itemName}" class="locDetail_title" ></span>
