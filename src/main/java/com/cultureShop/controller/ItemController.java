@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,10 +120,9 @@ public class ItemController {
 
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         UserLikeItem likeItem = userLikeItemService.getLikeItem(itemId);
-        int likeCount = likeItem.getCount();
 
         model.addAttribute("item", itemFormDto);
-        model.addAttribute("likeCount", likeCount);
+        model.addAttribute("likeItem", likeItem);
         return "item/itemDtl";
     }
 }

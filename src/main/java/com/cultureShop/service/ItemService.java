@@ -4,10 +4,8 @@ import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemImgDto;
 import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.dto.MainItemDto;
-import com.cultureShop.entity.Item;
-import com.cultureShop.entity.ItemImg;
-import com.cultureShop.repository.ItemImgRepository;
-import com.cultureShop.repository.ItemRepository;
+import com.cultureShop.entity.*;
+import com.cultureShop.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +25,9 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
+    private final MemberRepository memberRepository;
+    private final UserLikeRepository userLikeRepository;
+    private final UserLikeItemRepository userLikeItemRepository;
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
 
@@ -45,6 +46,7 @@ public class ItemService {
             }
             itemImgService.saveItemImg(itemImg, itemImgFileList.get(i));
         }
+
         return item.getId();
     }
 

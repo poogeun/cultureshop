@@ -101,11 +101,11 @@
                 </div>
                 <div class="summaryBody">
                     <div class="posterBox">
-                        <a class="likeBtn" role="checkbox" href="#">
+                        <button type="submit" th:classappend="${isLikeItem}" th:formaction="@{/like}" class="likeBtn">
                             <span class="material-symbols-outlined">favorite</span>
-                            <span th:if="${likeCount == 0}">찜 0</span>
-                            <span th:unless="${likeCount == 0}" th:text="${'찜 '+ likeCount}"></span>
-                        </a>
+                            <span th:if="${likeItem == null}">찜 0</span>
+                            <span th:unless="${likeItem == null}" th:text="${'찜 '+ likeItem.count}"></span>
+                        </button>
                         <img th:src="${item.itemImgDtoList[0].imgUrl}" alt="${item.itemName}" class="posterBoxImage">
                     </div>
                     <ul class="itemInfos">
