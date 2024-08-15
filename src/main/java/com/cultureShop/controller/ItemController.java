@@ -3,7 +3,9 @@ package com.cultureShop.controller;
 import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.entity.Item;
+import com.cultureShop.entity.Member;
 import com.cultureShop.entity.UserLikeItem;
+import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.service.ItemService;
 import com.cultureShop.service.UserLikeItemService;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,6 +35,7 @@ public class ItemController {
 
     private final ItemService itemService;
     private final UserLikeItemService userLikeItemService;
+    private final MemberRepository memberRepository;
 
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model, HttpServletRequest request){
@@ -116,13 +119,41 @@ public class ItemController {
     }
 
     @GetMapping(value = "/item/{itemId}")
-    public String itemDtl(@PathVariable("itemId")Long itemId, Model model){
+    public String itemDtl(@PathVariable("itemId")Long itemId, Model model, Principal principal){
 
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
-        UserLikeItem likeItem = userLikeItemService.getLikeItem(itemId);
+        List<UserLikeItem> likeItems = userLikeItemService.getLikeItems(itemId);
+        int likeCount = likeItems.size();
+
+        if(principal != null) {
+            System.out.println("========================================================");
+            System.out.println(userLikeItemService.findLikeItem(principal.getName(), itemId));
+            if (userLikeItemService.findLikeItem(principal.getName(), itemId)) {
+                model.addAttribute("isLikeItem", "afterLike");
+            }
+            else {
+                model.addAttribute("isLikeItem", "beforeLike");
+            }
+        }
 
         model.addAttribute("item", itemFormDto);
-        model.addAttribute("likeItem", likeItem);
+        model.addAttribute("likeItems", likeItems);
+        model.addAttribute("likeCount", likeCount);
         return "item/itemDtl";
+    }
+
+    @PostMapping(value = "/like") // 찜 추가
+    public String addLike(@RequestParam("itemId") Long itemId, Principal principal, Model model) {
+
+        System.out.println("-----------------------------");
+
+        if(principal != null) {
+            userLikeItemService.addLike(principal.getName(), itemId);
+            return "redirect:/item/"+itemId;
+        }
+        else {
+            model.addAttribute("errorMessage", "찜 기능은 로그인 후 이용 가능합니다.");
+        }
+        return "redirect:/item/"+itemId;
     }
 }

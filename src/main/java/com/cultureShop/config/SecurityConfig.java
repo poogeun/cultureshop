@@ -14,6 +14,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +31,7 @@ public class SecurityConfig {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/error").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/error", "/like").permitAll()
                         .requestMatchers("/", "/members/**", "/item/**", "/images/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -39,6 +40,9 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
                         .usernameParameter("email")
                         .failureUrl("/members/login/error")
+                ).logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+                        .logoutSuccessUrl("/")
                 );
 
         // 에러가 발생하면 이렇게 핸들링 해라, 권한이 없는 사용자 리소스 요청하면 "Unauthorized" 에러 발생 시킴

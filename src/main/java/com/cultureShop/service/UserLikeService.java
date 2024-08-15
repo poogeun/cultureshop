@@ -23,26 +23,5 @@ public class UserLikeService {
     private final UserLikeRepository userLikeRepository;
     private final UserLikeItemRepository userLikeItemRepository;
 
-    public Long addUserLike(Long itemId, String email) {
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository.findByEmail(email);
 
-        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
-        if(userLike == null) {
-            userLike = UserLike.createLike(member);
-            userLikeRepository.save(userLike);
-        }
-
-        UserLikeItem savedLikeItem = userLikeItemRepository.findByItemId(itemId);
-        if(savedLikeItem != null) {
-            savedLikeItem.addLike();
-            return savedLikeItem.getId();
-        }
-        else{
-            UserLikeItem userLikeItem = UserLikeItem.createLikeItem(item,userLike);
-            userLikeItemRepository.save(userLikeItem);
-            return userLikeItem.getId();
-        }
-    }
 }
