@@ -143,9 +143,10 @@ public class ItemController {
     }
 
     @PostMapping(value = "/like") // 찜 추가
-    public String addLike(@RequestParam("itemId") Long itemId, Principal principal, Model model) {
+    public String addLike(@RequestParam("itemId") Long itemId, Principal principal, Model model, HttpServletRequest request) {
 
-        System.out.println("-----------------------------");
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("_csrf", csrfToken);
 
         if(principal != null) {
             userLikeItemService.addLike(principal.getName(), itemId);

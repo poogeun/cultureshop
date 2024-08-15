@@ -20,6 +20,16 @@
             $("#count").change(function(){
                 calculateTotalPrice();
             });
+
+            $(".nav-link").on("click", function(e) {
+                $(".nav-link").each(function() {
+                    if ($(this).is(e.currentTarget)) {
+                        $(this).addClass("active");
+                    } else {
+                        $(this).removeClass("active");
+                    }
+                });
+            });
         });
 
         function calculateTotalPrice(){
@@ -100,6 +110,64 @@
             margin-bottom: 100px;
             margin-left: 0;
         }
+        #detail-sales {
+            line-height: 2.5;
+        }
+        .reviewWrap {
+
+        }
+        .reviewTop {
+            padding: 50px 0;
+            border-bottom: 1px solid #dadee3;
+        }
+        .leftSide {
+            float: left;
+            vertical-align: middle;
+        }
+        .rightSide {
+            float: right;
+            vertical-align: middle;
+        }
+        .reviewList {
+            padding-left: 0;
+        }
+        .reviewContent {
+            padding: 10px 40px;
+            margin: 40px 0;
+            border: 1px solid #dfe5ed;
+            border-radius: 15px;
+            box-sizing: border-box;
+        }
+        .reviewItemHead {
+            display: table;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .reviewItemHead .rightSide {
+            text-align: right;
+        }
+        .reviewInfos {
+            display: inline-block;
+            color: #999;
+            vertical-align: middle;
+
+        }
+        .reviewInfo {
+            display: inline-block;
+            position: relative;
+            margin-left: 15px;
+            padding-left: 15px;
+            vertical-align: middle;
+        }
+        .reviewTitle {
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        .reviewText {
+            line-height: 2;
+            margin-top: 20px;
+        }
     </style>
 </th:block>
 
@@ -164,28 +232,86 @@
         <div id="itemMainBody" class="itemMainBody">
             <ul class="nav nav-tabs" id="nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">이용정보</a>
+                    <a class="nav-link active" aria-current="page" href="#detail-img-text">이용정보</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">판매정보</a>
+                    <a class="nav-link" href="#detail-sales">판매정보</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">이용후기</a>
+                    <a class="nav-link" href="#detail-review">이용후기</a>
                 </li>
             </ul>
 
             <div class="itemContentsDtl">
-                <div class="content">
+                <div class="content" id="detail-img-text">
                     <h3 class="contentTitle">상세 정보</h3>
                     <div th:text="${item.itemDetail}" class="contentDtl"></div>
                     <img th:src="${item.itemImgDtoList[1].imgUrl}" alt="${item.itemName}" class="contentDtl">
                 </div>
-                <div class="content">
+                <div class="content" id="detail-sales">
                     <h3 class="contentTitle">판매 정보</h3>
-                    <div th:text="${item.info}" class="contentDtl"></div>
+                    <b style="font-size: 20px">[ 배송 정보 ]</b><br/>
+                    <p>
+                        1. 예매완료(결제익일) 기준 4~5일 이내에 배송됩니다. (주말, 공휴일을 제외한 영업일 기준)<br/>
+                        2. 배송 중 전달 불가사항이 발생할 시에는 반송되며, 본인 수령 불가 시 경우에 따라 대리 수령도 가능합니다.<br/>
+                        3. 공연 3일 전까지 티켓을 배송받지 못하신 경우 고객센터(0000-0000)로 연락 주시기 바랍니다.<br/>
+                        4. 반송이 확인되지 않은 티켓은 현장에서도 수령하실 수 없으며, 공연 관람 및 환불이 불가합니다.<br/>
+                        5. 티켓 배송 (배송상태 : 배송 준비중 이후) 후에는 주소 변경이 불가합니다.
+                    </p>
+                    <b style="font-size: 20px">[ 예매 취소 시 유의사항 ]</b><br/>
+                    <p style="background-color: #f4f6f9; padding-left: 30px">
+                        - ~관람일 10일전까지 : 장당 2,000원 (단, 최대 티켓금액의 10% 한도)<br/>
+                        - 관람일 9일전~관람일 7일전까지 : 티켓금액의 10%<br/>
+                        - 관람일 6일전~관람일 3일전까지 : 티켓금액의 20%<br/>
+                        - 관람일 2일전~관람일 1일전까지 : 티켓금액의 30%
+                    </p>
+                    <p>
+                        1. 취소 시 예매수수료는 예매 당일 밤 12시 이전까지 환불되며, 그 이후 기간에는 환불되지 않습니다.<br/>
+                        2. 웹 취소가능시간 이후에는 취소가 불가합니다.<br/>
+                        3. 단, 관람일 당일 취소가능 한 상품의 경우 관람일 당일 취소 시에는 티켓금액의 90%가 과금됩니다.<br/>
+                        4. 상품의 특성에 따라서, 취소수수료 정책이 달라질 수 있습니다.(각 상품 예매 시 취소수수료 확인)<br/>
+                        5. 배송 및 반송처리 된 티켓의 배송료는 환불되지 않습니다.<br/>
+                        6. (공연 전일이 휴일인 경우, 휴일 전날까지) 반송이 확인되지 않은 티켓은 현장에서도 수령하실 수 없으며, 공연 관람 및 환불이 불가합니다.
+                    </p>
                 </div>
-                <div class="content">
+                <div class="content" id="detail-review">
                     <h3 class="contentTitle">이용 후기</h3>
+                    <div class="reviewWrap">
+                        <div class="reviewTop">
+                            <div class="leftSide">
+                                <strong>총 <span class="reviewNum"></span>개의 이용후기가 등록되었습니다. </strong>
+                            </div>
+                            <div class="rightSide">
+                                <a role="button" href="#">이용후기 작성</a>
+                            </div>
+                        </div>
+                        <ul class="reviewList">
+                            <li class="reviewItem">
+                                <div class="reviewContent">
+                                    <div class="reviewItemHead">
+                                        <div class="leftSide">
+                                            <div class="prdStar">
+                                                별다섯개
+                                            </div>
+                                        </div>
+                                        <div class="rightSide">
+                                            <ul class="reviewInfos">
+                                                <li class="reviewInfo">작성자</li>
+                                                <li class="reviewInfo">작성일</li>
+                                                <li class="reviewInfo">조회수</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="reviewItemBody">
+                                        <strong class="reviewTitle">제목</strong>
+                                        <p class="reviewText">뭉크의 삶, 사랑, 질투 등에 대한 시각이 투영된 시기의 작품이 전시되었습니다.
+                                            우리에게 잘 알려진 '절규'가 탄생하기까지의 과거 작품들도 함께 감상할 수 있어서 참으로 유익했습니다.
+                                            다양한 범위의 다양한 기법들을 사용한 작가의 작품들을 접하게 되어 좋았습니다.</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
