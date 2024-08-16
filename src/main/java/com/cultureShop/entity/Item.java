@@ -2,6 +2,7 @@ package com.cultureShop.entity;
 
 import com.cultureShop.constant.ItemStartStatus;
 import com.cultureShop.dto.ItemFormDto;
+import com.cultureShop.exception.OutOfStockException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -71,6 +72,14 @@ public class Item extends BaseEntity {
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemStartStatus = itemFormDto.getItemStartStatus();
         this.info = itemFormDto.getInfo();
+    }
+
+    public void removeStock(int stockNumber) {
+        int restStock = this.stockNumber - stockNumber;
+        if(restStock < 0) {
+            throw new OutOfStockException("상품의 재고가 부족합니다.(현재 재고 수량: "+this.stockNumber);
+        }
+        this.stockNumber = restStock;
     }
 
 }

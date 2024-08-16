@@ -29,6 +29,18 @@
             display: flex;
             justify-content: center;
         }
+        .rwItem {
+            display: flex;
+            align-items: center;
+            margin: 50px 0;
+        }
+        .rwItemImg img {
+            width: 130px;
+        }
+        .rwItemInfo {
+            margin-left: 30px;
+            width: 400px;
+        }
         .starRadio {
             display: flex;
             align-items: center;
@@ -47,12 +59,22 @@
 </th:block>
 
 <div layout:fragment="content">
+    <form role="form" method="post" th:object="${reviewFormDto}">
     <div class="reviewWriteBox">
         <div class="rwTop">
             구매후기 작성
         </div>
         <div class="rwBody">
-            상품정보
+            <div class="rwItem">
+                <div class="rwItemImg">
+                    <img th:src="${item.imgUrl}" alt="${item.itemName}">
+                </div>
+                <div class="rwItemInfo">
+                    <div class="orderDate">구매 날짜</div>
+                    <h4 th:text="${item.itemName}" class="rwItemName"></h4>
+                    <div th:text="${item.place}" class="rwItemLoc" style="color: #bbe309"></div>
+                </div>
+            </div>
         </div>
         <div class="rwBody">
             <div class="starRadio">
@@ -91,8 +113,16 @@
             </div>
         </div>
         <div class="rwBody">
-
+            <div class="rwBtn">
+                <div th:if="${#strings.isEmpty(reviewFormDto.id)}" class="rwSave">
+                    <button th:formaction="@{/review/write}" type="submit" class="btn btn-primary">저장</button>
+                </div>
+                <div th:unless="${#strings.isEmpty(reviewFormDto.id)}" class="rwSave">
+                    <button th:formaction="@{'/review/update/' + ${reviewFormDto.id}}" type="submit" class="btn btn-primary">수정</button>
+                </div>
+            </div>
         </div>
     </div>
+    </form>
 </div>
 </html>

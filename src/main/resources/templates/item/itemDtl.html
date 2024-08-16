@@ -174,6 +174,7 @@
 <div layout:fragment="content">
     <form method="post">
     <div class="itemMain">
+        <input type="hidden" name="itemId" th:value="${item.id}">
         <div class="itemMainTop">
             <div class="summary">
                 <div class="summaryTop">
@@ -282,7 +283,7 @@
                                 <strong>총 <span class="reviewNum"></span>개의 이용후기가 등록되었습니다. </strong>
                             </div>
                             <div class="rightSide">
-                                <a role="button" href="#">이용후기 작성</a>
+                                <a role="button" th:href="@{'/review/write/' + ${item.id}}">이용후기 작성</a>
                             </div>
                         </div>
                         <ul class="reviewList">
