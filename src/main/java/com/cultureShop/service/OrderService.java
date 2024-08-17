@@ -1,6 +1,6 @@
 package com.cultureShop.service;
 
-import com.cultureShop.dto.OrderDto;
+import com.cultureShop.dto.OrderFormDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
 import com.cultureShop.entity.Order;
@@ -25,7 +25,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
 
-    public Long order(OrderDto orderDto, String email) {
+    public Long order(OrderFormDto orderDto, String email) {
         Item item = itemRepository.findById(orderDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByEmail(email);

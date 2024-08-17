@@ -2,6 +2,7 @@ package com.cultureShop.controller;
 
 import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemSearchDto;
+import com.cultureShop.dto.LikeDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
 import com.cultureShop.entity.UserLikeItem;
@@ -15,14 +16,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -142,19 +142,15 @@ public class ItemController {
         return "item/itemDtl";
     }
 
-    @PostMapping(value = "/like") // 찜 추가
-    public String addLike(@RequestParam("itemId") Long itemId, Principal principal, Model model, HttpServletRequest request) {
-
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        model.addAttribute("_csrf", csrfToken);
+    @PostMapping(value = "/like") // 찜 기능
+    public @ResponseBody ResponseEntity addLike(@RequestBody LikeDto likeDto, Principal principal, Model model) {
 
         if(principal != null) {
-            userLikeItemService.addLike(principal.getName(), itemId);
-            return "redirect:/item/"+itemId;
+            userLikeItemService.addLike(principal.getName(), likeDto.getItemId());
+            return new ResponseEntity<Long>(likeDto.getItemId(), HttpStatus.OK);
         }
         else {
-            model.addAttribute("errorMessage", "찜 기능은 로그인 후 이용 가능합니다.");
+            return new ResponseEntity<String>("찜 기능은 로그인 후 이용 가능합니다.", HttpStatus.BAD_REQUEST);
         }
-        return "redirect:/item/"+itemId;
     }
 }

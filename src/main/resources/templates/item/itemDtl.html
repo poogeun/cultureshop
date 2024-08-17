@@ -38,6 +38,37 @@
             var totalPrice = price * count;
             $("#totalPrice").html(totalPrice + '원');
         }
+
+        function addLike() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/like";
+            var paramData = {
+                itemId : $("#itemId").val()
+            }
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url : url,
+                type : "POST",
+                contentType : "application/json",
+                data : param,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function(result, status){
+                    location.href = '/item/' + [[${item.id}]]
+                },
+                error : function(jqXHR, status, error){
+                    alert('찜 기능은 로그인 후 이용 가능합니다.');
+                    location.href = '/members/login';
+                }
+            });
+        }
     </script>
 </th:block>
 
@@ -73,8 +104,8 @@
             width: 300px;
         }
         .posterBoxImage {
-            width: 300px;
-            height: 400px;
+            width: 330px;
+            height: 430px;
             border: 1px solid #dadee3;
         }
         .itemInfos {
@@ -91,7 +122,7 @@
             margin-top: 20px;
         }
         .resBtn {
-            margin-top: 80px;
+            margin-top: 50px;
         }
         #nav {
             background-color: #fff;
@@ -172,9 +203,8 @@
 </th:block>
 
 <div layout:fragment="content">
-    <form method="post">
+    <form th:action="@{/order}" method="get">
     <div class="itemMain">
-        <input type="hidden" name="itemId" th:value="${item.id}">
         <div class="itemMainTop">
             <div class="summary">
                 <div class="summaryTop">
@@ -186,11 +216,11 @@
                 </div>
                 <div class="summaryBody">
                     <div class="posterBox">
-                        <button type="submit" th:classappend="${isLikeItem}" th:formaction="@{/like}" class="likeBtn">
+                        <button type="button" th:classappend="${isLikeItem}" onclick="addLike()" class="likeBtn">
                             <span class="material-symbols-outlined">favorite</span>
                             <span th:if="${likeItems == null}" style="color: grey">찜 0</span>
                             <span th:unless="${likeItems == null}" th:text="${'찜 '+ likeCount}" style="color: grey"></span>
-                            <input type="hidden" name="itemId" th:value="${item.id}">
+                            <input type="hidden" id="itemId" name="itemId" th:value="${item.id}">
                         </button>
                         <img th:src="${item.itemImgDtoList[0].imgUrl}" alt="${item.itemName}" class="posterBoxImage">
                     </div>
@@ -214,10 +244,16 @@
                                 <input type="number" name="count" id="count" value="1" min="1">
                             </div>
                         </li>
+                        <li class="itemInfo">
+                            <strong class="infoLabel">관람일</strong>
+                            <div class="infoDesc">
+                                <input type="date" th:min="${item.startDay}" th:max="${item.endDay}" name="date" id="date">
+                            </div>
+                        </li>
                         <li class="resBtn">
                             <div th:if="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
                                  class="text-right">
-                                <button type="button" class="btn btn-primary btn-lg" onclick="order()">
+                                <button type="submit" class="btn btn-primary btn-lg">
                                     총 <span name="totalPrice" id="totalPrice" class="font-weight-bold"></span> 예매하기</button>
                             </div>
                             <div th:unless="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"

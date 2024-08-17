@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class OrderDto {
+public class OrderFormDto {
 
     @NotNull(message = "상품 아이디는 필수 입력 값입니다.")
     private Long itemId;
@@ -20,4 +20,12 @@ public class OrderDto {
     private int count;
 
     private LocalDate viewDay;
+
+    private String orderName;
+    private String orderTel;
+    private String address;
+    private String delReq;
+    private String reqWrite;
+    private String getTicket;
+
 }
