@@ -21,9 +21,9 @@ public class OrderFormDto {
 
     private LocalDate viewDay;
 
-    private String orderName;
-    private String orderTel;
+    @NotNull(message = "주소는 필수 입력 값입니다.")
     private String address;
+
     private String delReq;
     private String reqWrite;
     private String getTicket;

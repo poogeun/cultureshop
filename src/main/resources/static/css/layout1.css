@@ -350,3 +350,95 @@ section {
     line-height: 150%;
     color: #cdd0d1;
 }
+
+/* orderForm */
+.subTitle {
+    padding-top: 50px;
+    padding-bottom: 15px;
+    font-size: 20px;
+    font-weight: 800;
+    border-bottom: 2px solid #808080;
+}
+.oiContent {
+
+}
+.memInfos {
+    padding: 30px 0;
+}
+.delReq {
+    border-top: 1px solid #ebebeb;
+    padding-top: 30px;
+}
+.gtContent {
+    margin-top: 30px;
+}
+.gtSelect {
+    border: 1px solid #ebebeb;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    align-content: center;
+    padding-left: 50px;
+    width: 500px;
+    height: 70px;
+}
+.orderItems {
+    border-color: #ebebeb;
+}
+.orderItemDtl {
+    padding: 0;
+    border-color: #ebebeb;
+    display: flex;
+    flex-direction: column;
+}
+.oidWrap {
+    width: 100%;
+    padding: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+.orderItemDtl img {
+    width: 150px;
+}
+.orderItemText {
+    padding: 0;
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+}
+.oit_1 {
+    width: 850px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-left: 50px;
+}
+.oit_2 {
+    width: 208px;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid #ebebeb;
+    flex-shrink: 0;
+    justify-content: center;
+}
+.pmContent {
+    margin: 30px auto;
+    width: 600px;
+}
+.pmContent th {
+    text-align: center;
+    line-height: 3;
+}
+.pmContent td {
+    text-align: center;
+    line-height: 4;
+    font-weight: 600;
+}
+.payBtn {
+    margin: 100px auto 0;
+    padding: 30px 0 0;
+    width: 444px;
+}
+.delReq textarea {
+    margin-top: 20px;
+}

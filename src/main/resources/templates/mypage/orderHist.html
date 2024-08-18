@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+    <style>
+        .mypageHead {
+            margin: 0 auto;
+            width: 1200px;
+        }
+        .mypageBox {
+            border: 1px solid #F0F0F0;
+            margin: 20px auto 0;
+            padding: 26px 40px 31px 40px;
+            border-radius: 8px;
+            height: 200px;
+            align-content: center;
+        }
+        .mypageText {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .mypage-mem {
+            width: 420px;
+            margin-bottom: 0;
+            align-content: center;
+        }
+        .mypage-list {
+            width: 546px;
+            align-items: center;
+        }
+        .mypage-button {
+            width: 116px;
+            height: 58px;
+            padding: 0;
+            border: none;
+            background: none;
+            margin-right: 60px;
+        }
+        .menuList {
+            display: flex;
+            position: relative;
+            height: 58px;
+            align-items: flex-start;
+            padding-top: 32px;
+            flex-direction: row;
+        }
+        .mypage-menu {
+            top: 0;
+            left: 0;
+            position: absolute;
+            margin-top: 0;
+        }
+        .mypage-menu-count {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .orderList {
+            width: 100%;
+            display: table;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        .olItem {
+            width: 100%;
+            padding: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .olItem img {
+            display: block;
+            width: 130px;
+        }
+        .olItemText {
+            padding: 0;
+            align-items: stretch;
+            display: flex;
+            width: 500px;
+        }
+        .olText {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            padding-top: 20px;
+            padding-left: 50px;
+        }
+
+
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="container">
+        <section class="mypageHead">
+            <div class="mypageBox">
+                <div class="mypageText">
+                    <div class="mypage-mem">
+                        <span style="font-size: 25px">장인영님</span>
+                        <a href="#" style="color: #808080">회원정보수정</a>
+                    </div>
+                    <div class="mypage-list">
+                        <button class="mypage-button" type="button">
+                            <div class="menuList">
+                                <span class="material-symbols-outlined" style="font-size: 40px">shopping_bag</span>
+                                <span class="mypage-menu">구매</span>
+                                <strong class="mypage-menu-count">(1)</strong>
+                            </div>
+                        </button>
+                        <button class="mypage-button" type="button">
+                            <div class="menuList">
+                                <span class="material-symbols-outlined" style="font-size: 40px">Favorite</span>
+                                <span class="mypage-menu">좋아요</span>
+                                <strong class="mypage-menu-count">(2)</strong>
+                            </div>
+                        </button>
+                        <button class="mypage-button" type="button">
+                            <div class="menuList">
+                                <span class="material-symbols-outlined" style="font-size: 40px">rate_review</span>
+                                <span class="mypage-menu">리뷰</span>
+                                <strong class="mypage-menu-count">(3)</strong>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mypageBody">
+            <div class="mypage-body">
+                <h2 class="mypage-title">주문 내역</h2>
+                <table class="orderList">
+                    <colgroup>
+                        <col width="15%">
+                        <col width="55%">
+                        <col width="15%">
+                        <col width="15%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>주문 일자</th>
+                            <th>상품 정보</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-05-02</td>
+                            <td>
+                                <div class="olItem">
+                                    <img th:src="@{/img/example.gif}" alt="포스터">
+                                    <div class="olItemText">
+                                        <div class="olText">
+                                            <h3 style="font-weight: bold">상품명</h3>
+                                            <div style="color: #787878">관람일 : 2024-05-02</div>
+                                            <div style="color: #787878">수량 : 1개</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>주문상세보기</td>
+                            <td>주문취소</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+</html>

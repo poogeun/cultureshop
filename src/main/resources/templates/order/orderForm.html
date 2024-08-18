@@ -3,98 +3,14 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
 <th:block layout:fragment="css">
     <style>
-        .subTitle {
-            padding-top: 50px;
-            padding-bottom: 15px;
-            font-size: 20px;
-            font-weight: 800;
-            border-bottom: 2px solid #808080;
-        }
-        .oiContent {
 
-        }
-        .memInfos {
-            padding: 30px 0;
-        }
-        .delReq {
-            border-top: 1px solid #ebebeb;
-            padding-top: 30px;
-        }
-        .gtContent {
-            margin-top: 30px;
-        }
-        .gtSelect {
-            border: 1px solid #ebebeb;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            align-content: center;
-            padding-left: 50px;
-            width: 500px;
-            height: 70px;
-        }
-        .orderItems {
-            border-color: #ebebeb;
-        }
-        .orderItemDtl {
-            padding: 0;
-            border-color: #ebebeb;
-            display: flex;
-            flex-direction: column;
-        }
-        .oidWrap {
-            width: 100%;
-            padding: 20px 0;
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .orderItemDtl img {
-            width: 150px;
-        }
-        .orderItemText {
-            padding: 0;
-            align-items: stretch;
-            display: flex;
-            flex-direction: row;
-        }
-        .oit_1 {
-            width: 850px;
-            display: flex;
-            align-items: flex-start;
-            flex-direction: column;
-            padding-top: 20px;
-            padding-left: 50px;
-        }
-        .oit_2 {
-            width: 208px;
-            display: flex;
-            align-items: center;
-            border-left: 1px solid #ebebeb;
-            flex-shrink: 0;
-            justify-content: center;
-        }
-        .pmContent {
-            margin: 30px auto;
-            width: 600px;
-        }
-        .pmContent th {
-            text-align: center;
-            line-height: 3;
-        }
-        .pmContent td {
-            text-align: center;
-            line-height: 4;
-            font-weight: 600;
-        }
-        .payBtn {
-            margin: 100px auto 0;
-            padding: 30px 0 0;
-            width: 444px;
-        }
-        .delReq textarea {
-            margin-top: 20px;
-        }
 
     </style>
 </th:block>
@@ -108,7 +24,7 @@
             }
 
             $('#reqWrite').hide();
-            $('#orderReq').change(function() {
+            $('#delReq').change(function() {
                 if($(this).val() === '직접 입력') {
                     $('#reqWrite').show();
                 }
@@ -132,6 +48,49 @@
 
         });
 
+        function order() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/order";
+            var paramData = {
+                itemId : $('#itemId').val(),
+                count : $('#count').val(),
+                viewDay : $('#date').val(),
+                address: $('#address').val(),
+                delReq: $('#delReq').val(),
+                reqWrite: $('#reqWrite').val(),
+                getTicket: $("input[name='getTicket']:checked").val()
+            }
+
+            var param = JSON.stringify(paramData);
+
+            console.log("Sending request with data:", param);
+
+            $.ajax({
+                url : url,
+                type : "POST",
+                contentType : "application/json",
+                data : param,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function(result, status) {
+                    alert('주문이 완료 되었습니다.');
+                },
+                error : function(jqXHR, status, error) {
+                    if(jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요.');
+                    }
+                    else {
+                        alert(jqXHR.responseText);
+                    }
+                }
+            });
+
+        }
 
 
 
@@ -141,7 +100,7 @@
 
 <div layout:fragment="content">
     <div class="container">
-    <form th:action="@{/order}" method="post" th:object="${orderFormDto}">
+        <input type="hidden" th:value="${item.id}" id="itemId">
         <section class="orderInfo">
             <div class="subTitle">
                 <div>배송정보</div>
@@ -158,14 +117,14 @@
                             <input class="form-control" type="text" th:value="${member.tel}" id="orderTel" readonly>
                         </div>
                         <div class="col-12">
-                            <label for="orderAddr" class="form-label" style="color: #808080">Address</label>
-                            <input type="text" class="form-control" th:value="${member.address}" id="orderAddr">
+                            <label for="address" class="form-label" style="color: #808080">주소</label>
+                            <input type="text" class="form-control" th:value="${member.address}" id="address">
                         </div>
                     </div>
                     <div class="delReq">
                         <div class="col-md-6">
-                            <label for="orderReq" class="form-label" style="color: #808080">배송 요청사항</label>
-                            <select class="form-select" id="orderReq" th:field="*{delReq}">
+                            <label for="delReq" class="form-label" style="color: #808080">배송 요청사항</label>
+                            <select class="form-select" id="delReq">
                                 <option value="요청사항없음">배송 요청 사항을 선택하세요.</option>
                                 <option value="배송 전 연락 바랍니다.">배송 전 연락 바랍니다.</option>
                                 <option value="부재시 휴대전화로 연락주세요.">부재시 휴대전화로 연락주세요.</option>
@@ -175,7 +134,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <textarea class="form-control" id="reqWrite" th:field="*{reqWrite}" rows="3" placeholder="배송 요청 사항을 입력하세요.(최대 50자)"></textarea>
+                            <textarea class="form-control" id="reqWrite" rows="3" placeholder="배송 요청 사항을 입력하세요.(최대 50자)"></textarea>
                         </div>
                     </div>
                 </div>
@@ -189,13 +148,13 @@
             <div class="subContents">
                 <div class="gtContent">
                     <div class="form-check gtSelect">
-                        <input class="form-check-input" type="radio" th:field="*{getTicket}" value="현장수령" name="getTicket" id="scene" checked>
+                        <input class="form-check-input" type="radio" value="현장수령" name="getTicket" id="scene" checked>
                         <label class="form-check-label" for="scene">
                             현장수령
                         </label>
                     </div>
                     <div class="form-check gtSelect">
-                        <input class="form-check-input" type="radio" th:field="*{getTicket}" value="배송" name="getTicket" id="delivery">
+                        <input class="form-check-input" type="radio" value="배송" name="getTicket" id="delivery">
                         <label class="form-check-label" for="delivery">
                             배송 (3000원)
                         </label>
@@ -213,12 +172,14 @@
                     <ul class="orderItems">
                         <li class="orderItemDtl">
                             <div class="oidWrap">
-                                <img th:src="@{/img/example.gif}" alt="포스터">
+                                <img th:src="${item.imgUrl}" th:alt="${item.itemName}">
                                 <div class="orderItemText">
                                     <div class="oit_1">
                                         <h3 th:text=${item.itemName} style="font-weight: bold"></h3>
                                         <div th:text="'관람일 : ' + ${date}" style="color: #787878"></div>
+                                        <input type="hidden" th:value="${date}" id="date">
                                         <div th:text="'수량 : ' + ${count} + '개'" style="color: #787878"></div>
+                                        <input type="hidden" th:value="${count}" id="count">
                                     </div>
                                     <div class="oit_2">
                                         <strong th:text="${item.price * count} + '원'" style="font-size: 20px"></strong>
@@ -265,10 +226,10 @@
             </div>
         </section>
 
+
         <div class="d-grid gap-2 payBtn">
-            <button class="btn btn-primary btn-lg" type="submit">결제하기</button>
+            <button class="btn btn-primary btn-lg" type="button" onclick="order()">결제하기</button>
         </div>
-    </form>
     </div>
 </div>
 </html>

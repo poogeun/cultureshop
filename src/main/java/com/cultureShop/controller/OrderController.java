@@ -1,5 +1,6 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.OrderFormDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
@@ -7,15 +8,22 @@ import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.service.OrderService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +38,7 @@ public class OrderController {
                         @RequestParam("date") LocalDate date, Principal principal, Model model) {
 
         Member member = memberRepository.findByEmail(principal.getName());
-        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        MainItemDto item = itemRepository.findMainItemDto(itemId);
 
         model.addAttribute("orderFormDto", new OrderFormDto());
         model.addAttribute("member", member);
@@ -41,10 +49,26 @@ public class OrderController {
     }
 
     @PostMapping(value = "/order")
-    public String order(OrderFormDto orderFormDto, Model model) {
+    public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderFormDto orderFormDto,
+                                              BindingResult bindingResult, Principal principal) {
 
-        System.out.println(orderFormDto.getGetTicket());
+        if(bindingResult.hasErrors()) {
+            StringBuilder sb = new StringBuilder();
+            List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
+            for(FieldError fieldError : fieldErrorList) {
+                sb.append(fieldError.getDefaultMessage());
+            }
+            return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
+        }
 
-        return "order/orderSuccess";
+        String email = principal.getName();
+        Long orderId;
+        try{
+            orderId = orderService.order(orderFormDto, email);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
+
 }
