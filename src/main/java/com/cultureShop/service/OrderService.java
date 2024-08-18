@@ -25,16 +25,16 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
 
-    public Long order(OrderFormDto orderDto, String email) {
-        Item item = itemRepository.findById(orderDto.getItemId())
+    public Long order(OrderFormDto orderFormDto, String email) {
+        Item item = itemRepository.findById(orderFormDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByEmail(email);
 
         List<OrderItem> orderItemList = new ArrayList<>();
-        OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getViewDay(), orderDto.getCount());
+        OrderItem orderItem = OrderItem.createOrderItem(item, orderFormDto.getViewDay(), orderFormDto.getCount());
         orderItemList.add(orderItem);
 
-        Order order = Order.createOrder(member, orderItemList);
+        Order order = Order.createOrder(member, orderItemList, orderFormDto);
         orderRepository.save(order);
         return order.getId();
     }

@@ -59,7 +59,7 @@
             flex-direction: row;
         }
         .oit_1 {
-            width: 660px;
+            width: 850px;
             display: flex;
             align-items: flex-start;
             flex-direction: column;
@@ -85,6 +85,7 @@
         .pmContent td {
             text-align: center;
             line-height: 4;
+            font-weight: 600;
         }
         .payBtn {
             margin: 100px auto 0;
@@ -116,7 +117,25 @@
                 }
             });
 
+            $('.delFree').show();
+            $('.delCharge').hide();
+            $('input[name="getTicket"]').change(function() {
+                if($(this).val() === '현장수령') {
+                    $('.delFree').show();
+                    $('.delCharge').hide();
+                }
+                else {
+                    $('.delCharge').show();
+                    $('.delFree').hide();
+                }
+            });
+
         });
+
+
+
+
+
     </script>
 </th:block>
 
@@ -170,13 +189,13 @@
             <div class="subContents">
                 <div class="gtContent">
                     <div class="form-check gtSelect">
-                        <input class="form-check-input" type="radio" name="getTicket" id="scene" checked>
+                        <input class="form-check-input" type="radio" th:field="*{getTicket}" value="현장수령" name="getTicket" id="scene" checked>
                         <label class="form-check-label" for="scene">
                             현장수령
                         </label>
                     </div>
                     <div class="form-check gtSelect">
-                        <input class="form-check-input" type="radio" name="getTicket" id="delivery">
+                        <input class="form-check-input" type="radio" th:field="*{getTicket}" value="배송" name="getTicket" id="delivery">
                         <label class="form-check-label" for="delivery">
                             배송 (3000원)
                         </label>
@@ -197,12 +216,12 @@
                                 <img th:src="@{/img/example.gif}" alt="포스터">
                                 <div class="orderItemText">
                                     <div class="oit_1">
-                                        <h3 style="font-weight: bold">상품명</h3>
-                                        <div style="color: #BBE309">관람일</div>
-                                        <div style="color: #787878">수량</div>
+                                        <h3 th:text=${item.itemName} style="font-weight: bold"></h3>
+                                        <div th:text="'관람일 : ' + ${date}" style="color: #787878"></div>
+                                        <div th:text="'수량 : ' + ${count} + '개'" style="color: #787878"></div>
                                     </div>
                                     <div class="oit_2">
-                                        <strong style="font-size: 20px">10000원</strong>
+                                        <strong th:text="${item.price * count} + '원'" style="font-size: 20px"></strong>
                                     </div>
                                 </div>
                             </div>
@@ -225,30 +244,21 @@
                         </colgroup>
                         <tr>
                             <th class="p-3 bg-body-tertiary">총 상품금액</th>
-                            <td>50000원</td>
-                            <!--
-                            <td th:text="${item.ogPrice * orderFormDto.count} + '원'" class="formatPrice p-3"></td>
-                            -->
+                            <td th:text="${item.price * count} + '원'"></td>
                         </tr>
                         <tr>
                             <th class="p-3 bg-body-tertiary">배송비</th>
-                            <td>3000원</td>
-                            <!--
-                            <td th:if="${item.price * orderFormDto.count < 30000}" class="p-3">
+                            <td class="delCharge">
                                 +3,000원
                             </td>
-                            <td th:unless="${item.price * orderFormDto.count < 30000}" class="p-3">
-                                무료
+                            <td class="delFree">
+                                없음
                             </td>
-                            -->
                         </tr>
                         <tr>
                             <th class="p-3 bg-body-tertiary">총 결제금액</th>
-                            <td style="color: #C10000">50000원</td>
-                            <!--
-                            <td th:if="${item.price * orderFormDto.count < 30000}" th:text="${item.price * orderFormDto.count + 3000} + '원'" class="formatPrice text-danger p-3 fw-bold fs-5"></td>
-                            <td th:unless="${item.price * orderFormDto.count < 30000}" th:text="${item.price * orderFormDto.count} + '원'" class="formatPrice text-danger p-3 fw-bold fs-5"></td>
-                            -->
+                            <td th:text="${item.price * count + 3000} + '원'" class="delCharge" style="color: #C10000"></td>
+                            <td th:text="${item.price * count} + '원'" class="delFree" style="color: #C10000"></td>
                         </tr>
                     </table>
                 </div>
@@ -256,7 +266,7 @@
         </section>
 
         <div class="d-grid gap-2 payBtn">
-            <button class="btn btn-primary btn-lg" type="button">결제하기</button>
+            <button class="btn btn-primary btn-lg" type="submit">결제하기</button>
         </div>
     </form>
     </div>

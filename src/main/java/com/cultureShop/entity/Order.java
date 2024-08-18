@@ -1,6 +1,7 @@
 package com.cultureShop.entity;
 
 import com.cultureShop.constant.OrderStatus;
+import com.cultureShop.dto.OrderFormDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,9 @@ public class Order extends BaseEntity{
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDateTime orderDate;
+    private String delReq;
+    private String reqWrite;
+    private String getTicket;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -38,12 +42,15 @@ public class Order extends BaseEntity{
         orderItem.setOrder(this);
     }
 
-    public static Order createOrder(Member member, List<OrderItem> orderItemList) {
+    public static Order createOrder(Member member, List<OrderItem> orderItemList, OrderFormDto orderFormDto) {
         Order order = new Order();
         order.setMember(member);
         for(OrderItem orderItem : orderItemList) {
             order.addOrderItem(orderItem);
         }
+        order.setDelReq(orderFormDto.getDelReq());
+        order.setReqWrite(orderFormDto.getReqWrite());
+        order.setGetTicket(orderFormDto.getGetTicket());
         order.setOrderStatus(OrderStatus.ORDER);
         order.setOrderDate(LocalDateTime.now());
         return order;
