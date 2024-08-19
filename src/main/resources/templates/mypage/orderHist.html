@@ -3,11 +3,18 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
 <th:block layout:fragment="css">
     <style>
+        section {
+            width: 100%;
+        }
         .mypageHead {
             margin: 0 auto;
-            width: 1200px;
         }
         .mypageBox {
             border: 1px solid #F0F0F0;
@@ -47,6 +54,10 @@
             padding-top: 32px;
             flex-direction: row;
         }
+        #bag {
+            font-size: 40px;
+            color: #bbe309;
+        }
         .mypage-menu {
             top: 0;
             left: 0;
@@ -60,8 +71,19 @@
         .orderList {
             width: 100%;
             display: table;
+            border-bottom: 1px solid #f0f0f0;
             border-spacing: 0;
             border-collapse: collapse;
+        }
+        .orderList th {
+            text-align: center;
+            color: #808080;
+            font-weight: 800;
+        }
+        .orderList td {
+            text-align: center;
+            border-top: 1px solid #f0f0f0;
+            border-right: 1px solid #f0f0f0;
         }
         .olItem {
             width: 100%;
@@ -72,6 +94,7 @@
         .olItem img {
             display: block;
             width: 130px;
+            margin-left: 20px;
         }
         .olItemText {
             padding: 0;
@@ -108,22 +131,22 @@
             <div class="mypageBox">
                 <div class="mypageText">
                     <div class="mypage-mem">
-                        <span style="font-size: 25px">장인영님</span>
+                        <span th:text="${member.name} + '님'" style="font-size: 25px"></span>
                         <a href="#" style="color: #808080">회원정보수정</a>
                     </div>
                     <div class="mypage-list">
                         <button class="mypage-button" type="button">
                             <div class="menuList">
-                                <span class="material-symbols-outlined" style="font-size: 40px">shopping_bag</span>
+                                <span class="material-symbols-outlined" id="bag">shopping_bag</span>
                                 <span class="mypage-menu">구매</span>
-                                <strong class="mypage-menu-count">(1)</strong>
+                                <strong th:text="${orderCount}" class="mypage-menu-count"></strong>
                             </div>
                         </button>
                         <button class="mypage-button" type="button">
                             <div class="menuList">
                                 <span class="material-symbols-outlined" style="font-size: 40px">Favorite</span>
                                 <span class="mypage-menu">좋아요</span>
-                                <strong class="mypage-menu-count">(2)</strong>
+                                <strong th:text="${likeCount}" class="mypage-menu-count"></strong>
                             </div>
                         </button>
                         <button class="mypage-button" type="button">
@@ -140,11 +163,10 @@
 
         <section class="mypageBody">
             <div class="mypage-body">
-                <h2 class="mypage-title">주문 내역</h2>
                 <table class="orderList">
                     <colgroup>
-                        <col width="15%">
-                        <col width="55%">
+                        <col width="10%">
+                        <col width="60%">
                         <col width="15%">
                         <col width="15%">
                     </colgroup>
@@ -157,27 +179,62 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <div th:each="order : ${orders.getContent()}">
                         <tr>
-                            <td>2024-05-02</td>
+                            <td th:text="${order.orderDate}"></td>
                             <td>
                                 <div class="olItem">
-                                    <img th:src="@{/img/example.gif}" alt="포스터">
-                                    <div class="olItemText">
-                                        <div class="olText">
-                                            <h3 style="font-weight: bold">상품명</h3>
-                                            <div style="color: #787878">관람일 : 2024-05-02</div>
-                                            <div style="color: #787878">수량 : 1개</div>
+                                    <div th:each="orderItem : ${order.orderItemDtoList}">
+                                        <img th:src="${orderItem.imgUrl}" th:alt="${orderItem.itemName}">
+                                        <div class="olItemText">
+                                            <div class="olText">
+                                                <h3 th:text="${orderItem.itemName}" style="font-weight: bold"></h3>
+                                                <div th:text="'관람일: ' + ${orderItem.viewDay}" style="color: #787878"></div>
+                                                <div th:text="'수량: ' + ${orderItem.count}" style="color: #787878"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td>주문상세보기</td>
-                            <td>주문취소</td>
+                            <td style="border-right: none">
+                                <th:block th:if="${order.orderStatus == T(com.cultureShop.constant.OrderStatus).ORDER}">
+                                    <button type="button" class="btn btn-outline-danger" th:value="${order.orderId}"
+                                            onclick="cancelOrder(this.value)">주문취소</button>
+                                </th:block>
+                                <th:block th:unless="${order.orderStatus == T(com.cultureShop.constant.OrderStatus).ORDER}">
+                                    <h4>(취소 완료)</h4>
+                                </th:block>
+                            </td>
                         </tr>
+                    </div>
                     </tbody>
                 </table>
             </div>
         </section>
+
+        <div th:with="start=${(orders.number/maxPage) * maxPage + 1},
+                end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage-1) < orders.totalPages ?
+                start + (maxPage-1) : orders.totalPages)})">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${orders.number eq 0} ? 'disabled' : ''">
+                    <a th:href="@{'/my-page/orders/' + ${orders.number-1}}" aria-label="Previous" class="page-link">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}"
+                    th:classappend="${orders.number eq page-1} ? 'active' : ''">
+                    <a th:href="@{'/my-page/orders/' + ${page-1}}" th:inline="text" class="page-link">
+                        [[${page}]]
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${orders.number+1 ge orders.totalPages} ? 'disabled' : ''">
+                    <a th:href="@{'/my-page/orders/' + ${orders.number+1}}" aria-label="Next" class="page-link">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 </html>
