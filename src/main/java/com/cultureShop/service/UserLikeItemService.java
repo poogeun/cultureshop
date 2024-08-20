@@ -1,5 +1,6 @@
 package com.cultureShop.service;
 
+import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
 import com.cultureShop.entity.UserLike;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -69,5 +71,35 @@ public class UserLikeItemService {
         else {
             userLikeItemRepository.delete(userLikeItem);
         }
+    }
+
+    // 찜 상품 개수
+    public int likeCount(String email) {
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        int likeCount = 0;
+        if(userLike != null) {
+            List<UserLikeItem> userLikeItems = userLikeItemRepository.findByUserLikeId(userLike.getId());
+            if(userLikeItems != null) {
+                likeCount = userLikeItems.size();
+            }
+        }
+        return likeCount;
+    }
+
+    //  찜 상품 리스트
+    public List<MainItemDto> getLikeList(String email) {
+
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        List<UserLikeItem> userLikeItems = userLikeItemRepository.findByUserLikeId(userLike.getId());
+
+        List<MainItemDto> likeItemDtls = new ArrayList<>();
+        for(UserLikeItem userLikeItem : userLikeItems) {
+            Long itemId = userLikeItem.getItem().getId();
+            MainItemDto likeItem = itemRepository.findMainItemDto(itemId);
+            likeItemDtls.add(likeItem);
+        }
+        return likeItemDtls;
     }
 }

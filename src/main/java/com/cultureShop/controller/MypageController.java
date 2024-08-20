@@ -1,5 +1,6 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.OrderHistDto;
 import com.cultureShop.entity.Member;
 import com.cultureShop.entity.Order;
@@ -10,6 +11,8 @@ import com.cultureShop.repository.OrderRepository;
 import com.cultureShop.repository.UserLikeItemRepository;
 import com.cultureShop.repository.UserLikeRepository;
 import com.cultureShop.service.OrderService;
+import com.cultureShop.service.UserLikeItemService;
+import com.cultureShop.service.UserLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +35,7 @@ public class MypageController {
 
     private final OrderService orderService;
     private final MemberRepository memberRepository;
-    private final UserLikeItemRepository userLikeItemRepository;
+    private final UserLikeItemService userLikeItemService;
     private final UserLikeRepository userLikeRepository;
     private final OrderRepository orderRepository;
 
@@ -43,15 +46,7 @@ public class MypageController {
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
         Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
-        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
-        int likeCount = 0;
-        if(userLike != null) {
-            List<UserLikeItem> userLikeItems = userLikeItemRepository.findByUserLikeId(userLike.getId());
-            if(userLikeItems != null) {
-                likeCount = userLikeItems.size();
-            }
-        }
-
+        int likeCount = userLikeItemService.likeCount(principal.getName());
         Long orderCount = orderRepository.countOrder(principal.getName());
 
         model.addAttribute("member", member);
@@ -62,5 +57,23 @@ public class MypageController {
         model.addAttribute("maxPage", 5);
 
         return "mypage/orderHist";
+    }
+
+    @GetMapping(value = "/likes")
+    public String likeList(Model model, Principal principal) {
+
+        Member member = memberRepository.findByEmail(principal.getName());
+        int likeCount = userLikeItemService.likeCount(principal.getName());
+        Long orderCount = orderRepository.countOrder(principal.getName());
+
+        List<MainItemDto> likeItems = userLikeItemService.getLikeList(principal.getName());
+
+
+        model.addAttribute("member", member);
+        model.addAttribute("likeCount", likeCount);
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("likeItems", likeItems);
+
+        return "mypage/likeList";
     }
 }

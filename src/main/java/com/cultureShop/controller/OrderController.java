@@ -6,6 +6,7 @@ import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
 import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MemberRepository;
+import com.cultureShop.service.ItemService;
 import com.cultureShop.service.OrderService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ public class OrderController {
     private final OrderService orderService;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
+    private final ItemService itemService;
 
     @GetMapping(value = "/order")
     public String order(@RequestParam("itemId")Long itemId, @RequestParam("count")int count,
@@ -69,6 +71,19 @@ public class OrderController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/order/like")
+    public String orderLike(@RequestParam("likeChkBox")List<Long> likeItemIds, Principal principal, Model model){
+
+        Member member = memberRepository.findByEmail(principal.getName());
+        List<MainItemDto> likeItems = itemService.getOrderLike(likeItemIds);
+
+        model.addAttribute("member", member);
+        model.addAttribute("likeItems", likeItems);
+
+        return "order/likeOrderForm";
+
     }
 
 }

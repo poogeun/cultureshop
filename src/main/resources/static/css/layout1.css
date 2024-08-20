@@ -319,7 +319,7 @@ section {
     overflow: hidden;
     box-sizing: border-box;
 }
-.locImgWrap Img {
+.locImgWrap img {
     width: 230px;
     height: 300px;
 }
@@ -389,6 +389,7 @@ section {
     border-color: #ebebeb;
     display: flex;
     flex-direction: column;
+    border-bottom: 1px solid #ebebeb;
 }
 .oidWrap {
     width: 100%;
@@ -441,4 +442,106 @@ section {
 }
 .delReq textarea {
     margin-top: 20px;
+}
+
+/* orderHist */
+.mypageHead {
+    margin: 0 auto;
+}
+.mypageBox {
+    border: 1px solid #F0F0F0;
+    margin: 20px auto 0;
+    padding: 26px 40px 31px 40px;
+    border-radius: 8px;
+    height: 200px;
+    align-content: center;
+}
+.mypageText {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.mypage-mem {
+    width: 420px;
+    margin-bottom: 0;
+    align-content: center;
+}
+.mypage-list {
+    width: 546px;
+    align-items: center;
+}
+.mypage-button {
+    width: 116px;
+    height: 58px;
+    padding: 0;
+    border: none;
+    background: none;
+    margin-right: 60px;
+}
+#bag {
+    font-size: 40px;
+}
+.menuList {
+    display: flex;
+    position: relative;
+    height: 58px;
+    align-items: flex-start;
+    padding-top: 32px;
+    flex-direction: row;
+}
+
+.mypage-menu {
+    top: 0;
+    left: 0;
+    position: absolute;
+    margin-top: 0;
+}
+.mypage-menu-count {
+    font-size: 20px;
+    font-weight: 500;
+}
+.orderList {
+    width: 100%;
+    display: table;
+    border-bottom: 1px solid #f0f0f0;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.orderList th {
+    text-align: center;
+    color: #808080;
+    font-weight: 800;
+}
+.orderList td {
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
+}
+.olItem {
+    width: 100%;
+    padding: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+.olItems {
+    display: flex;
+    flex-direction: row;
+}
+.olItem img {
+    display: block;
+    width: 130px;
+    margin-left: 20px;
+}
+.olItemText {
+    padding: 0;
+    align-items: stretch;
+    display: flex;
+    width: 500px;
+}
+.olText {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-left: 50px;
 }

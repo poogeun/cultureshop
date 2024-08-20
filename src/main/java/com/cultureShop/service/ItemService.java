@@ -138,4 +138,15 @@ public class ItemService {
 
         return mainItemDetails;
     }
+
+    // 찜 주문 리스트 가져오기
+    public List<MainItemDto> getOrderLike(List<Long> itemIds) {
+
+        List<MainItemDto> orderLikes = new ArrayList<>();
+        for(Long itemId : itemIds) {
+            MainItemDto orderLike = itemRepository.findMainItemDto(itemId);
+            orderLikes.add(orderLike);
+        }
+        return orderLikes;
+    }
 }
