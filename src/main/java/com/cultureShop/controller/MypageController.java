@@ -1,5 +1,6 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.dto.LikeItemDto;
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.OrderHistDto;
 import com.cultureShop.entity.Member;
@@ -66,7 +67,7 @@ public class MypageController {
         int likeCount = userLikeItemService.likeCount(principal.getName());
         Long orderCount = orderRepository.countOrder(principal.getName());
 
-        List<MainItemDto> likeItems = userLikeItemService.getLikeList(principal.getName());
+        List<LikeItemDto> likeItems = userLikeItemService.getLikeList(principal.getName());
 
 
         model.addAttribute("member", member);

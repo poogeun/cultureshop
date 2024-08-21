@@ -1,9 +1,6 @@
 package com.cultureShop.service;
 
-import com.cultureShop.dto.ItemFormDto;
-import com.cultureShop.dto.ItemImgDto;
-import com.cultureShop.dto.ItemSearchDto;
-import com.cultureShop.dto.MainItemDto;
+import com.cultureShop.dto.*;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -139,14 +136,5 @@ public class ItemService {
         return mainItemDetails;
     }
 
-    // 찜 주문 리스트 가져오기
-    public List<MainItemDto> getOrderLike(List<Long> itemIds) {
 
-        List<MainItemDto> orderLikes = new ArrayList<>();
-        for(Long itemId : itemIds) {
-            MainItemDto orderLike = itemRepository.findMainItemDto(itemId);
-            orderLikes.add(orderLike);
-        }
-        return orderLikes;
-    }
 }

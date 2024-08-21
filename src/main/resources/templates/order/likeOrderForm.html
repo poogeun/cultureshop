@@ -57,12 +57,18 @@
         function getPerPrice() {
 
             var totalPrice = 0;
+            var delPayPrice = 0;
+
             $('.orderItemDtl').each(function() {
                 var item = $(this);
                 var price = parseInt(item.find('.price').text().replace('원', '').trim());
 
                 totalPrice += price;
+                delPayPrice = totalPrice + 3000;
                 $('#totalPrice').html(totalPrice + '원');
+                $('#delFree').html(totalPrice + '원');
+                $('#delCharge').html(delPayPrice + '원');
+
 
                 item.find('.count').on('change', function(e) {
                     if($(this).is(e.currentTarget)) {
@@ -77,37 +83,57 @@
         function getTotalPrice() {
 
             var totalPrice = 0;
+            var delPayPrice = 0;
+
             $('.orderItemDtl').each(function() {
                 var item = $(this);
                 var price = parseInt(item.find('.price').text().replace('원', '').trim());
 
                 totalPrice += price;
+                delPayPrice = totalPrice + 3000;
                 $('#totalPrice').html(totalPrice + '원');
+                $('#delFree').html(totalPrice + '원');
+                $('#delCharge').html(delPayPrice + '원');
             });
-
         }
 
-
-
-        function order() {
+        function orders() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
-            var url = "/order";
-            var paramData = {
-                itemId : $('#itemId').val(),
-                count : $('#count').val(),
-                viewDay : $('#date').val(),
-                address: $('#address').val(),
-                delReq: $('#delReq').val(),
-                reqWrite: $('#reqWrite').val(),
-                getTicket: $("input[name='getTicket']:checked").val()
-            }
+            var url = "/order/like";
 
+            var dataList = new Array();
+            var paramData = new Object();
+
+            var address = $('#address').val();
+            var delReq = $('#delReq').val();
+            var reqWrite = $('#reqWrite').val();
+            var getTicket = $('input[name=getTicket]:checked').val();
+
+            $('.orderItemDtl').each(function() {
+                var likeItemId = $(this).find('input[name=likeItemId]').val();
+                var itemId = $(this).find('input[name=itemId]').val();
+                var count = $(this).find('input[name=count]').val();
+                var viewDay = $(this).find('input[name=date]').val();
+
+                var data = {
+                    likeItemId : likeItemId,
+                    itemId : itemId,
+                    count : count,
+                    viewDay : viewDay,
+                    address : address,
+                    delReq : delReq,
+                    reqWrite : reqWrite,
+                    getTicket : getTicket
+                }
+                dataList.push(data);
+            });
+
+            paramData['likeOrderFormDtoList'] = dataList;
             var param = JSON.stringify(paramData);
 
-            console.log("Sending request with data:", param);
-
+            console.log(param);
             $.ajax({
                 url : url,
                 type : "POST",
@@ -118,7 +144,7 @@
                 },
                 dataType : "json",
                 cache : false,
-                success : function(result, status) {
+                success : function(result, status){
                     alert('주문이 완료 되었습니다.');
                 },
                 error : function(jqXHR, status, error) {
@@ -130,9 +156,7 @@
                     }
                 }
             });
-
         }
-
 
 
 
@@ -212,6 +236,8 @@
                     <ul class="orderItems">
                         <th:block th:each="likeItem : ${likeItems}">
                             <li class="orderItemDtl">
+                                <input type="hidden" th:value="${likeItem.likeItemId}" name="likeItemId">
+                                <input type="hidden" th:value="${likeItem.itemId}" name="itemId">
                                 <div class="oidWrap">
                                     <img th:src="${likeItem.imgUrl}" th:alt="${likeItem.itemName}">
                                     <div class="orderItemText">
@@ -219,18 +245,19 @@
                                             <h3 th:text=${likeItem.itemName} style="font-weight: bold"></h3>
                                             <div class="row g-3 align-items-center">
                                                 <div class="col-auto">
-                                                    <label for="date" class="col-form-label">관람일</label>
+                                                    <label class="col-form-label">관람일</label>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <input type="date" id="date" th:min="${likeItem.startDay}" th:max="${likeItem.endDay}" class="form-control">
+                                                    <input type="date" name="date" th:min="${likeItem.startDay}"
+                                                           th:max="${likeItem.endDay}" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="row g-3 align-items-center">
                                                 <div class="col-auto">
-                                                    <label for="count" class="col-form-label">수량</label>
+                                                    <label class="col-form-label">수량</label>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <input type="number" class="count" name="count" id="count" value="1" min="1">
+                                                    <input type="number" class="count" name="count" value="1" min="1">
                                                 </div>
                                             </div>
                                         </div>
@@ -272,10 +299,8 @@
                         </tr>
                         <tr>
                             <th class="p-3 bg-body-tertiary">총 결제금액</th>
-                            <!--
-                            <td th:text="${item.price * count + 3000} + '원'" class="delCharge" style="color: #C10000"></td>
-                            <td th:text="${item.price * count} + '원'" class="delFree" style="color: #C10000"></td>
-                            -->
+                            <td class="delCharge" style="color: #C10000" id="delCharge"></td>
+                            <td class="delFree" style="color: #C10000" id="delFree"></td>
                         </tr>
                     </table>
                 </div>
@@ -284,7 +309,7 @@
 
 
         <div class="d-grid gap-2 payBtn">
-            <button class="btn btn-primary btn-lg" type="button" onclick="order()">결제하기</button>
+            <button class="btn btn-primary btn-lg" type="button" onclick="orders()">결제하기</button>
         </div>
 
     </div>

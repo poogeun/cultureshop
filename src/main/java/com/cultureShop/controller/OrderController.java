@@ -1,5 +1,7 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.dto.LikeItemDto;
+import com.cultureShop.dto.LikeOrderFormDto;
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.OrderFormDto;
 import com.cultureShop.entity.Item;
@@ -8,6 +10,8 @@ import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.service.ItemService;
 import com.cultureShop.service.OrderService;
+import com.cultureShop.service.UserLikeItemService;
+import com.cultureShop.service.UserLikeService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -34,6 +38,8 @@ public class OrderController {
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final ItemService itemService;
+    private final UserLikeItemService userLikeItemService;
+    private final UserLikeService userLikeService;
 
     @GetMapping(value = "/order")
     public String order(@RequestParam("itemId")Long itemId, @RequestParam("count")int count,
@@ -77,7 +83,7 @@ public class OrderController {
     public String orderLike(@RequestParam("likeChkBox")List<Long> likeItemIds, Principal principal, Model model){
 
         Member member = memberRepository.findByEmail(principal.getName());
-        List<MainItemDto> likeItems = itemService.getOrderLike(likeItemIds);
+        List<LikeItemDto> likeItems = userLikeItemService.getOrderLike(likeItemIds);
 
         model.addAttribute("member", member);
         model.addAttribute("likeItems", likeItems);
@@ -85,5 +91,31 @@ public class OrderController {
         return "order/likeOrderForm";
 
     }
+
+
+    @PostMapping(value = "/order/like")
+    public @ResponseBody ResponseEntity orderLikeItem(@RequestBody LikeOrderFormDto likeOrderFormDto,
+                                                      Principal principal) {
+        List<LikeOrderFormDto> likeOrderFormDtoList = likeOrderFormDto.getLikeOrderFormDtoList();
+
+        for(LikeOrderFormDto likeOrderForm : likeOrderFormDtoList) {
+            if(likeOrderForm.getViewDay() == null) {
+                return new ResponseEntity<String>("관람일을 선택해주세요.", HttpStatus.FORBIDDEN);
+            }
+            if(likeOrderForm.getAddress() == null) {
+                return new ResponseEntity<String>("주소를 입력해주세요.", HttpStatus.FORBIDDEN);
+            }
+        }
+
+        Long orderId;
+        try {
+            orderId = userLikeService.orderLikeItem(likeOrderFormDtoList, principal.getName());
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
+
 
 }

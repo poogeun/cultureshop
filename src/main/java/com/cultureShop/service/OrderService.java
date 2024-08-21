@@ -45,6 +45,24 @@ public class OrderService {
         return order.getId();
     }
 
+    public Long orders(List<OrderFormDto> orderFormDtoList, String email) {
+        Member member = memberRepository.findByEmail(email);
+
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for(OrderFormDto orderFormDto : orderFormDtoList) {
+            Item item = itemRepository.findById(orderFormDto.getItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderFormDto.getViewDay(),
+                    orderFormDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        Order order = Order.createOrder(member, orderItemList,orderFormDtoList.getFirst());
+        orderRepository.save(order);
+
+        return order.getId();
+    }
+
     @Transactional(readOnly = true)
     public Page<OrderHistDto> getOrderList(String email, Pageable pageable) {
         List<Order> orders = orderRepository.findOrders(email, pageable);

@@ -27,7 +27,7 @@ public class UserLikeItem extends BaseEntity {
     private UserLike userLike;
 
     @ColumnDefault("0")
-    private int count; // 찜 수
+    private int likeCount; // 찜 수
 
     public static UserLikeItem createLikeItem(Item item, UserLike userLike) {
         UserLikeItem userLikeItem = new UserLikeItem();
@@ -37,10 +37,10 @@ public class UserLikeItem extends BaseEntity {
     }
 
     public void addLike(){
-        this.count += 1;
+        this.likeCount += 1;
     }
 
     public void minusLike(){
-        this.count -= 1;
+        this.likeCount -= 1;
     }
 }
