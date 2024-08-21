@@ -1,6 +1,7 @@
 package com.cultureShop.entity;
 
 import com.cultureShop.constant.OrderStatus;
+import com.cultureShop.constant.PaymentStatus;
 import com.cultureShop.dto.OrderFormDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
@@ -25,11 +27,17 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,
                     orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    private String orderUid; // 주문 번호
     private LocalDateTime orderDate;
+    private int orderPrice;
     private String delReq;
     private String reqWrite;
     private String getTicket;
@@ -42,17 +50,21 @@ public class Order extends BaseEntity{
         orderItem.setOrder(this);
     }
 
-    public static Order createOrder(Member member, List<OrderItem> orderItemList, OrderFormDto orderFormDto) {
+    public static Order createOrder(Member member, Payment payment, List<OrderItem> orderItemList, OrderFormDto orderFormDto) {
         Order order = new Order();
         order.setMember(member);
+        order.setPayment(payment);
         for(OrderItem orderItem : orderItemList) {
             order.addOrderItem(orderItem);
         }
+        order.setOrderUid(UUID.randomUUID().toString());
+        order.setOrderDate(LocalDateTime.now());
+        order.setOrderPrice(orderFormDto.getOrderPrice());
         order.setDelReq(orderFormDto.getDelReq());
         order.setReqWrite(orderFormDto.getReqWrite());
         order.setGetTicket(orderFormDto.getGetTicket());
         order.setOrderStatus(OrderStatus.ORDER);
-        order.setOrderDate(LocalDateTime.now());
+
         return order;
     }
 

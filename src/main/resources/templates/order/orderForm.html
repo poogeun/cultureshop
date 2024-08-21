@@ -53,10 +53,18 @@
             var header = $("meta[name='_csrf_header']").attr("content");
 
             var url = "/order";
+
+            if($('input[name="getTicket"]').val() === '현장수령'){
+                var orderPrice = parseInt($('#delFree').text());
+            }
+            else {
+                var orderPrice = parseInt($('#delCharge').text());
+            }
             var paramData = {
                 itemId : $('#itemId').val(),
                 count : $('#count').val(),
                 viewDay : $('#date').val(),
+                orderPrice : orderPrice,
                 address: $('#address').val(),
                 delReq: $('#delReq').val(),
                 reqWrite: $('#reqWrite').val(),
@@ -218,8 +226,8 @@
                         </tr>
                         <tr>
                             <th class="p-3 bg-body-tertiary">총 결제금액</th>
-                            <td th:text="${item.price * count + 3000} + '원'" class="delCharge" style="color: #C10000"></td>
-                            <td th:text="${item.price * count} + '원'" class="delFree" style="color: #C10000"></td>
+                            <td th:text="${item.price * count + 3000} + '원'" class="delCharge" id="delCharge" style="color: #C10000"></td>
+                            <td th:text="${item.price * count} + '원'" class="delFree" id="delFree" style="color: #C10000"></td>
                         </tr>
                     </table>
                 </div>

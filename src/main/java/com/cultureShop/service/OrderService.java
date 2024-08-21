@@ -1,5 +1,6 @@
 package com.cultureShop.service;
 
+import com.cultureShop.constant.PaymentStatus;
 import com.cultureShop.dto.OrderFormDto;
 import com.cultureShop.dto.OrderHistDto;
 import com.cultureShop.dto.OrderItemDto;
@@ -36,17 +37,27 @@ public class OrderService {
                 .orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByEmail(email);
 
+        Payment payment = Payment.builder()
+                .price(orderFormDto.getOrderPrice())
+                .status(PaymentStatus.READY)
+                .build();
+
         List<OrderItem> orderItemList = new ArrayList<>();
         OrderItem orderItem = OrderItem.createOrderItem(item, orderFormDto.getViewDay(), orderFormDto.getCount());
         orderItemList.add(orderItem);
 
-        Order order = Order.createOrder(member, orderItemList, orderFormDto);
+        Order order = Order.createOrder(member, payment, orderItemList, orderFormDto);
         orderRepository.save(order);
         return order.getId();
     }
 
     public Long orders(List<OrderFormDto> orderFormDtoList, String email) {
         Member member = memberRepository.findByEmail(email);
+
+        Payment payment = Payment.builder()
+                .price(orderFormDtoList.getFirst().getOrderPrice())
+                .status(PaymentStatus.READY)
+                .build();
 
         List<OrderItem> orderItemList = new ArrayList<>();
         for(OrderFormDto orderFormDto : orderFormDtoList) {
@@ -57,7 +68,7 @@ public class OrderService {
             orderItemList.add(orderItem);
         }
 
-        Order order = Order.createOrder(member, orderItemList,orderFormDtoList.getFirst());
+        Order order = Order.createOrder(member, payment, orderItemList,orderFormDtoList.getFirst());
         orderRepository.save(order);
 
         return order.getId();
