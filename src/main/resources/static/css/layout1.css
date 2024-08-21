@@ -405,9 +405,10 @@ section {
     align-items: stretch;
     display: flex;
     flex-direction: row;
+    width: 970px;
 }
 .oit_1 {
-    width: 850px;
+    width: 100%;
     display: flex;
     align-items: flex-start;
     flex-direction: column;

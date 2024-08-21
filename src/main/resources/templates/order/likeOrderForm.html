@@ -47,6 +47,11 @@
             });
 
            getPerPrice();
+
+           $('.count').on('change', function() {
+                getTotalPrice();
+           });
+
         });
 
         function getPerPrice() {
@@ -56,6 +61,9 @@
                 var item = $(this);
                 var price = parseInt(item.find('.price').text().replace('원', '').trim());
 
+                totalPrice += price;
+                $('#totalPrice').html(totalPrice + '원');
+
                 item.find('.count').on('change', function(e) {
                     if($(this).is(e.currentTarget)) {
                         var perCount = $(this).val();
@@ -63,11 +71,20 @@
                         item.find('.price').html(perPrice + '원');
                     }
                 });
+            });
+        }
+
+        function getTotalPrice() {
+
+            var totalPrice = 0;
+            $('.orderItemDtl').each(function() {
+                var item = $(this);
+                var price = parseInt(item.find('.price').text().replace('원', '').trim());
 
                 totalPrice += price;
+                $('#totalPrice').html(totalPrice + '원');
             });
 
-            $('#totalPrice').html(totalPrice + '원');
         }
 
 
