@@ -34,6 +34,7 @@ public class UserLikeService {
             orderFormDto.setItemId(likeOrderDto.getItemId());
             orderFormDto.setCount(likeOrderDto.getCount());
             orderFormDto.setViewDay(likeOrderDto.getViewDay());
+            orderFormDto.setOrderPrice(likeOrderDto.getOrderPrice());
             orderFormDto.setAddress(likeOrderDto.getAddress());
             orderFormDto.setDelReq(likeOrderDto.getDelReq());
             orderFormDto.setReqWrite(likeOrderDto.getReqWrite());

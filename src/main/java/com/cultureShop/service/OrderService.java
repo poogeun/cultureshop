@@ -57,6 +57,7 @@ public class OrderService {
                 .price(orderFormDtoList.getFirst().getOrderPrice())
                 .status(PaymentStatus.READY)
                 .build();
+        System.out.println(orderFormDtoList.getFirst().getOrderPrice());
         paymentRepository.save(payment);
 
         List<OrderItem> orderItemList = new ArrayList<>();
@@ -68,7 +69,7 @@ public class OrderService {
             orderItemList.add(orderItem);
         }
 
-        Order order = Order.createOrder(member, payment, orderItemList,orderFormDtoList.getFirst());
+        Order order = Order.createOrder(member, payment, orderItemList, orderFormDtoList.getFirst());
         orderRepository.save(order);
 
         return order.getId();

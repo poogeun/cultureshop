@@ -106,6 +106,13 @@
             var dataList = new Array();
             var paramData = new Object();
 
+            var orderPrice;
+            if($('input[name="getTicket"]').val() === '현장수령'){
+                orderPrice = parseInt($('#delFree').text());
+            }
+            else {
+                orderPrice = parseInt($('#delCharge').text());
+            }
             var address = $('#address').val();
             var delReq = $('#delReq').val();
             var reqWrite = $('#reqWrite').val();
@@ -122,6 +129,7 @@
                     itemId : itemId,
                     count : count,
                     viewDay : viewDay,
+                    orderPrice : orderPrice,
                     address : address,
                     delReq : delReq,
                     reqWrite : reqWrite,
@@ -142,10 +150,11 @@
                 beforeSend : function(xhr){
                     xhr.setRequestHeader(header, token);
                 },
-                dataType : "json",
+                dataType : "text",
                 cache : false,
                 success : function(result, status){
-                    alert('주문이 완료 되었습니다.');
+                    var orderUid = result;
+                    requestPay(orderUid);
                 },
                 error : function(jqXHR, status, error) {
                     if(jqXHR.status == '401') {
@@ -154,6 +163,86 @@
                     else {
                         alert(jqXHR.responseText);
                     }
+                }
+            });
+        }
+
+        var IMP = window.IMP;
+        IMP.init("imp16131530");
+        function requestPay(orderUid) {
+
+            var itemName = $('ul li:first-child h3').text();
+
+            console.log(orderUid);
+
+            var paymentPrice;
+            if($('input[name="getTicket"]').val() === '현장수령'){
+                paymentPrice = parseInt($('#delFree').text().replace('원', '').trim());
+            }
+            else {
+                paymentPrice = parseInt($('#delCharge').text().replace('원', '').trim());
+            }
+            console.log(paymentPrice);
+
+            var buyerName = $('#orderName').val();
+            var buyerEmail = $('#email').val();
+            var buyerAddress = $('#address').val();
+            var buyerTel = $('#orderTel').val();
+
+            IMP.request_pay({
+                pg : 'html5_inicis.INIpayTest',
+                pay_method : 'card',
+                merchant_uid: orderUid,
+                name : itemName,
+                amount : paymentPrice,
+                buyer_email : buyerEmail,
+                buyer_name : buyerName,
+                buyer_tel : buyerTel,
+                buyer_addr : buyerAddress,
+                buyer_postcode : '123-456',
+            },
+            function(rsp) {
+
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                if (rsp.success) {
+                    alert('call back!! ' + JSON.stringify(rsp));
+
+                    jQuery.ajax({
+                        url: "/payment",
+                        method: "POST",
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        headers: {"Content-Type": "application/json"},
+                        data: JSON.stringify({
+                            "payment_uid": rsp.imp_uid,      // 결제 고유번호
+                            "order_uid": rsp.merchant_uid   // 주문번호
+                        })
+                    }).done(function (response) {
+                        window.location.href = "/order/success"
+                    })
+                } else {
+                    alert('결제 취소' + rsp);
+
+                    jQuery.ajax({
+                        url: "/order/" + rsp.merchant_uid,
+                        method: "DELETE",
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        headers: {"Content-Type": "application/json"}
+                    }).done(function(response) {
+                        console.log("주문 삭제 응답: ", response);
+                        alert('주문이 취소되었습니다.');
+                        window.location.href = "/";
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.error('주문 삭제 중 오류 발생: ', textStatus, errorThrown);
+                        console.error('HTTP 상태 코드: ', jqXHR.status);
+                        console.error('응답 본문: ', jqXHR.responseText);
+                        alert('주문 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    });
                 }
             });
         }

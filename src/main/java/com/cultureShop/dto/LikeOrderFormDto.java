@@ -23,6 +23,8 @@ public class LikeOrderFormDto {
 
     private LocalDate viewDay;
 
+    private int orderPrice;
+
     private String address;
 
     private String delReq;

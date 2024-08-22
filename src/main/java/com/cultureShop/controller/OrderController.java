@@ -114,14 +114,17 @@ public class OrderController {
             }
         }
 
-        Long orderId;
+        String orderUid;
         try {
-            orderId = userLikeService.orderLikeItem(likeOrderFormDtoList, principal.getName());
+            Long orderId = userLikeService.orderLikeItem(likeOrderFormDtoList, principal.getName());
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(EntityNotFoundException::new);
+            orderUid = order.getOrderUid();
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        return new ResponseEntity<String>(orderUid, HttpStatus.OK);
     }
 
     @GetMapping(value = "/order/success")
