@@ -30,4 +30,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Order findLatestOrder(String email);
 
     Order findByOrderUid(String orderUid);
+
+    List<Order> findByMemberId(Long memberId);
 }

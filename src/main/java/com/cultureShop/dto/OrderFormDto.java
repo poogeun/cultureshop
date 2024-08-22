@@ -2,6 +2,7 @@ package com.cultureShop.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,7 @@ public class OrderFormDto {
     private LocalDate viewDay;
     private int orderPrice;
 
-    @NotNull(message = "주소는 필수 입력 값입니다.")
+    @NotBlank(message = "주소는 필수 입력 값입니다.")
     private String address;
 
     private String delReq;

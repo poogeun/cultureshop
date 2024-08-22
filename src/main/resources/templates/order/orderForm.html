@@ -86,8 +86,9 @@
                 dataType : "text",
                 cache : false,
                 success : function(result, status) {
-                    var orderUid = result;
-                    requestPay(orderUid);
+                    alert('주문성공');
+                    //var orderUid = result;
+                    //requestPay(orderUid);
                 },
                 error : function(jqXHR, status, error) {
                     if(jqXHR.status == '401') {
