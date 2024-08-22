@@ -47,15 +47,28 @@
             });
 
            getPerPrice();
+
+           $('.count').on('change', function() {
+                getTotalPrice();
+           });
+
         });
 
         function getPerPrice() {
 
             var totalPrice = 0;
+            var delPayPrice = 0;
+
             $('.orderItemDtl').each(function() {
                 var item = $(this);
                 var price = parseInt(item.find('.price').text().replace('원', '').trim());
-                var count = parseInt(item.find('.count').val(), 10);
+
+                totalPrice += price;
+                delPayPrice = totalPrice + 3000;
+                $('#totalPrice').html(totalPrice + '원');
+                $('#delFree').html(totalPrice + '원');
+                $('#delCharge').html(delPayPrice + '원');
+
 
                 item.find('.count').on('change', function(e) {
                     if($(this).is(e.currentTarget)) {
@@ -64,33 +77,71 @@
                         item.find('.price').html(perPrice + '원');
                     }
                 });
-                totalPrice += price * count;
             });
-
-            $('#totalPrice').html(totalPrice + '원');
         }
 
+        function getTotalPrice() {
 
+            var totalPrice = 0;
+            var delPayPrice = 0;
 
-        function order() {
+            $('.orderItemDtl').each(function() {
+                var item = $(this);
+                var price = parseInt(item.find('.price').text().replace('원', '').trim());
+
+                totalPrice += price;
+                delPayPrice = totalPrice + 3000;
+                $('#totalPrice').html(totalPrice + '원');
+                $('#delFree').html(totalPrice + '원');
+                $('#delCharge').html(delPayPrice + '원');
+            });
+        }
+
+        function orders() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
-            var url = "/order";
-            var paramData = {
-                itemId : $('#itemId').val(),
-                count : $('#count').val(),
-                viewDay : $('#date').val(),
-                address: $('#address').val(),
-                delReq: $('#delReq').val(),
-                reqWrite: $('#reqWrite').val(),
-                getTicket: $("input[name='getTicket']:checked").val()
-            }
+            var url = "/order/like";
 
+            var dataList = new Array();
+            var paramData = new Object();
+
+            var orderPrice;
+            if($('input[name="getTicket"]').val() === '현장수령'){
+                orderPrice = parseInt($('#delFree').text());
+            }
+            else {
+                orderPrice = parseInt($('#delCharge').text());
+            }
+            var address = $('#address').val();
+            var delReq = $('#delReq').val();
+            var reqWrite = $('#reqWrite').val();
+            var getTicket = $('input[name=getTicket]:checked').val();
+
+            $('.orderItemDtl').each(function() {
+                var likeItemId = $(this).find('input[name=likeItemId]').val();
+                var itemId = $(this).find('input[name=itemId]').val();
+                var count = $(this).find('input[name=count]').val();
+                var viewDay = $(this).find('input[name=date]').val();
+
+                var data = {
+                    likeItemId : likeItemId,
+                    itemId : itemId,
+                    count : count,
+                    viewDay : viewDay,
+                    orderPrice : orderPrice,
+                    address : address,
+                    delReq : delReq,
+                    reqWrite : reqWrite,
+                    getTicket : getTicket
+                }
+                dataList.push(data);
+            });
+
+            paramData['likeOrderFormDtoList'] = dataList;
             var param = JSON.stringify(paramData);
 
-            console.log("Sending request with data:", param);
-
+            console.log(param);
             $.ajax({
                 url : url,
                 type : "POST",
@@ -99,10 +150,11 @@
                 beforeSend : function(xhr){
                     xhr.setRequestHeader(header, token);
                 },
-                dataType : "json",
+                dataType : "text",
                 cache : false,
-                success : function(result, status) {
-                    alert('주문이 완료 되었습니다.');
+                success : function(result, status){
+                    var orderUid = result;
+                    requestPay(orderUid);
                 },
                 error : function(jqXHR, status, error) {
                     if(jqXHR.status == '401') {
@@ -113,9 +165,87 @@
                     }
                 }
             });
-
         }
 
+        var IMP = window.IMP;
+        IMP.init("imp16131530");
+        function requestPay(orderUid) {
+
+            var itemName = $('ul li:first-child h3').text();
+
+            console.log(orderUid);
+
+            var paymentPrice;
+            if($('input[name="getTicket"]').val() === '현장수령'){
+                paymentPrice = parseInt($('#delFree').text().replace('원', '').trim());
+            }
+            else {
+                paymentPrice = parseInt($('#delCharge').text().replace('원', '').trim());
+            }
+            console.log(paymentPrice);
+
+            var buyerName = $('#orderName').val();
+            var buyerEmail = $('#email').val();
+            var buyerAddress = $('#address').val();
+            var buyerTel = $('#orderTel').val();
+
+            IMP.request_pay({
+                pg : 'html5_inicis.INIpayTest',
+                pay_method : 'card',
+                merchant_uid: orderUid,
+                name : itemName,
+                amount : paymentPrice,
+                buyer_email : buyerEmail,
+                buyer_name : buyerName,
+                buyer_tel : buyerTel,
+                buyer_addr : buyerAddress,
+                buyer_postcode : '123-456',
+            },
+            function(rsp) {
+
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                if (rsp.success) {
+                    alert('call back!! ' + JSON.stringify(rsp));
+
+                    jQuery.ajax({
+                        url: "/payment",
+                        method: "POST",
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        headers: {"Content-Type": "application/json"},
+                        data: JSON.stringify({
+                            "payment_uid": rsp.imp_uid,      // 결제 고유번호
+                            "order_uid": rsp.merchant_uid   // 주문번호
+                        })
+                    }).done(function (response) {
+                        window.location.href = "/order/success"
+                    })
+                } else {
+                    alert('결제 취소' + rsp);
+
+                    jQuery.ajax({
+                        url: "/order/" + rsp.merchant_uid,
+                        method: "DELETE",
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        headers: {"Content-Type": "application/json"}
+                    }).done(function(response) {
+                        console.log("주문 삭제 응답: ", response);
+                        alert('주문이 취소되었습니다.');
+                        window.location.href = "/";
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.error('주문 삭제 중 오류 발생: ', textStatus, errorThrown);
+                        console.error('HTTP 상태 코드: ', jqXHR.status);
+                        console.error('응답 본문: ', jqXHR.responseText);
+                        alert('주문 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    });
+                }
+            });
+        }
 
 
 
@@ -195,6 +325,8 @@
                     <ul class="orderItems">
                         <th:block th:each="likeItem : ${likeItems}">
                             <li class="orderItemDtl">
+                                <input type="hidden" th:value="${likeItem.likeItemId}" name="likeItemId">
+                                <input type="hidden" th:value="${likeItem.itemId}" name="itemId">
                                 <div class="oidWrap">
                                     <img th:src="${likeItem.imgUrl}" th:alt="${likeItem.itemName}">
                                     <div class="orderItemText">
@@ -202,18 +334,19 @@
                                             <h3 th:text=${likeItem.itemName} style="font-weight: bold"></h3>
                                             <div class="row g-3 align-items-center">
                                                 <div class="col-auto">
-                                                    <label for="date" class="col-form-label">관람일</label>
+                                                    <label class="col-form-label">관람일</label>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <input type="date" id="date" th:min="${likeItem.startDay}" th:max="${likeItem.endDay}" class="form-control">
+                                                    <input type="date" name="date" th:min="${likeItem.startDay}"
+                                                           th:max="${likeItem.endDay}" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="row g-3 align-items-center">
                                                 <div class="col-auto">
-                                                    <label for="count" class="col-form-label">수량</label>
+                                                    <label class="col-form-label">수량</label>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <input type="number" class="count" name="count" id="count" value="1" min="1">
+                                                    <input type="number" class="count" name="count" value="1" min="1">
                                                 </div>
                                             </div>
                                         </div>
@@ -255,10 +388,8 @@
                         </tr>
                         <tr>
                             <th class="p-3 bg-body-tertiary">총 결제금액</th>
-                            <!--
-                            <td th:text="${item.price * count + 3000} + '원'" class="delCharge" style="color: #C10000"></td>
-                            <td th:text="${item.price * count} + '원'" class="delFree" style="color: #C10000"></td>
-                            -->
+                            <td class="delCharge" style="color: #C10000" id="delCharge"></td>
+                            <td class="delFree" style="color: #C10000" id="delFree"></td>
                         </tr>
                     </table>
                 </div>
@@ -267,7 +398,7 @@
 
 
         <div class="d-grid gap-2 payBtn">
-            <button class="btn btn-primary btn-lg" type="button" onclick="order()">결제하기</button>
+            <button class="btn btn-primary btn-lg" type="button" onclick="orders()">결제하기</button>
         </div>
 
     </div>

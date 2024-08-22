@@ -94,7 +94,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         QItemImg itemImg = QItemImg.itemImg;
 
         List<MainItemDto> results = queryFactory.select(new QMainItemDto(item.id, item.itemName, item.place, item.address,
-                item.startDay, item.endDay, itemImg.imgUrl))
+                item.price, item.startDay, item.endDay, itemImg.imgUrl))
                 .from(itemImg).join(itemImg.item, item).where(itemImg.repImgYn.eq("Y"))
                 .where(itemNameLike(itemSearchDto.getSearchQuery()))
                 .orderBy(item.id.desc()).fetch();

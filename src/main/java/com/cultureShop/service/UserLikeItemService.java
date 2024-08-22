@@ -1,5 +1,6 @@
 package com.cultureShop.service;
 
+import com.cultureShop.dto.LikeItemDto;
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
@@ -88,18 +89,29 @@ public class UserLikeItemService {
     }
 
     //  찜 상품 리스트
-    public List<MainItemDto> getLikeList(String email) {
+    public List<LikeItemDto> getLikeList(String email) {
 
         Member member = memberRepository.findByEmail(email);
         UserLike userLike = userLikeRepository.findByMemberId(member.getId());
         List<UserLikeItem> userLikeItems = userLikeItemRepository.findByUserLikeId(userLike.getId());
 
-        List<MainItemDto> likeItemDtls = new ArrayList<>();
+        List<LikeItemDto> likeItemDtls = new ArrayList<>();
         for(UserLikeItem userLikeItem : userLikeItems) {
             Long itemId = userLikeItem.getItem().getId();
-            MainItemDto likeItem = itemRepository.findMainItemDto(itemId);
+            LikeItemDto likeItem = userLikeItemRepository.findLikeItemDto(userLikeItem.getId());
             likeItemDtls.add(likeItem);
         }
         return likeItemDtls;
+    }
+
+    // 찜 주문 리스트 가져오기
+    public List<LikeItemDto> getOrderLike(List<Long> likeItemIds) {
+
+        List<LikeItemDto> orderLikes = new ArrayList<>();
+        for(Long likeItemId : likeItemIds) {
+            LikeItemDto orderLike = userLikeItemRepository.findLikeItemDto(likeItemId);
+            orderLikes.add(orderLike);
+        }
+        return orderLikes;
     }
 }

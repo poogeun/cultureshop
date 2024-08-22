@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
@@ -15,4 +16,20 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select count(o) from Order o where o.member.email = :email")
     Long countOrder(@Param("email") String email);
+
+    @Query("select o from Order o " +
+            "left join fetch o.payment p " +
+            "left join fetch o.member m " +
+            "where o.orderUid = :orderUid")
+    Optional<Order> findOrderAndPaymentAndMember(String orderUid);
+
+    @Query("select o from Order o left join fetch o.payment p where o.orderUid = :orderUid")
+    Optional<Order> findOrderAndPayment(String orderUid);
+
+    @Query("select o from Order o where o.member.email = :email order by o.orderDate desc limit 1")
+    Order findLatestOrder(String email);
+
+    Order findByOrderUid(String orderUid);
+
+    List<Order> findByMemberId(Long memberId);
 }

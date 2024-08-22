@@ -53,10 +53,18 @@
             var header = $("meta[name='_csrf_header']").attr("content");
 
             var url = "/order";
+
+            if($('input[name="getTicket"]').val() === '현장수령'){
+                var orderPrice = parseInt($('#delFree').text());
+            }
+            else {
+                var orderPrice = parseInt($('#delCharge').text());
+            }
             var paramData = {
                 itemId : $('#itemId').val(),
                 count : $('#count').val(),
                 viewDay : $('#date').val(),
+                orderPrice : orderPrice,
                 address: $('#address').val(),
                 delReq: $('#delReq').val(),
                 reqWrite: $('#reqWrite').val(),
@@ -75,10 +83,12 @@
                 beforeSend : function(xhr){
                     xhr.setRequestHeader(header, token);
                 },
-                dataType : "json",
+                dataType : "text",
                 cache : false,
                 success : function(result, status) {
-                    alert('주문이 완료 되었습니다.');
+                    alert('주문성공');
+                    //var orderUid = result;
+                    //requestPay(orderUid);
                 },
                 error : function(jqXHR, status, error) {
                     if(jqXHR.status == '401') {
@@ -92,6 +102,85 @@
 
         }
 
+        var IMP = window.IMP;
+        IMP.init("imp16131530");
+        function requestPay(orderUid) {
+
+            var itemName = $('#itemName').val();
+
+            console.log(orderUid);
+
+            var paymentPrice;
+            if($('input[name="getTicket"]').val() === '현장수령'){
+                paymentPrice = parseInt($('#delFree').text());
+            }
+            else {
+                paymentPrice = parseInt($('#delCharge').text());
+            }
+
+            var buyerName = $('#orderName').val();
+            var buyerEmail = $('#email').val();
+            var buyerAddress = $('#address').val();
+            var buyerTel = $('#orderTel').val();
+
+            IMP.request_pay({
+                pg : 'html5_inicis.INIpayTest',
+                pay_method : 'card',
+                merchant_uid: orderUid,
+                name : itemName,
+                amount : paymentPrice,
+                buyer_email : buyerEmail,
+                buyer_name : buyerName,
+                buyer_tel : buyerTel,
+                buyer_addr : buyerAddress,
+                buyer_postcode : '123-456',
+            },
+            function(rsp) {
+
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                if (rsp.success) {
+                    alert('call back!! ' + JSON.stringify(rsp));
+
+                    jQuery.ajax({
+                        url: "/payment",
+                        method: "POST",
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        headers: {"Content-Type": "application/json"},
+                        data: JSON.stringify({
+                            "payment_uid": rsp.imp_uid,      // 결제 고유번호
+                            "order_uid": rsp.merchant_uid   // 주문번호
+                        })
+                    }).done(function (response) {
+                        window.location.href = "/order/success"
+                    })
+                } else {
+                    alert('결제 취소' + rsp);
+
+                    jQuery.ajax({
+                        url: "/order/" + rsp.merchant_uid,
+                        method: "DELETE",
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        headers: {"Content-Type": "application/json"}
+                    }).done(function(response) {
+                        console.log("주문 삭제 응답: ", response);
+                        alert('주문이 취소되었습니다.');
+                        window.location.href = "/";
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.error('주문 삭제 중 오류 발생: ', textStatus, errorThrown);
+                        console.error('HTTP 상태 코드: ', jqXHR.status);
+                        console.error('응답 본문: ', jqXHR.responseText);
+                        alert('주문 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    });
+                }
+            });
+        }
+
 
 
 
@@ -101,6 +190,7 @@
 <div layout:fragment="content">
     <div class="container">
         <input type="hidden" th:value="${item.id}" id="itemId">
+        <input type="hidden" th:value="${member.email}" id="email">
         <section class="orderInfo">
             <div class="subTitle">
                 <div>배송정보</div>
@@ -176,6 +266,7 @@
                                 <div class="orderItemText">
                                     <div class="oit_1">
                                         <h3 th:text=${item.itemName} style="font-weight: bold"></h3>
+                                        <input type="hidden" th:value="${item.itemName}" id="itemName">
                                         <div th:text="'관람일 : ' + ${date}" style="color: #787878"></div>
                                         <input type="hidden" th:value="${date}" id="date">
                                         <div th:text="'수량 : ' + ${count} + '개'" style="color: #787878"></div>
@@ -218,8 +309,8 @@
                         </tr>
                         <tr>
                             <th class="p-3 bg-body-tertiary">총 결제금액</th>
-                            <td th:text="${item.price * count + 3000} + '원'" class="delCharge" style="color: #C10000"></td>
-                            <td th:text="${item.price * count} + '원'" class="delFree" style="color: #C10000"></td>
+                            <td th:text="${item.price * count + 3000} + '원'" class="delCharge" id="delCharge" style="color: #C10000"></td>
+                            <td th:text="${item.price * count} + '원'" class="delFree" id="delFree" style="color: #C10000"></td>
                         </tr>
                     </table>
                 </div>
