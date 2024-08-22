@@ -3,6 +3,7 @@ package com.cultureShop.dto;
 import com.cultureShop.entity.Member;
 import com.cultureShop.entity.Review;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
@@ -13,10 +14,8 @@ public class ReviewFormDto {
 
     private Long id;
 
-    @NotBlank(message = "제목은 필수 입력 값입니다.")
     private String title;
 
-    @NotBlank(message = "내용은 필수 입력 값입니다.")
     private String content;
 
     private int starPoint;

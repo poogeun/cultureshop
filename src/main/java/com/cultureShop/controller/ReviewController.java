@@ -46,10 +46,11 @@ public class ReviewController {
     public String reviewWrite(@Valid ReviewFormDto reviewFormDto, @PathVariable Long itemId,
                               BindingResult bindingResult, Model model, Principal principal) {
 
-        if(bindingResult.hasErrors()){
+        if(reviewFormDto.getTitle().isEmpty() || reviewFormDto.getContent().isEmpty()) {
             MainItemDto item = itemRepository.findMainItemDto(itemId);
             OrderItem orderItem = orderItemService.getOrderItem(itemId, principal.getName());
 
+            model.addAttribute("errorMessage", "제목과 내용을 입력해주세요.");
             model.addAttribute("reviewFormDto", new ReviewFormDto());
             model.addAttribute("item", item);
             model.addAttribute("orderItem", orderItem);
@@ -67,7 +68,7 @@ public class ReviewController {
         }
 
         try {
-            reviewService.saveReview(reviewFormDto);
+            reviewService.saveReview(reviewFormDto, principal.getName());
         } catch (Exception e) {
             MainItemDto item = itemRepository.findMainItemDto(itemId);
             OrderItem orderItem = orderItemService.getOrderItem(itemId, principal.getName());
