@@ -6,8 +6,10 @@ import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.OrderFormDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
+import com.cultureShop.entity.Order;
 import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MemberRepository;
+import com.cultureShop.repository.OrderRepository;
 import com.cultureShop.service.ItemService;
 import com.cultureShop.service.OrderService;
 import com.cultureShop.service.UserLikeItemService;
@@ -40,6 +42,7 @@ public class OrderController {
     private final ItemService itemService;
     private final UserLikeItemService userLikeItemService;
     private final UserLikeService userLikeService;
+    private final OrderRepository orderRepository;
 
     @GetMapping(value = "/order")
     public String order(@RequestParam("itemId")Long itemId, @RequestParam("count")int count,
@@ -60,23 +63,27 @@ public class OrderController {
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderFormDto orderFormDto,
                                               BindingResult bindingResult, Principal principal) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
-            for(FieldError fieldError : fieldErrorList) {
+            for (FieldError fieldError : fieldErrorList) {
                 sb.append(fieldError.getDefaultMessage());
             }
             return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
         }
 
         String email = principal.getName();
-        Long orderId;
-        try{
-            orderId = orderService.order(orderFormDto, email);
+        String orderUid;
+        try {
+            Long orderId = orderService.order(orderFormDto, email);
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(EntityNotFoundException::new);
+            orderUid = order.getOrderUid();
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+
+        return new ResponseEntity<String>(orderUid, HttpStatus.OK);
     }
 
     @GetMapping(value = "/order/like")
@@ -115,6 +122,11 @@ public class OrderController {
         }
 
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/order/success")
+    public String orderSuccess() {
+        return "order/orderSuccess";
     }
 
 

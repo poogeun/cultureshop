@@ -5,10 +5,7 @@ import com.cultureShop.dto.OrderFormDto;
 import com.cultureShop.dto.OrderHistDto;
 import com.cultureShop.dto.OrderItemDto;
 import com.cultureShop.entity.*;
-import com.cultureShop.repository.ItemImgRepository;
-import com.cultureShop.repository.ItemRepository;
-import com.cultureShop.repository.MemberRepository;
-import com.cultureShop.repository.OrderRepository;
+import com.cultureShop.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +28,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final ItemImgRepository itemImgRepository;
+    private final PaymentRepository paymentRepository;
 
     public Long order(OrderFormDto orderFormDto, String email) {
         Item item = itemRepository.findById(orderFormDto.getItemId())
@@ -41,6 +39,7 @@ public class OrderService {
                 .price(orderFormDto.getOrderPrice())
                 .status(PaymentStatus.READY)
                 .build();
+        paymentRepository.save(payment);
 
         List<OrderItem> orderItemList = new ArrayList<>();
         OrderItem orderItem = OrderItem.createOrderItem(item, orderFormDto.getViewDay(), orderFormDto.getCount());
@@ -58,6 +57,7 @@ public class OrderService {
                 .price(orderFormDtoList.getFirst().getOrderPrice())
                 .status(PaymentStatus.READY)
                 .build();
+        paymentRepository.save(payment);
 
         List<OrderItem> orderItemList = new ArrayList<>();
         for(OrderFormDto orderFormDto : orderFormDtoList) {
@@ -91,5 +91,15 @@ public class OrderService {
             orderHistDtos.add(orderHistDto);
         }
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
+    }
+
+    public Order getOrder(String email) {
+        return orderRepository.findLatestOrder(email);
+    }
+
+    public void deleteOrder(String orderUid) {
+        Order order = orderRepository.findByOrderUid(orderUid);
+        orderRepository.delete(order);
+        paymentRepository.delete(order.getPayment());
     }
 }

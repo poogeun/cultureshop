@@ -38,6 +38,7 @@ public class Order extends BaseEntity{
     private String orderUid; // 주문 번호
     private LocalDateTime orderDate;
     private int orderPrice;
+    private String address;
     private String delReq;
     private String reqWrite;
     private String getTicket;
@@ -60,6 +61,7 @@ public class Order extends BaseEntity{
         order.setOrderUid(UUID.randomUUID().toString());
         order.setOrderDate(LocalDateTime.now());
         order.setOrderPrice(orderFormDto.getOrderPrice());
+        order.setAddress(orderFormDto.getAddress());
         order.setDelReq(orderFormDto.getDelReq());
         order.setReqWrite(orderFormDto.getReqWrite());
         order.setGetTicket(orderFormDto.getGetTicket());

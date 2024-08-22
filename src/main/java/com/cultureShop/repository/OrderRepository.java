@@ -25,4 +25,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select o from Order o left join fetch o.payment p where o.orderUid = :orderUid")
     Optional<Order> findOrderAndPayment(String orderUid);
+
+    @Query("select o from Order o where o.member.email = :email order by o.orderDate desc limit 1")
+    Order findLatestOrder(String email);
+
+    Order findByOrderUid(String orderUid);
 }
