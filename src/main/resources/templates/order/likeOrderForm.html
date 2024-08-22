@@ -55,6 +55,7 @@
             $('.orderItemDtl').each(function() {
                 var item = $(this);
                 var price = parseInt(item.find('.price').text().replace('원', '').trim());
+                var count = parseInt(item.find('.count').val(), 10);
 
                 item.find('.count').on('change', function(e) {
                     if($(this).is(e.currentTarget)) {
@@ -63,8 +64,7 @@
                         item.find('.price').html(perPrice + '원');
                     }
                 });
-
-                totalPrice += price;
+                totalPrice += price * count;
             });
 
             $('#totalPrice').html(totalPrice + '원');
