@@ -1,12 +1,10 @@
 package com.cultureShop.controller;
 
-import com.cultureShop.dto.LikeItemDto;
-import com.cultureShop.dto.LikeOrderFormDto;
-import com.cultureShop.dto.MainItemDto;
-import com.cultureShop.dto.OrderFormDto;
+import com.cultureShop.dto.*;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
 import com.cultureShop.entity.Order;
+import com.cultureShop.entity.UserLikeItem;
 import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.repository.OrderRepository;
@@ -46,8 +44,19 @@ public class OrderController {
 
     @GetMapping(value = "/order")
     public String order(@RequestParam("itemId")Long itemId, @RequestParam("count")int count,
-                        @RequestParam("date") LocalDate date, Principal principal, Model model) {
+                        @RequestParam(value = "date", required = false) LocalDate date, Principal principal, Model model) {
 
+        if(date == null) {
+            ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+            List<UserLikeItem> likeItems = userLikeItemService.getLikeItems(itemId);
+            int likeCount = likeItems.size();
+
+            model.addAttribute("item", itemFormDto);
+            model.addAttribute("likeItems", likeItems);
+            model.addAttribute("likeCount", likeCount);
+            model.addAttribute("errorMessage", "관람일을 선택해주세요.");
+            return "item/itemDtl";
+        }
         Member member = memberRepository.findByEmail(principal.getName());
         MainItemDto item = itemRepository.findMainItemDto(itemId);
 

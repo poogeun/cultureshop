@@ -16,6 +16,7 @@
             }
 
             calculateTotalPrice();
+            starActive();
 
             $("#count").change(function(){
                 calculateTotalPrice();
@@ -68,6 +69,36 @@
                     location.href = '/members/login';
                 }
             });
+        }
+
+        function starActive() {
+            var starPoint = $('.rvPoint').val();
+            console.log(starPoint);
+            if(starPoint == 5) {
+                $('.starPoint1').addClass('active');
+                $('.starPoint2').addClass('active');
+                $('.starPoint3').addClass('active');
+                $('.starPoint4').addClass('active');
+                $('.starPoint5').addClass('active');
+            }
+            if(starPoint == 4) {
+                $('.starPoint1').addClass('active');
+                $('.starPoint2').addClass('active');
+                $('.starPoint3').addClass('active');
+                $('.starPoint4').addClass('active');
+            }
+            if(starPoint == 3) {
+                $('.starPoint1').addClass('active');
+                $('.starPoint2').addClass('active');
+                $('.starPoint3').addClass('active');
+            }
+            if(starPoint == 2) {
+                $('.starPoint1').addClass('active');
+                $('.starPoint2').addClass('active');
+            }
+            if(starPoint == 1) {
+                $('.starPoint1').addClass('active');
+            }
         }
     </script>
 </th:block>
@@ -155,6 +186,12 @@
             float: left;
             vertical-align: middle;
         }
+        .prdStar span {
+            color: #dfe5ed;
+        }
+        .starPoint1.active, .starPoint2.active, .starPoint3.active, .starPoint4.active, .starPoint5.active {
+            color: #ffb400;
+        }
         .rightSide {
             float: right;
             vertical-align: middle;
@@ -163,11 +200,17 @@
             padding-left: 0;
         }
         .reviewContent {
-            padding: 10px 40px;
+            padding: 10px 30px 40px;
             margin: 40px 0;
             border: 1px solid #dfe5ed;
             border-radius: 15px;
             box-sizing: border-box;
+        }
+        #noReview {
+            line-height: 11;
+            color: #808080;
+            height: 200px;
+            text-align: center;
         }
         .reviewItemHead {
             display: table;
@@ -199,6 +242,9 @@
             line-height: 2;
             margin-top: 20px;
         }
+        .bodyRight {
+            float: right;
+        }
     </style>
 </th:block>
 
@@ -226,8 +272,14 @@
                     </div>
                     <ul class="itemInfos">
                         <li class="itemInfo">
-                            <strong class="infoLabel">장소</strong>
-                            <div th:text="${item.place}" class="infoDesc"></div>
+                            <div th:if="${#strings.isEmpty(item.place)}">
+                                <strong class="infoLabel">주소</strong>
+                                <div th:text="${item.address}" class="infoDesc"></div>
+                            </div>
+                            <div th:unless="${#strings.isEmpty(item.place)}">
+                                <strong class="infoLabel">장소</strong>
+                                <div th:text="${item.place}" class="infoDesc"></div>
+                            </div>
                         </li>
                         <li class="itemInfo">
                             <strong class="infoLabel">기간</strong>
@@ -283,7 +335,11 @@
                 <div class="content" id="detail-img-text">
                     <h3 class="contentTitle">상세 정보</h3>
                     <div th:text="${item.itemDetail}" class="contentDtl"></div>
-                    <img th:src="${item.itemImgDtoList[1].imgUrl}" alt="${item.itemName}" class="contentDtl">
+                    <div th:if="${#strings.isEmpty(item.itemImgDtoList[1].imgUrl)}">
+                    </div>
+                    <div th:unless="${#strings.isEmpty(item.itemImgDtoList[1].imgUrl)}">
+                        <img th:src="${item.itemImgDtoList[1].imgUrl}" alt="${item.itemName}" class="contentDtl">
+                    </div>
                 </div>
                 <div class="content" id="detail-sales">
                     <h3 class="contentTitle">판매 정보</h3>
@@ -316,37 +372,62 @@
                     <div class="reviewWrap">
                         <div class="reviewTop">
                             <div class="leftSide">
-                                <strong>총 <span class="reviewNum"></span>개의 이용후기가 등록되었습니다. </strong>
+                                <strong>총 <span th:text="${reviewCount}" class="reviewNum"></span>개의 이용후기가 등록되었습니다. </strong>
                             </div>
                             <div class="rightSide">
-                                <a role="button" th:href="@{'/review/write/' + ${item.id}}">이용후기 작성</a>
+                                <div th:if="${orderItem == null}">
+                                </div>
+                                <div th:unless="${orderItem == null}">
+                                    <a role="button" th:href="@{'/review/write/' + ${item.id}}" class="btn btn-outline-secondary">
+                                        이용후기 작성</a>
+                                </div>
                             </div>
                         </div>
                         <ul class="reviewList">
-                            <li class="reviewItem">
-                                <div class="reviewContent">
-                                    <div class="reviewItemHead">
-                                        <div class="leftSide">
-                                            <div class="prdStar">
-                                                별다섯개
+                            <div th:if="${#lists.isEmpty(reviews)}">
+                                <li class="reviewItem">
+                                    <div class="reviewContent" id="noReview">
+                                        등록된 리뷰가 없습니다
+                                    </div>
+                                </li>
+                            </div>
+                            <div th:unless="${#lists.isEmpty(reviews)}">
+                                <li th:each="review : ${reviews}" class="reviewItem">
+                                    <div class="reviewContent">
+                                        <div class="reviewItemHead">
+                                            <div class="leftSide">
+                                                <div class="prdStar">
+                                                    <input type="hidden" th:value="${review.starPoint}" class="rvPoint">
+                                                    <span class="material-symbols-outlined starPoint1">star</span>
+                                                    <span class="material-symbols-outlined starPoint2">star</span>
+                                                    <span class="material-symbols-outlined starPoint3">star</span>
+                                                    <span class="material-symbols-outlined starPoint4">star</span>
+                                                    <span class="material-symbols-outlined starPoint5">star</span>
+                                                </div>
+                                            </div>
+                                            <div class="rightSide">
+                                                <ul class="reviewInfos">
+                                                    <li th:text="'작성자: '+${review.member.name}" class="reviewInfo"></li>
+                                                    <li th:text="'등록일: '+${review.regTime}" class="reviewInfo"></li>
+                                                </ul>
                                             </div>
                                         </div>
-                                        <div class="rightSide">
-                                            <ul class="reviewInfos">
-                                                <li class="reviewInfo">작성자</li>
-                                                <li class="reviewInfo">작성일</li>
-                                                <li class="reviewInfo">조회수</li>
-                                            </ul>
+                                        <div class="reviewItemBody">
+                                            <strong th:text="${review.title}" class="reviewTitle"></strong>
+                                            <p th:text="${review.content}" class="reviewText"></p>
+                                            <div class="bodyRight">
+                                                <div th:if="${memReview == null}">
+                                                </div>
+                                                <div th:unless="${memReview == null}">
+                                                    <input type="hidden" th:value="${review.id}" name="reviewId">
+                                                    <a role="button" th:href="@{'/review/update/' + ${review.id}}" class="btn btn-outline-secondary btn-sm">
+                                                        수정하기</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="reviewItemBody">
-                                        <strong class="reviewTitle">제목</strong>
-                                        <p class="reviewText">뭉크의 삶, 사랑, 질투 등에 대한 시각이 투영된 시기의 작품이 전시되었습니다.
-                                            우리에게 잘 알려진 '절규'가 탄생하기까지의 과거 작품들도 함께 감상할 수 있어서 참으로 유익했습니다.
-                                            다양한 범위의 다양한 기법들을 사용한 작가의 작품들을 접하게 되어 좋았습니다.</p>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            </div>
                         </ul>
                     </div>
                 </div>

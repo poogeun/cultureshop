@@ -189,7 +189,8 @@
                                                 <input class="form-check-input" type="checkbox" id="likeItemId" name="likeChkBox" th:value="${likeItem.likeItemId}">
                                             </span>
                                                 <span th:text="${likeItem.itemName}" class="likeDetail_title" ></span>
-                                                <span th:text="${likeItem.place}" class="likeDetail_place"></span>
+                                                <span th:if="${#strings.isEmpty(likeItem.place)}" th:text="${festItem.address}" class="likeDetail_place"></span>
+                                                <span th:unless="${#strings.isEmpty(likeItem.place)}" th:text="${likeItem.place}" class="likeDetail_place"></span>
                                                 <span th:text="${likeItem.startDay +' ~ '+ likeItem.endDay}" class="likeDetail_date"></span>
                                                 <span th:text="${likeItem.price} + '원'" class="likeDetail_price"></span>
                                             </div>

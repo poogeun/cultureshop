@@ -3,11 +3,11 @@ package com.cultureShop.controller;
 import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.dto.LikeDto;
-import com.cultureShop.entity.Item;
-import com.cultureShop.entity.Member;
-import com.cultureShop.entity.UserLikeItem;
+import com.cultureShop.entity.*;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.service.ItemService;
+import com.cultureShop.service.OrderItemService;
+import com.cultureShop.service.ReviewService;
 import com.cultureShop.service.UserLikeItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +36,8 @@ public class ItemController {
     private final ItemService itemService;
     private final UserLikeItemService userLikeItemService;
     private final MemberRepository memberRepository;
+    private final ReviewService reviewService;
+    private final OrderItemService orderItemService;
 
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model, HttpServletRequest request){
@@ -126,19 +128,32 @@ public class ItemController {
         int likeCount = likeItems.size();
 
         if(principal != null) {
-            System.out.println("========================================================");
-            System.out.println(userLikeItemService.findLikeItem(principal.getName(), itemId));
             if (userLikeItemService.findLikeItem(principal.getName(), itemId)) {
                 model.addAttribute("isLikeItem", "afterLike");
             }
             else {
                 model.addAttribute("isLikeItem", "beforeLike");
             }
+
+            OrderItem orderItem = orderItemService.getOrderItem(itemId, principal.getName());
+            Review memReview = reviewService.getMemItemReview(itemId, principal.getName());
+            model.addAttribute("orderItem", orderItem);
+            model.addAttribute("memReview", memReview);
         }
+        else {
+            model.addAttribute("orderItem", null);
+            model.addAttribute("memReview", null);
+        }
+
+        List<Review> reviews = reviewService.getItemReview(itemId);
+        int reviewCount = reviews.size();
 
         model.addAttribute("item", itemFormDto);
         model.addAttribute("likeItems", likeItems);
         model.addAttribute("likeCount", likeCount);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("reviewCount", reviewCount);
+
         return "item/itemDtl";
     }
 

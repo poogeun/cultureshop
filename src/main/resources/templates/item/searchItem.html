@@ -54,8 +54,8 @@
                 <div class="item_content">
                     <strong th:text="${item.itemName}"></strong>
                     <div th:text="${item.startDay} +'~'+ ${item.endDay}" class="date"></div>
-                    <div th:if="${item.place == null}" th:text="${item.address}" class="loc"></div>
-                    <div th:unless="${item.place == null}" th:text="${item.place}" class="loc"></div>
+                    <div th:if="${#strings.isEmpty(item.place)}" th:text="${item.address}" class="loc"></div>
+                    <div th:unless="${#strings.isEmpty(item.place)}" th:text="${item.place}" class="loc"></div>
                 </div>
             </div>
         </th:block>

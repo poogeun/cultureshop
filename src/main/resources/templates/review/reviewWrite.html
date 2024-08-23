@@ -9,7 +9,7 @@
             var errorMessage = [[${errorMessage}]];
             if(errorMessage != null){
                 alert(errorMessage);
-                }
+            }
         });
 
 
@@ -96,7 +96,8 @@
                     <div class="rwItemInfo">
                         <input type="hidden" th:value="${item.id}" name="itemId">
                         <h4 th:text="${item.itemName}" class="rwItemName"></h4>
-                        <div th:text="${item.place}" class="rwItemLoc" style="color: #bbe309"></div>
+                        <div th:if="${#strings.isEmpty(item.place)}" th:text="${item.address}" class="rwItemLoc" style="color: #bbe309"></div>
+                        <div th:unless="${#strings.isEmpty(item.place)}" th:text="${item.place}" class="rwItemLoc" style="color: #bbe309"></div>
                         <div th:text="${orderItem.viewDay}" class="rwItemVday" style="color: #787878"></div>
                     </div>
                 </div>

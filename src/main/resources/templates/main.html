@@ -112,8 +112,8 @@
                         <img th:src="${bannerItem.imgUrl}" alt="${bannerItem.itemName}" class="bannerImg">
                         <ul class="bannerContents">
                             <li th:text="${bannerItem.itemName}" class="bannerTitle"></li>
-                            <li th:if="${bannerItem.place == null}" th:text="${bannerItem.address}" class="bannerLoc"></li>
-                            <li th:unless="${bannerItem.place == null}" th:text="${bannerItem.place}" class="bannerLoc"></li>
+                            <li th:if="${#strings.isEmpty(bannerItem.place)}" th:text="${bannerItem.address}" class="bannerLoc"></li>
+                            <li th:unless="${#strings.isEmpty(bannerItem.place)}" th:text="${bannerItem.place}" class="bannerLoc"></li>
                             <li th:text="${bannerItem.startDay +' ~ '+ bannerItem.endDay}" class="bannerDate"></li>
                         </ul>
                     </a>
@@ -154,8 +154,8 @@
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${seoulItem.itemName}" class="locDetail_title" ></span>
-                                    <span th:if="${seoulItem.place == null}" th:text="${seoulItem.address}" class="locDetail_place"></span>
-                                    <span th:unless="${seoulItem.place == null}" th:text="${seoulItem.place}" class="locDetail_place"></span>
+                                    <span th:if="${#strings.isEmpty(seoulItem.place)}" th:text="${seoulItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${#strings.isEmpty(seoulItem.place)}" th:text="${seoulItem.place}" class="locDetail_place"></span>
                                     <span th:text="${seoulItem.startDay +' ~ '+ seoulItem.endDay}" class="locDetail_date"></span>
                                 </div>
                             </a>
@@ -172,8 +172,8 @@
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${kkItem.itemName}" class="locDetail_title"></span>
-                                    <span th:if="${kkItem.place == null}" th:text="${kkItem.address}" class="locDetail_place"></span>
-                                    <span th:unless="${kkItem.place == null}" th:text="${kkItem.place}" class="locDetail_place"></span>
+                                    <span th:if="${#strings.isEmpty(kkItem.place)}" th:text="${kkItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${#strings.isEmpty(kkItem.place)}" th:text="${kkItem.place}" class="locDetail_place"></span>
                                     <span th:text="${kkItem.startDay +' ~ '+ kkItem.endDay}" class="locDetail_date"></span>
                                 </div>
                             </a>
@@ -190,8 +190,8 @@
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${ksItem.itemName}" class="locDetail_title"></span>
-                                    <span th:if="${ksItem.place == null}" th:text="${ksItem.address}" class="locDetail_place"></span>
-                                    <span th:unless="${ksItem.place == null}" th:text="${ksItem.place}" class="locDetail_place"></span>
+                                    <span th:if="${#strings.isEmpty(ksItem.place)}" th:text="${ksItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${#strings.isEmpty(ksItem.place)}" th:text="${ksItem.place}" class="locDetail_place"></span>
                                     <span th:text="${ksItem.startDay +' ~ '+ ksItem.endDay}" class="locDetail_date"></span>
                                 </div>
                             </a>
@@ -208,8 +208,8 @@
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${jrItem.itemName}" class="locDetail_title"></span>
-                                    <span th:if="${jrItem.place == null}" th:text="${jrItem.address}" class="locDetail_place"></span>
-                                    <span th:unless="${jrItem.place == null}" th:text="${jrItem.place}" class="locDetail_place"></span>
+                                    <span th:if="${#strings.isEmpty(jrItem.place)}" th:text="${jrItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${#strings.isEmpty(jrItem.place)}" th:text="${jrItem.place}" class="locDetail_place"></span>
                                     <span th:text="${jrItem.startDay +' ~ '+ jrItem.endDay}" class="locDetail_date"></span>
                                 </div>
                             </a>
@@ -226,8 +226,8 @@
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${jjItem.itemName}" class="locDetail_title"></span>
-                                    <span th:if="${jjItem.place == null}" th:text="${jjItem.address}" class="locDetail_place"></span>
-                                    <span th:unless="${jjItem.place == null}" th:text="${jjItem.place}" class="locDetail_place"></span>
+                                    <span th:if="${#strings.isEmpty(jjItem.place)}" th:text="${jjItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${#strings.isEmpty(jjItem.place)}" th:text="${jjItem.place}" class="locDetail_place"></span>
                                     <span th:text="${jjItem.startDay +' ~ '+ jjItem.endDay}" class="locDetail_date"></span>
                                 </div>
                             </a>
@@ -244,8 +244,8 @@
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${ccItem.itemName}" class="locDetail_title"></span>
-                                    <span th:if="${ccItem.place == null}" th:text="${ccItem.address}" class="locDetail_place"></span>
-                                    <span th:unless="${ccItem.place == null}" th:text="${ccItem.place}" class="locDetail_place"></span>
+                                    <span th:if="${#strings.isEmpty(ccItem.place)}" th:text="${ccItem.address}" class="locDetail_place"></span>
+                                    <span th:unless="${#strings.isEmpty(ccItem.place)}" th:text="${ccItem.place}" class="locDetail_place"></span>
                                     <span th:text="${ccItem.startDay +' ~ '+ ccItem.endDay}" class="locDetail_date"></span>
                                 </div>
                             </a>
@@ -275,8 +275,8 @@
                             </div>
                             <div class="locDetail">
                                 <span th:text="${exhiItem.itemName}" class="locDetail_title" ></span>
-                                <span th:if="${exhiItem.place == null}" th:text="${exhiItem.address}" class="locDetail_place"></span>
-                                <span th:unless="${exhiItem.place == null}" th:text="${exhiItem.place}" class="locDetail_place"></span>
+                                <span th:if="${#strings.isEmpty(exhiItem.place)}" th:text="${exhiItem.address}" class="locDetail_place"></span>
+                                <span th:unless="${#strings.isEmpty(exhiItem.place)}" th:text="${exhiItem.place}" class="locDetail_place"></span>
                                 <span th:text="${exhiItem.startDay +' ~ '+ exhiItem.endDay}" class="locDetail_date"></span>
                             </div>
                         </a>
@@ -304,8 +304,8 @@
                             </div>
                             <div class="locDetail">
                                 <span th:text="${musItem.itemName}" class="locDetail_title" ></span>
-                                <span th:if="${musItem.place == null}" th:text="${musItem.address}" class="locDetail_place"></span>
-                                <span th:unless="${musItem.place == null}" th:text="${musItem.place}" class="locDetail_place"></span>
+                                <span th:if="${#strings.isEmpty(musItem.place)}" th:text="${musItem.address}" class="locDetail_place"></span>
+                                <span th:unless="${#strings.isEmpty(musItem.place)}" th:text="${musItem.place}" class="locDetail_place"></span>
                                 <span th:text="${musItem.startDay +' ~ '+ musItem.endDay}" class="locDetail_date"></span>
                             </div>
                         </a>
@@ -333,8 +333,8 @@
                             </div>
                             <div class="locDetail">
                                 <span th:text="${festItem.itemName}" class="locDetail_title" ></span>
-                                <span th:if="${festItem.place == null}" th:text="${festItem.address}" class="locDetail_place"></span>
-                                <span th:unless="${festItem.place == null}" th:text="${festItem.place}" class="locDetail_place"></span>
+                                <span th:if="${#strings.isEmpty(festItem.place)}" th:text="${festItem.address}" class="locDetail_place"></span>
+                                <span th:unless="${#strings.isEmpty(festItem.place)}" th:text="${festItem.place}" class="locDetail_place"></span>
                                 <span th:text="${festItem.startDay +' ~ '+ festItem.endDay}" class="locDetail_date"></span>
                             </div>
                         </a>
