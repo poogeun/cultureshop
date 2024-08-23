@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ItemImgRepository itemImgRepository;
     private final PaymentRepository paymentRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final ReviewRepository reviewRepository;
 
     public Long order(OrderFormDto orderFormDto, String email) {
         Item item = itemRepository.findById(orderFormDto.getItemId())
@@ -102,5 +105,34 @@ public class OrderService {
         Order order = orderRepository.findByOrderUid(orderUid);
         orderRepository.delete(order);
         paymentRepository.delete(order.getPayment());
+    }
+
+    @Transactional(readOnly = true)
+    public boolean validateOrder(Long orderId, String email) {
+        Member curMember = memberRepository.findByEmail(email);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+        Member savedMember = order.getMember();
+
+        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())) {
+            return false;
+        }
+        return true;
+    }
+
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+        order.cancelOrder();
+
+        // 주문 취소 시 주문아이템, 리뷰 삭제
+        Long memberId = order.getMember().getId();
+        List<OrderItem> orderItems = order.getOrderItems();
+        for(OrderItem orderItem : orderItems) {
+            Long itemId = orderItem.getItem().getId();
+            Review review = reviewRepository.findByItemIdAndMemberId(itemId, memberId);
+            reviewRepository.delete(review);
+            orderItemRepository.delete(orderItem);
+        }
     }
 }

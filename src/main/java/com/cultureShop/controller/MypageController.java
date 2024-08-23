@@ -39,6 +39,7 @@ public class MypageController {
     private final UserLikeItemService userLikeItemService;
     private final UserLikeRepository userLikeRepository;
     private final OrderRepository orderRepository;
+    private final ReviewController reviewController;
 
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page")Optional<Integer> page, Principal principal, Model model) {
@@ -76,5 +77,19 @@ public class MypageController {
         model.addAttribute("likeItems", likeItems);
 
         return "mypage/likeList";
+    }
+
+    @GetMapping(value = "/reviews")
+    public String reviewList(Model model, Principal principal) {
+
+        Member member = memberRepository.findByEmail(principal.getName());
+        int likeCount = userLikeItemService.likeCount(principal.getName());
+        Long orderCount = orderRepository.countOrder(principal.getName());
+
+        model.addAttribute("member", member);
+        model.addAttribute("likeCount", likeCount);
+        model.addAttribute("orderCount", orderCount);
+
+        return "mypage/reviewList";
     }
 }

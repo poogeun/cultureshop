@@ -59,4 +59,9 @@ public class ReviewService {
                 .orElseThrow(EntityNotFoundException::new);
         review.updateReview(reviewFormDto.getTitle(), reviewFormDto.getContent(), reviewFormDto.getStarPoint());
     }
+
+    public List<Review> getMemReview(String email) {
+        Member member = memberRepository.findByEmail(email);
+        return reviewRepository.findByMemberIdOrderByRegTimeDesc(member.getId());
+    }
 }

@@ -546,3 +546,80 @@ section {
     padding-top: 20px;
     padding-left: 50px;
 }
+
+/* likeList */
+.likeBody {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+.likeContents {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin-top: 40px;
+}
+.likeOrderBtn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}
+.allLikeCheck {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #cdd0d1;
+    margin-bottom: 40px;
+}
+.likeContentList{
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+.mLikeItem {
+    margin-bottom: 65px;
+}
+.likeImgWrap {
+    position: ralative;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.likeImgWrap img {
+    width: 300px;
+    height: 370px;
+    border-radius: 8px;
+}
+.likeDetail {
+    display: flex;
+    padding: 0 4px;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    height: 100px;
+    width: 300px;
+}
+.likeDetail_title {
+    line-height: 150%;
+    margin: 0 0 4px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #000;
+    word-wrap: break-word;
+    word-break: break-all;
+    text-align: left;
+}
+.likeDetail_place {
+    font-size: 15px;
+    line-height: 150%;
+    color: #bbe309;
+}
+.likeDetail_date {
+    font-size: 15px;
+    line-height: 150%;
+    color: #cdd0d1;
+}
+.likeDetail_price {
+    font-size: 16px;
+    color: #808080;
+    line-height: 150%;
+    font-weight: 700;
+}

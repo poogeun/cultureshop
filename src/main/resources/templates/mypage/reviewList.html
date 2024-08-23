@@ -13,7 +13,7 @@
         section {
             width: 100%;
         }
-        #favorite {
+        #rate_review {
             font-size: 40px;
             color: #bbe309;
         }
@@ -30,14 +30,7 @@
             }
         });
 
-        function checkAll(){
-            if($('#likeAll').prop('checked')) {
-                $('input[name=likeChkBox]').prop('checked', true);
-            }
-            else {
-                $('input[name=likeChkBox]').prop('checked', false);
-            }
-        }
+
     </script>
 </th:block>
 
@@ -68,7 +61,7 @@
                             </button>
                             <button class="mypage-button" type="button">
                                 <div class="menuList">
-                                    <span class="material-symbols-outlined" style="font-size: 40px">rate_review</span>
+                                    <span class="material-symbols-outlined" style="font-size: 40px" id="rate_review">rate_review</span>
                                     <span class="mypage-menu">리뷰</span>
                                     <strong class="mypage-menu-count">(3)</strong>
                                 </div>
