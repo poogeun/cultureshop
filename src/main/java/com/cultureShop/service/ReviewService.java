@@ -1,11 +1,15 @@
 package com.cultureShop.service;
 
+import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.ReviewFormDto;
+import com.cultureShop.dto.ReviewItemDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
+import com.cultureShop.entity.OrderItem;
 import com.cultureShop.entity.Review;
 import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MemberRepository;
+import com.cultureShop.repository.OrderItemRepository;
 import com.cultureShop.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
+    private final OrderItemRepository orderItemRepository;
 
     public Long saveReview(ReviewFormDto reviewFormDto, Long itemId, String email) throws Exception {
 
@@ -32,6 +37,11 @@ public class ReviewService {
                         .orElseThrow(EntityNotFoundException::new);
         review.setItem(item);
         reviewRepository.save(review);
+
+        // 주문아이템에 해당 리뷰 저장
+        OrderItem orderItem = orderItemRepository.findByCreatedByAndItemId(email, itemId);
+        orderItem.updateReview(review);
+
         return review.getId();
     }
 
@@ -60,8 +70,28 @@ public class ReviewService {
         review.updateReview(reviewFormDto.getTitle(), reviewFormDto.getContent(), reviewFormDto.getStarPoint());
     }
 
-    public List<Review> getMemReview(String email) {
+    public int getMemReviewCount(String email) {
         Member member = memberRepository.findByEmail(email);
-        return reviewRepository.findByMemberIdOrderByRegTimeDesc(member.getId());
+        List<Review> reviews = reviewRepository.findByMemberIdOrderByRegTimeDesc(member.getId());
+
+        int reviewCount = 0;
+        if(reviews != null) {
+            reviewCount = reviews.size();
+        }
+
+        return reviewCount;
     }
+
+    public List<ReviewItemDto> getMemReview(String email) {
+        Member member = memberRepository.findByEmail(email);
+        List<ReviewItemDto> reviewItemDtos = reviewRepository.findReviewItemDto(member.getId());
+        return reviewItemDtos;
+    }
+
+    public void deleteReview(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(EntityNotFoundException::new);
+        reviewRepository.delete(review);
+    }
+
 }

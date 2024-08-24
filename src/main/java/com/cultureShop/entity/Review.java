@@ -3,11 +3,13 @@ package com.cultureShop.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "review")
 @Getter
 @Setter
+@ToString
 public class Review extends BaseEntity{
 
     @Id

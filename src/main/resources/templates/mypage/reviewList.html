@@ -17,6 +17,12 @@
             font-size: 40px;
             color: #bbe309;
         }
+        table.orderList {
+            margin-top: 50px;
+        }
+        .reviewTab {
+            color: black;
+        }
 
     </style>
 </th:block>
@@ -28,7 +34,69 @@
             if(errorMessage != null){
                 alert(errorMessage);
             }
+
+            $('#wriReview').show();
+            $('#noReview').hide();
+            $(".nav-link").on("click", function(e) {
+                $(".nav-link").each(function() {
+                    if ($(this).is(e.currentTarget)) {
+                        $(this).addClass("active");
+                    } else {
+                        $(this).removeClass("active");
+                    }
+                });
+
+                var wriReviewTab = $('#wriReviewTab');
+                var noReviewTab = $('#noReviewTab');
+                if($(e.currentTarget).is(wriReviewTab)) {
+                    $('#wriReview').show();
+                    $('#noReview').hide();
+                }
+                else {
+                    $('#noReview').show();
+                    $('#wriReview').hide();
+                }
+            });
         });
+
+        function deleteReview(reviewId) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            console.log(reviewId);
+            var url = "/review/delete/" + reviewId;
+            console.log(url);
+
+            var paramData = {
+                reviewId : reviewId,
+            }
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url : url,
+                type : "DELETE",
+                contentType : "application/json",
+                data : param,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function(result, status){
+                    alert('리뷰가 삭제 되었습니다.');
+                    location.href='/my-page/reviews';
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요.');
+                        location.href='/members/login';
+                    }
+                    else{
+                        alert(jqXHR.responseText);
+                    }
+                }
+            })
+        }
 
 
     </script>
@@ -59,11 +127,11 @@
                                     <strong th:text="${likeCount}" class="mypage-menu-count"></strong>
                                 </div>
                             </button>
-                            <button class="mypage-button" type="button">
+                            <button class="mypage-button" type="button" onclick="location.href='/my-page/reviews'">
                                 <div class="menuList">
                                     <span class="material-symbols-outlined" style="font-size: 40px" id="rate_review">rate_review</span>
                                     <span class="mypage-menu">리뷰</span>
-                                    <strong class="mypage-menu-count">(3)</strong>
+                                    <strong th:text="${reviewCount}" class="mypage-menu-count"></strong>
                                 </div>
                             </button>
                         </div>
@@ -72,52 +140,95 @@
             </section>
 
             <section class="mypageBody">
-                <div class="likeBody">
-                    <div class="likeTab">
-                        <ul class="nav nav-underline">
-                            <li class="nav-item" id="likeItemTab">
-                                <a class="nav-link active" aria-current="page" href="#">상품</a>
-                            </li>
-                            <li class="nav-item" id="likePlaceTab">
-                                <a class="nav-link" href="#">장소</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="likeContents">
-                        <div class="likeOrderBtn">
-                            <button type="submit" class="btn btn-outline-secondary">선택상품 예매하기</button>
-                        </div>
-                        <div class="form-check allLikeCheck">
-                            <input class="form-check-input" type="checkbox" value="" id="likeAll" onclick="checkAll()">
-                            <label class="form-check-label" for="likeAll">
-                                전체 선택
-                            </label>
-                        </div>
-                        <div class="container text-center">
-                            <div class="row row-cols-3">
-                                <th:block th:each="likeItem : ${likeItems}">
-                                    <div class="col mLikeItem">
-                                        <a class="mLikeLink">
-                                            <div class="likeImgWrap">
-                                                <img th:src="${likeItem.imgUrl}" th:alt="${likeItem.itemName}">
+                <ul class="nav nav-underline">
+                    <li class="nav-item">
+                        <a class="nav-link active reviewTab" id="wriReviewTab" aria-current="page" href="#">  작성한 리뷰  </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link reviewTab" id="noReviewTab" href="#">  작성 가능한  </a>
+                    </li>
+                </ul>
+                <div class="mypage-body">
+                    <table class="orderList" id="wriReview">
+                        <colgroup>
+                            <col width="10%">
+                            <col width="70%">
+                            <col width="10%">
+                            <col width="10%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>등록일</th>
+                            <th>상품 정보</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:each="review : ${reviews}">
+                            <tr>
+                                <td th:text="${review.regTime}"></td>
+                                <td>
+                                    <div class="olItem">
+                                            <img th:src="${review.imgUrl}" th:alt="${review.itemName}">
+                                            <div class="olItemText">
+                                                <div class="olText">
+                                                    <h3 th:text="${review.itemName}" style="font-weight: bold"></h3>
+                                                    <div th:if="${#strings.isEmpty(review.place)}" th:text="${review.address}" style="color: #BBE309"></div>
+                                                    <div th:unless="${#strings.isEmpty(review.place)}" th:text="${review.place}" style="color: #BBE309"></div>
+                                                    <div th:text="'관람일: ' + ${review.viewDay}" style="color: #787878"></div>
+                                                </div>
                                             </div>
-                                            <div class="likeDetail">
-                                            <span class="likeCheck">
-                                                <input class="form-check-input" type="checkbox" id="likeItemId" name="likeChkBox" th:value="${likeItem.likeItemId}">
-                                            </span>
-                                                <span th:text="${likeItem.itemName}" class="likeDetail_title" ></span>
-                                                <span th:if="${#strings.isEmpty(likeItem.place)}" th:text="${festItem.address}" class="likeDetail_place"></span>
-                                                <span th:unless="${#strings.isEmpty(likeItem.place)}" th:text="${likeItem.place}" class="likeDetail_place"></span>
-                                                <span th:text="${likeItem.startDay +' ~ '+ likeItem.endDay}" class="likeDetail_date"></span>
-                                                <span th:text="${likeItem.price} + '원'" class="likeDetail_price"></span>
-                                            </div>
-                                        </a>
                                     </div>
-                                </th:block>
-                            </div>
+                                </td>
+                                <td>
+                                    <input type="hidden" th:value="${review.reviewId}" name="reviewId">
+                                    <a role="button" th:href="@{'/review/update/' + ${review.reviewId}}" class="btn btn-outline-secondary">
+                                        수정</a>
+                                </td>
+                                <td style="border-right: none">
+                                    <button type="button" onclick="deleteReview(this.value)" th:value="${review.reviewId}" class="btn btn-outline-secondary">
+                                        삭제</button>
+                                </td>
+                            </tr>
                         </div>
+                        </tbody>
+                    </table>
 
-                    </div>
+                    <table class="orderList" id="noReview">
+                        <colgroup>
+                            <col width="80%">
+                            <col width="20%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>상품 정보</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:each="noRevItem : ${noRevItems}">
+                            <tr>
+                                <td style="border-left: none">
+                                    <div class="olItem">
+                                        <img th:src="${noRevItem.imgUrl}" th:alt="${noRevItem.itemName}">
+                                        <div class="olItemText">
+                                            <div class="olText">
+                                                <h3 th:text="${noRevItem.itemName}" style="font-weight: bold"></h3>
+                                                <div th:if="${#strings.isEmpty(noRevItem.place)}" th:text="${noRevItem.address}" style="color: #BBE309"></div>
+                                                <div th:unless="${#strings.isEmpty(noRevItem.place)}" th:text="${noRevItem.place}" style="color: #BBE309"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="border-right: none">
+                                    <a role="button" th:href="@{'/review/write/' + ${noRevItem.id}}" class="btn btn-outline-secondary">
+                                        리뷰 작성</a>
+                                </td>
+                            </tr>
+                        </div>
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </form>

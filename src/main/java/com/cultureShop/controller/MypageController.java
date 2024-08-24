@@ -3,17 +3,13 @@ package com.cultureShop.controller;
 import com.cultureShop.dto.LikeItemDto;
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.OrderHistDto;
-import com.cultureShop.entity.Member;
-import com.cultureShop.entity.Order;
-import com.cultureShop.entity.UserLike;
-import com.cultureShop.entity.UserLikeItem;
+import com.cultureShop.dto.ReviewItemDto;
+import com.cultureShop.entity.*;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.repository.OrderRepository;
 import com.cultureShop.repository.UserLikeItemRepository;
 import com.cultureShop.repository.UserLikeRepository;
-import com.cultureShop.service.OrderService;
-import com.cultureShop.service.UserLikeItemService;
-import com.cultureShop.service.UserLikeService;
+import com.cultureShop.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +35,8 @@ public class MypageController {
     private final UserLikeItemService userLikeItemService;
     private final UserLikeRepository userLikeRepository;
     private final OrderRepository orderRepository;
-    private final ReviewController reviewController;
+    private final ReviewService reviewService;
+    private final OrderItemService orderItemService;
 
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page")Optional<Integer> page, Principal principal, Model model) {
@@ -50,10 +47,12 @@ public class MypageController {
 
         int likeCount = userLikeItemService.likeCount(principal.getName());
         Long orderCount = orderRepository.countOrder(principal.getName());
+        int reviewCount = reviewService.getMemReviewCount(principal.getName());
 
         model.addAttribute("member", member);
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("orderCount", orderCount);
+        model.addAttribute("reviewCount", reviewCount);
         model.addAttribute("orders", orderHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
@@ -67,13 +66,14 @@ public class MypageController {
         Member member = memberRepository.findByEmail(principal.getName());
         int likeCount = userLikeItemService.likeCount(principal.getName());
         Long orderCount = orderRepository.countOrder(principal.getName());
+        int reviewCount = reviewService.getMemReviewCount(principal.getName());
 
         List<LikeItemDto> likeItems = userLikeItemService.getLikeList(principal.getName());
-
 
         model.addAttribute("member", member);
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("orderCount", orderCount);
+        model.addAttribute("reviewCount", reviewCount);
         model.addAttribute("likeItems", likeItems);
 
         return "mypage/likeList";
@@ -85,10 +85,16 @@ public class MypageController {
         Member member = memberRepository.findByEmail(principal.getName());
         int likeCount = userLikeItemService.likeCount(principal.getName());
         Long orderCount = orderRepository.countOrder(principal.getName());
+        int reviewCount = reviewService.getMemReviewCount(principal.getName());
+        List<ReviewItemDto> reviews = reviewService.getMemReview(principal.getName());
+        List<MainItemDto> noRevItems = orderItemService.getNoRevOrderItems(principal.getName());
 
         model.addAttribute("member", member);
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("orderCount", orderCount);
+        model.addAttribute("reviewCount", reviewCount);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("noRevItems", noRevItems);
 
         return "mypage/reviewList";
     }

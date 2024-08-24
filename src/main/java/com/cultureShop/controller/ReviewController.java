@@ -2,7 +2,6 @@ package com.cultureShop.controller;
 
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.ReviewFormDto;
-import com.cultureShop.entity.Item;
 import com.cultureShop.entity.OrderItem;
 import com.cultureShop.entity.Review;
 import com.cultureShop.repository.ItemRepository;
@@ -14,6 +13,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -127,5 +128,18 @@ public class ReviewController {
         model.addAttribute("orderItem", orderItem);
         return "review/reviewWrite";
     }
+
+    @DeleteMapping(value = "/delete/{reviewId}")
+    public @ResponseBody ResponseEntity deleteReview(@PathVariable Long reviewId) {
+
+        try {
+            reviewService.deleteReview(reviewId);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<String>("리뷰 삭제 중 에러가 발생하였습니다.", HttpStatus.FORBIDDEN);
+
+        }
+        return new ResponseEntity<Long>(reviewId, HttpStatus.OK);
+    }
+
 
 }

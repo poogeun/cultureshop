@@ -96,11 +96,11 @@
                                 <strong th:text="${likeCount}" class="mypage-menu-count"></strong>
                             </div>
                         </button>
-                        <button class="mypage-button" type="button">
+                        <button class="mypage-button" type="button" onclick="location.href='/my-page/reviews'">
                             <div class="menuList">
                                 <span class="material-symbols-outlined" style="font-size: 40px">rate_review</span>
                                 <span class="mypage-menu">리뷰</span>
-                                <strong class="mypage-menu-count">(3)</strong>
+                                <strong th:text="${reviewCount}" class="mypage-menu-count"></strong>
                             </div>
                         </button>
                     </div>

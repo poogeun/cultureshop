@@ -120,19 +120,14 @@ public class OrderService {
         return true;
     }
 
+    @Transactional
     public void cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
-        order.cancelOrder();
-
-        // 주문 취소 시 주문아이템, 리뷰 삭제
-        Long memberId = order.getMember().getId();
         List<OrderItem> orderItems = order.getOrderItems();
         for(OrderItem orderItem : orderItems) {
-            Long itemId = orderItem.getItem().getId();
-            Review review = reviewRepository.findByItemIdAndMemberId(itemId, memberId);
-            reviewRepository.delete(review);
-            orderItemRepository.delete(orderItem);
+            orderItem.cancel();
         }
+        orderRepository.delete(order);
     }
 }
