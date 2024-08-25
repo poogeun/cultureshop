@@ -97,7 +97,12 @@
 
 <th:block layout:fragment="css">
     <style>
-
+        .moreItems a {
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            padding: 3px 10px;
+            color: #808080;
+        }
     </style>
 </th:block>
 
@@ -263,7 +268,7 @@
             <h2>전시회 추천 상품</h2>
         </div>
         <div class="moreItems">
-            <a class="radioButton">더보기</a>
+            <a href="/item/category/exhibition">더보기 ></a>
         </div>
         <div class="itemGroup">
             <div id="exhiRecItems" style="display: flex">
@@ -292,7 +297,7 @@
             <h2>뮤지엄 추천 상품</h2>
         </div>
         <div class="moreItems">
-            <a class="radioButton">더보기</a>
+            <a href="/item/category/museum">더보기 ></a>
         </div>
         <div class="itemGroup">
             <div id="musRecItems" style="display: flex">
@@ -321,7 +326,7 @@
             <h2>축제/행사 추천 상품</h2>
         </div>
         <div class="moreItems">
-            <a class="radioButton">더보기</a>
+            <a href="/item/category/festival">더보기 ></a>
         </div>
         <div class="itemGroup">
             <div id="festRecItems" style="display: flex">

@@ -136,4 +136,43 @@ public class ItemService {
         return mainItemDetails;
     }
 
+    // 카테고리 메뉴 상품 가져오기
+    public List<MainItemDto> getAllCategoryItem(String category) {
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+
+        for(Item item : categoryItems) {
+            MainItemDto mainItemDto = itemRepository.findMainItemDto(item.getId());
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return mainItemDetails;
+    }
+
+    // 카테고리 필터 (종료 임박순)
+    public List<MainItemDto> getEndDayCategoryItem(String category) {
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByEndDayAsc(category);
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+
+        for(Item item : categoryItems) {
+            MainItemDto mainItemDto = itemRepository.findMainItemDto(item.getId());
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return mainItemDetails;
+    }
+
+    // 카테고리 필터 (리뷰 많은순)
+    public List<MainItemDto> getReviewCategoryItem(String category) {
+        List<Item> categoryItems = itemRepository.findItemsOrderByReviewCount(category);
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+
+        for(Item item : categoryItems) {
+            MainItemDto mainItemDto = itemRepository.findMainItemDto(item.getId());
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return mainItemDetails;
+    }
+
 }

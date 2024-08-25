@@ -3,6 +3,7 @@ package com.cultureShop.controller;
 import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.dto.LikeDto;
+import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.service.ItemService;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,6 +126,7 @@ public class ItemController {
     public String itemDtl(@PathVariable("itemId")Long itemId, Model model, Principal principal){
 
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        LocalDate today = LocalDate.now();
         List<UserLikeItem> likeItems = userLikeItemService.getLikeItems(itemId);
         int likeCount = likeItems.size();
 
@@ -149,6 +152,7 @@ public class ItemController {
         int reviewCount = reviews.size();
 
         model.addAttribute("item", itemFormDto);
+        model.addAttribute("today", today);
         model.addAttribute("likeItems", likeItems);
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("reviews", reviews);
@@ -168,4 +172,42 @@ public class ItemController {
             return new ResponseEntity<String>("찜 기능은 로그인 후 이용 가능합니다.", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value = "/item/category/{category}")
+    public String category(@PathVariable("category") String category,
+                           @RequestParam(value = "sort", required = false) String sort,
+                           Model model) {
+
+        int count;
+        List<MainItemDto> items;
+        if(category.equals("exhibition")){
+            items = itemService.getAllCategoryItem(category);
+            count = items.size();
+        }
+        else if(category.equals("museum")){
+            items = itemService.getAllCategoryItem(category);
+            count = items.size();
+        }
+        else {
+            items = itemService.getAllCategoryItem(category);
+            count = items.size();
+        }
+
+        if(sort != null) {
+            if(sort.equals("endDay")) {
+                items = itemService.getEndDayCategoryItem(category);
+            }
+            else if(sort.equals("review")) {
+                items = itemService.getReviewCategoryItem(category);
+            }
+        }
+
+        model.addAttribute("items", items);
+        model.addAttribute("category", category);
+        model.addAttribute("sort", sort);
+        model.addAttribute("count", count);
+
+        return "menu/exhibition";
+    }
+
 }

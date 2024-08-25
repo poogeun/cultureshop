@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
+<th:block layout:fragment="css">
+    <style>
+        .cateFilter {
+            float: right;
+        }
+        .cateCount {
+            border-bottom: 1px solid #cdd0d1;
+            padding-top: 50px;
+            padding-bottom: 10px;
+        }
+        .cateItem {
+            display: flex;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+        }
+        .cateItem a {
+            margin-bottom: 65px;
+        }
+        .cateImgWrap {
+            position: ralative;
+            width: 100%;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .cateImgWrap img {
+            width: 300px;
+            height: 370px;
+            border-radius: 8px;
+        }
+        .cateDetail {
+            display: flex;
+            padding: 0 4px;
+            flex-direction: column;
+            align-items: flex-start;
+            align-self: stretch;
+            height: 100px;
+            width: 300px;
+            text-align: left;
+        }
+
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+
+            changeSortButton();
+
+        });
+
+        function changeSortButton() {
+            var sort = $('input[name=sort]').val();
+            console.log(sort);
+            $('#sorting ul li a').each(function() {
+                if(sort === $(this).attr('id')){
+                    $('#sorting button').text($(this).text());
+                }
+            });
+            if(sort === ''){
+                $('#sorting button').text($('#regTime').text());
+            }
+        }
+
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="cateHead">
+            <div class="cateFilter">
+                    <div class="dropdown" id="sorting">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <input type="hidden" th:value="${sort}" name="sort">
+                            <li><a class="dropdown-item" th:href="'/item/category/' +${category}" id="regTime">최신순</a></li>
+                            <li><a class="dropdown-item" th:href="'/item/category/' +${category}+ '?sort=review'" id="review">리뷰 많은순</a></li>
+                            <li><a class="dropdown-item" th:href="'/item/category/' +${category}+ '?sort=endDay'" id="endDay">종료 임박순</a></li>
+                        </ul>
+                    </div>
+            </div>
+            <div class="cateCount">
+                총 <span th:text="${count}"></span>개
+            </div>
+        </div>
+        <div class="cateBody">
+            <div class="container text-center" style="margin-top: 50px">
+                <div class="row row-cols-4">
+                    <th:block th:each="item : ${items}">
+                        <div class="col cateItem">
+                            <a th:href="'/item/' + ${item.id}">
+                                <div class="cateImgWrap">
+                                    <img th:src="${item.imgUrl}" th:alt="${item.itemName}">
+                                </div>
+                                <div class="cateDetail">
+                                    <span th:text="${item.itemName}" class="detail_title" ></span>
+                                    <span th:if="${#strings.isEmpty(item.place)}" th:text="${item.address}" class="detail_place"></span>
+                                    <span th:unless="${#strings.isEmpty(item.place)}" th:text="${item.place}" class="detail_place"></span>
+                                    <span th:text="${item.startDay +' ~ '+ item.endDay}" class="detail_date"></span>
+                                    <span th:text="${item.price} + '원'" class="detail_price"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

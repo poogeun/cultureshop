@@ -61,6 +61,9 @@ public class Item extends BaseEntity {
     @Column(length = 500)
     private String info; // 취소/교환/반품 안내
 
+    @OneToMany(mappedBy = "item")
+    private List<Review> reviews;
+
     public void updateItem(ItemFormDto itemFormDto) {
         this.itemName = itemFormDto.getItemName();
         this.place = itemFormDto.getPlace();
