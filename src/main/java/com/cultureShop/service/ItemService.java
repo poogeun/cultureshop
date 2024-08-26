@@ -1,5 +1,8 @@
 package com.cultureShop.service;
 
+import com.cultureShop.constant.ItemStartStatus;
+import com.cultureShop.crawling.festival.FestCrawlingService;
+import com.cultureShop.crawling.festival.FestDataDto;
 import com.cultureShop.dto.*;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.*;
@@ -22,9 +25,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
-    private final MemberRepository memberRepository;
-    private final UserLikeRepository userLikeRepository;
-    private final UserLikeItemRepository userLikeItemRepository;
+    private final FestCrawlingService festCrawlingService;
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
 
@@ -174,5 +175,6 @@ public class ItemService {
 
         return mainItemDetails;
     }
+
 
 }
