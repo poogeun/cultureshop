@@ -1,6 +1,8 @@
 package com.cultureShop.config;
 
 import com.cultureShop.constant.ItemStartStatus;
+import com.cultureShop.crawling.exhibition.ExhiCrawlingService;
+import com.cultureShop.crawling.exhibition.ExhiDataDto;
 import com.cultureShop.crawling.festival.FestCrawlingService;
 import com.cultureShop.crawling.festival.FestDataDto;
 import com.cultureShop.entity.Item;
@@ -28,6 +30,9 @@ public class CrawlingConfig {
     @Autowired
     FestCrawlingService festCrawlingService;
 
+    @Autowired
+    ExhiCrawlingService exhiCrawlingService;
+
     /*
     @Autowired
     public void saveCrawFestItem() {
@@ -54,4 +59,14 @@ public class CrawlingConfig {
     }
 
      */
+
+    @Autowired
+    public void saveCrawExhiItem() {
+        List<ExhiDataDto> exhiDatas = exhiCrawlingService.getExhiDatas();
+
+        for(ExhiDataDto exhiData : exhiDatas) {
+            Item item = new Item();
+
+        }
+    }
 }

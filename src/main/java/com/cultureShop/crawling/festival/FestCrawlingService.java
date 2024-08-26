@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Getter
 @Setter
-public class FestCrawlingService implements CrawlingService {
+public class FestCrawlingService /*implements CrawlingService*/ {
     /*
     public List<FestDataDto> festDatas;
     private final WebDriver driver;
