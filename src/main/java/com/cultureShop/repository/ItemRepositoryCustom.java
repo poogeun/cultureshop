@@ -13,4 +13,6 @@ public interface ItemRepositoryCustom {
     Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable);
 
     List<MainItemDto> getSearchItemList(ItemSearchDto itemSearchDto);
+
+    //List<MainItemDto> getCateItemList(String category, int offset, int limit);
 }

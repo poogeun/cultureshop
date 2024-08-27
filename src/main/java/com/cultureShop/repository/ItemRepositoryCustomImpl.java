@@ -88,6 +88,10 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemName.like("%"+searchQuery+"%");
     }
 
+    private BooleanExpression categoryLike(String category) {
+        return StringUtils.isEmpty(category) ? null : QItem.item.category.like(category);
+    }
+
     @Override
     public List<MainItemDto> getSearchItemList(ItemSearchDto itemSearchDto) {
         QItem item = QItem.item;
@@ -100,4 +104,19 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .orderBy(item.id.desc()).fetch();
         return results;
     }
+
+    /*
+    @Override
+    public List<MainItemDto> getCateItemList(String category, int offset, int limit) {
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        QueryResults<MainItemDto> results = queryFactory.select(new QMainItemDto(
+                item.id, item.itemName, item.place, item.address, item.price, item.startDay, item.endDay, itemImg.imgUrl))
+                .from(itemImg).join(itemImg.item, item).where(itemImg.repImgYn.eq("Y"))
+                .where(categoryLike(category))
+
+    }
+
+     */
 }

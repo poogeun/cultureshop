@@ -61,6 +61,8 @@
 
             changeSortButton();
 
+            infinityScroll();
+
         });
 
         function changeSortButton() {
@@ -76,6 +78,81 @@
             }
         }
 
+        function infinityScroll() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            let lastScroll = 0;
+            let page = 0;
+            let nowPageLimit = 0;
+            let nextPageLimit = 0;
+            var category = $('input[name=category]').val();
+
+            function getData(limit) {
+
+                $.ajax({
+                    type : "POST",
+                    enctype : 'multipart/form-data',
+                    url : "/item/category/" + category,
+                    async : false,
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data : {
+                        "page" : page,
+                        "limit" : limit
+                    },
+                    success : function(result, status) {
+                        if(result.length === 20) {
+                            for(var i=0; i < result.length; i++) {
+                                var item = result[i];
+                                var itemElement =
+                                    $(
+                                        "<div class='col cateItem'>" +
+                                            "<a href='/item/" + item.id + "'>" +
+                                                "<div class='cateImgWrap'>" +
+                                                    "<img src='" +item.imgUrl+ "' alt='" +item.itemName+ "'>" +
+                                                "</div>" +
+                                                "<div class='cateDetail'>" +
+                                                    "<span class='detail_title'>" +item.itemName+ "</span>" +
+                                                    "<span class='detail_place'>" +item.place+ "</span>" +
+                                                    "<span class='detail_date'>" +item.startDay+" ~ "+item.endDay+ "</span>" +
+                                                    "<span class='detail_price'>" +item.price+ "원" +"</span>" +
+                                                "</div>" +
+                                            "</a>" +
+                                        "</div>"
+                                    );
+                                    $('.cateItemCard').append(itemElement);
+                            }
+                        }
+
+                    },
+                    error : function (result, status, err) {
+                        page = page;
+                    },
+                    complete : function() {
+                        page = page + 1;
+                    }
+                });
+            }
+
+            $(document).scroll(function(e) {
+                var currentScroll = $(this).scrollTop();
+                var documentHeight = $(document).height();
+
+                var nowHeight = $(this).scrollTop() + $(window).height();
+
+                // 스크롤이 아래로 내려갔을때만
+                if(currentScroll > lastScroll) {
+                    if(documentHeight < (nowHeight + (documentHeight*0.1))) {
+                        getData(20);
+                    }
+                }
+
+                lastScroll = currentScroll;
+            });
+        }
+
     </script>
 </th:block>
 
@@ -88,6 +165,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <input type="hidden" th:value="${sort}" name="sort">
+                            <input type="hidden" th:value="${category}" name="category">
                             <li><a class="dropdown-item" th:href="'/item/category/' +${category}" id="regTime">최신순</a></li>
                             <li><a class="dropdown-item" th:href="'/item/category/' +${category}+ '?sort=review'" id="review">리뷰 많은순</a></li>
                             <li><a class="dropdown-item" th:href="'/item/category/' +${category}+ '?sort=endDay'" id="endDay">종료 임박순</a></li>
@@ -100,7 +178,7 @@
         </div>
         <div class="cateBody">
             <div class="container text-center" style="margin-top: 50px">
-                <div class="row row-cols-4">
+                <div class="row row-cols-4 cateItemCard">
                     <th:block th:each="item : ${items}">
                         <div class="col cateItem">
                             <a th:href="'/item/' + ${item.id}">
@@ -121,28 +199,6 @@
             </div>
         </div>
 
-        <div th:with="start=${(items.number/maxPage)*maxPage + 1},
-                    end=(${(items.totalPages == 0) ? 1 : (start + (maxPage-1) < items.totalPages ?
-                    start + (maxPage-1) : items.totalPages)})">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${items.number eq 0} ? 'disabled' : ''">
-                    <a th:href="@{'/item/category/'+${category}+ '/' +${items.number-1}}" aria-label="Previous" class="page-link">
-                        <span aria-hidden="true">Previous</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="page : ${#numbers.sequence(start,end)}"
-                    th:classappend="${items.number eq page-1} ? 'active' : ''">
-                    <a th:href="@{'/item/category/'+${category}+ '/' +${page-1}}" th:inline="text" class="page-link">
-                        [[${page}]]
-                    </a>
-                </li>
-                <li class="page-item" th:classappend="${items.number+1 ge items.totalPages} ? 'disabled' : ''">
-                    <a th:href="@{'/item/category/'+${category}+ '/' +${items.number+1}}" aria-label="Next" class="page-link">
-                        <span aria-hidden="true">Next</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
     </div>
 </div>
 </html>

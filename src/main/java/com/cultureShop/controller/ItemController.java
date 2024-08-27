@@ -173,12 +173,11 @@ public class ItemController {
         }
     }
 
-    @GetMapping(value = {"/item/category/{category}", "/item/category/{category}/{page}"})
+    @GetMapping(value = "/item/category/{category}")
     public String category(@PathVariable("category") String category,
-                           @PathVariable("page") Optional<Integer> page,
                            @RequestParam(value = "sort", required = false) String sort,
                            Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 12);
+        Pageable pageable = PageRequest.of(0, 20);
 
         Long count;
         Page<MainItemDto> items;
@@ -207,10 +206,23 @@ public class ItemController {
         model.addAttribute("category", category);
         model.addAttribute("sort", sort);
         model.addAttribute("count", count);
-        model.addAttribute("page", pageable.getPageNumber());
-        model.addAttribute("maxPage", 10);
 
         return "menu/exhibition";
+    }
+
+    @PostMapping(value = "/item/category/{category}")
+    public @ResponseBody ResponseEntity infinityScroll(@PathVariable String category,
+                                                       @RequestParam("page")int page,
+                                                       @RequestParam("limit")int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        try {
+            Page<MainItemDto> items = itemService.getAllCategoryItem(category, pageable);
+            List<MainItemDto> itemList = items.getContent();
+
+            return new ResponseEntity<List<MainItemDto>>(itemList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
