@@ -35,7 +35,7 @@ public class CrawlingConfig {
     @Autowired
     ExhiCrawlingService exhiCrawlingService;
 
-    /*
+/*
     @Autowired
     public void saveCrawFestItem() {
         List<FestDataDto> festDatas = festCrawlingService.getFestDatas();
@@ -86,5 +86,7 @@ public class CrawlingConfig {
         }
     }
 
-     */
+ */
+
+
 }

@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Getter
 @Setter
-public class FestCrawlingService /*implements CrawlingService*/ {
+public class FestCrawlingService{
+
     /*
     public List<FestDataDto> festDatas;
     private final WebDriver driver;
@@ -35,7 +36,7 @@ public class FestCrawlingService /*implements CrawlingService*/ {
     }
 
 
-    @Override
+
     public List<FestDataDto> festCrawling() {
         driver.navigate().to("https://korean.visitkorea.or.kr/kfes/list/wntyFstvlList.do");
         WebElement item = driver.findElement(By.cssSelector("#fstvlList a"));
@@ -79,4 +80,6 @@ public class FestCrawlingService /*implements CrawlingService*/ {
     }
 
      */
+
+
 }

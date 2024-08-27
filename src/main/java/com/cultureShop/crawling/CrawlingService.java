@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CrawlingService {
 
-    //public List<FestDataDto> festCrawling();
+    public List<FestDataDto> festCrawling();
 
-    //public List<ExhiDataDto> exhiCrawling();
+    public List<ExhiDataDto> exhiCrawling();
 }

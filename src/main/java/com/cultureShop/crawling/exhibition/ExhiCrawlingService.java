@@ -14,9 +14,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Getter
 @Setter
-public class ExhiCrawlingService /*implements CrawlingService*/ {
+public class ExhiCrawlingService {
 
     /*
+
     public List<ExhiDataDto> exhiDatas;
     private final WebDriver driver;
 
@@ -30,7 +31,7 @@ public class ExhiCrawlingService /*implements CrawlingService*/ {
         exhiCrawling();
     }
 
-    @Override
+
     public List<ExhiDataDto> exhiCrawling() {
 
         try {
@@ -100,5 +101,7 @@ public class ExhiCrawlingService /*implements CrawlingService*/ {
     }
 
      */
+
+
 
 }
