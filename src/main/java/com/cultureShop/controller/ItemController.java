@@ -173,32 +173,33 @@ public class ItemController {
         }
     }
 
-    @GetMapping(value = "/item/category/{category}")
+    @GetMapping(value = {"/item/category/{category}", "/item/category/{category}/{page}"})
     public String category(@PathVariable("category") String category,
+                           @PathVariable("page") Optional<Integer> page,
                            @RequestParam(value = "sort", required = false) String sort,
                            Model model) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 12);
 
-        int count;
-        List<MainItemDto> items;
+        Long count;
+        Page<MainItemDto> items;
         if(category.equals("exhibition")){
-            items = itemService.getAllCategoryItem(category);
-            count = items.size();
+            items = itemService.getAllCategoryItem(category, pageable);
+
         }
         else if(category.equals("museum")){
-            items = itemService.getAllCategoryItem(category);
-            count = items.size();
+            items = itemService.getAllCategoryItem(category, pageable);
         }
         else {
-            items = itemService.getAllCategoryItem(category);
-            count = items.size();
+            items = itemService.getAllCategoryItem(category, pageable);
         }
+        count = items.getTotalElements();
 
         if(sort != null) {
             if(sort.equals("endDay")) {
-                items = itemService.getEndDayCategoryItem(category);
+                items = itemService.getEndDayCategoryItem(category, pageable);
             }
             else if(sort.equals("review")) {
-                items = itemService.getReviewCategoryItem(category);
+                items = itemService.getReviewCategoryItem(category, pageable);
             }
         }
 
@@ -206,6 +207,8 @@ public class ItemController {
         model.addAttribute("category", category);
         model.addAttribute("sort", sort);
         model.addAttribute("count", count);
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("maxPage", 10);
 
         return "menu/exhibition";
     }

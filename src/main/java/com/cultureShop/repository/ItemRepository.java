@@ -2,6 +2,7 @@ package com.cultureShop.repository;
 
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.entity.Item;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -18,7 +19,9 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
 
     List<Item> findByCategoryOrderByRegTimeDesc(String category);
 
-    List<Item> findByCategoryOrderByEndDayAsc(String category);
+    List<Item> findByCategoryOrderByRegTimeDesc(String category, Pageable pageable);
+
+    List<Item> findByCategoryOrderByEndDayAsc(String category, Pageable pageable);
 
     @Query("select i from Item i where i.address like %:address% order by i.regTime desc")
     List<Item> findByAddress(String address);
@@ -33,7 +36,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
             "where i.category = :category " +
             "group by i.id " +
             "order by reviewCount desc")
-    List<Item> findItemsOrderByReviewCount(String category);
+    List<Item> findItemsOrderByReviewCount(String category, Pageable pageable);
 
     // select * from item where price < Integer price order by desc; 내림차순
     List<Item> findByPriceLessThanOrderByPriceDesc(Integer price);

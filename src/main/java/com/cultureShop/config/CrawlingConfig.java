@@ -12,10 +12,12 @@ import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Configuration
+@Transactional
 public class CrawlingConfig {
 
     @Autowired
@@ -58,7 +60,7 @@ public class CrawlingConfig {
         }
     }
 
-     */
+
 
     @Autowired
     public void saveCrawExhiItem() {
@@ -66,7 +68,23 @@ public class CrawlingConfig {
 
         for(ExhiDataDto exhiData : exhiDatas) {
             Item item = new Item();
+            item.setItemName(exhiData.getItemName());
+            item.setPlace(exhiData.getPlace());
+            item.setStartDay(exhiData.getStartDay());
+            item.setEndDay(exhiData.getEndDay());
+            item.setCategory("exhibition");
+            item.setPrice(0);
+            item.setStockNumber(300);
+            item.setItemStartStatus(ItemStartStatus.START);
+            itemRepository.save(item);
 
+            ItemImg itemImg = new ItemImg();
+            itemImg.setImgUrl(exhiData.getImgUrl());
+            itemImg.setItem(item);
+            itemImg.setRepImgYn("Y");
+            itemImgRepository.save(itemImg);
         }
     }
+
+     */
 }

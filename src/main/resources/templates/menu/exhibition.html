@@ -120,6 +120,29 @@
                 </div>
             </div>
         </div>
+
+        <div th:with="start=${(items.number/maxPage)*maxPage + 1},
+                    end=(${(items.totalPages == 0) ? 1 : (start + (maxPage-1) < items.totalPages ?
+                    start + (maxPage-1) : items.totalPages)})">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${items.number eq 0} ? 'disabled' : ''">
+                    <a th:href="@{'/item/category/'+${category}+ '/' +${items.number-1}}" aria-label="Previous" class="page-link">
+                        <span aria-hidden="true">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="page : ${#numbers.sequence(start,end)}"
+                    th:classappend="${items.number eq page-1} ? 'active' : ''">
+                    <a th:href="@{'/item/category/'+${category}+ '/' +${page-1}}" th:inline="text" class="page-link">
+                        [[${page}]]
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${items.number+1 ge items.totalPages} ? 'disabled' : ''">
+                    <a th:href="@{'/item/category/'+${category}+ '/' +${items.number+1}}" aria-label="Next" class="page-link">
+                        <span aria-hidden="true">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 </html>

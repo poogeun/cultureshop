@@ -9,6 +9,7 @@ import com.cultureShop.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -138,42 +139,49 @@ public class ItemService {
     }
 
     // 카테고리 메뉴 상품 가져오기
-    public List<MainItemDto> getAllCategoryItem(String category) {
-        List<Item> categoryItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
-        List<MainItemDto> mainItemDetails = new ArrayList<>();
+    public Page<MainItemDto> getAllCategoryItem(String category, Pageable pageable) {
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByRegTimeDesc(category, pageable);
+        List<Item> cateItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        int totalCount = cateItems.size();
 
+        System.out.println(totalCount+"============totalCount====");
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
         for(Item item : categoryItems) {
             MainItemDto mainItemDto = itemRepository.findMainItemDto(item.getId());
             mainItemDetails.add(mainItemDto);
         }
 
-        return mainItemDetails;
+        return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
     }
 
     // 카테고리 필터 (종료 임박순)
-    public List<MainItemDto> getEndDayCategoryItem(String category) {
-        List<Item> categoryItems = itemRepository.findByCategoryOrderByEndDayAsc(category);
-        List<MainItemDto> mainItemDetails = new ArrayList<>();
+    public Page<MainItemDto> getEndDayCategoryItem(String category, Pageable pageable) {
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByEndDayAsc(category, pageable);
+        List<Item> cateItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        int totalCount = cateItems.size();
 
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
         for(Item item : categoryItems) {
             MainItemDto mainItemDto = itemRepository.findMainItemDto(item.getId());
             mainItemDetails.add(mainItemDto);
         }
 
-        return mainItemDetails;
+        return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
     }
 
     // 카테고리 필터 (리뷰 많은순)
-    public List<MainItemDto> getReviewCategoryItem(String category) {
-        List<Item> categoryItems = itemRepository.findItemsOrderByReviewCount(category);
-        List<MainItemDto> mainItemDetails = new ArrayList<>();
+    public Page<MainItemDto> getReviewCategoryItem(String category, Pageable pageable) {
+        List<Item> categoryItems = itemRepository.findItemsOrderByReviewCount(category, pageable);
+        List<Item> cateItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        int totalCount = cateItems.size();
 
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
         for(Item item : categoryItems) {
             MainItemDto mainItemDto = itemRepository.findMainItemDto(item.getId());
             mainItemDetails.add(mainItemDto);
         }
 
-        return mainItemDetails;
+        return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
     }
 
 
