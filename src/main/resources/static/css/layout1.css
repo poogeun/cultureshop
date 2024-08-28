@@ -368,6 +368,9 @@ section {
 .memInfos {
     padding: 30px 0;
 }
+.memInfo label {
+    color: #808080;
+}
 .delReq {
     border-top: 1px solid #ebebeb;
     padding-top: 30px;

@@ -44,7 +44,6 @@ public class ItemFormDto {
 
     private ItemStartStatus itemStartStatus;
 
-    private String info;
     //------------------------------------------------------------------
     // ItemImg
     private List<ItemImgDto> itemImgDtoList = new ArrayList<>();

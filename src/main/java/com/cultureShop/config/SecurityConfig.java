@@ -32,7 +32,7 @@ public class SecurityConfig {
                 )
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/error", "/like").permitAll()
-                        .requestMatchers("/", "/members/**", "/item/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/members/**", "/item/**", "/images/**", "/place/**").permitAll()
                         .requestMatchers("/order/**", "/review/**", "/my-page/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

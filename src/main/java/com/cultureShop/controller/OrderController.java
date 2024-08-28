@@ -100,9 +100,11 @@ public class OrderController {
 
         Member member = memberRepository.findByEmail(principal.getName());
         List<LikeItemDto> likeItems = userLikeItemService.getOrderLike(likeItemIds);
+        LocalDate today = LocalDate.now();
 
         model.addAttribute("member", member);
         model.addAttribute("likeItems", likeItems);
+        model.addAttribute("today", today);
 
         return "order/likeOrderForm";
 

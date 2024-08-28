@@ -207,7 +207,7 @@ public class ItemController {
         model.addAttribute("sort", sort);
         model.addAttribute("count", count);
 
-        return "menu/exhibition";
+        return "item/itemCategory";
     }
 
     @PostMapping(value = "/item/category/{category}")

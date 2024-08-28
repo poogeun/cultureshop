@@ -27,6 +27,8 @@ public class LikeOrderFormDto {
 
     private String address;
 
+    private String dtlAddress;
+
     private String delReq;
     private String reqWrite;
     private String getTicket;

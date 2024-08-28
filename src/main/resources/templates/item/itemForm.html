@@ -119,13 +119,6 @@
             <textarea class="form-control" aria-label="With textarea" th:field="*{itemDetail}"></textarea>
         </div>
 
-        <div class="col-md-6">
-            <div class="input-group-prepend">
-                <span class="input-group-text">취소/교환/반품 안내</span>
-            </div>
-            <textarea class="form-control" aria-label="With textarea" th:field="*{info}"></textarea>
-        </div>
-
         <!-- 이미지 리스트가 비어있다면 상품 등록 -->
         <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
             <div class="row" th:each="num: ${#numbers.sequence(1,5)}">
@@ -139,8 +132,8 @@
         <div th:if="${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
             <div class="row" th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
                 <div class="input-group mb3">
-                    <label class="image input-group-text" th:text="${not #strings.isEmpty(itemImgDto.oriImgName)} ?
-                    ${itemImgDto.oriImgName} : '상품이미지' + ${status.index+1}"></label>
+                    <label class="image input-group-text" th:text="${not #strings.isEmpty(itemImgDto.imgUrl)} ?
+                    ${itemImgDto.imgUrl} : '상품이미지' + ${status.index+1}"></label>
                     <input type="file" class="imageFile form-control" name="itemImgFile">
                     <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
                 </div>

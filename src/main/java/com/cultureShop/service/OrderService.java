@@ -60,7 +60,6 @@ public class OrderService {
                 .price(orderFormDtoList.getFirst().getOrderPrice())
                 .status(PaymentStatus.READY)
                 .build();
-        System.out.println(orderFormDtoList.getFirst().getOrderPrice());
         paymentRepository.save(payment);
 
         List<OrderItem> orderItemList = new ArrayList<>();

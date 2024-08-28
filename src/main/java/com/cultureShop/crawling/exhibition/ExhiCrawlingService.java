@@ -1,6 +1,5 @@
 package com.cultureShop.crawling.exhibition;
 
-import com.cultureShop.crawling.CrawlingService;
 import lombok.Getter;
 import lombok.Setter;
 import org.openqa.selenium.*;
@@ -8,16 +7,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Getter
 @Setter
 public class ExhiCrawlingService {
-
-    /*
-
+/*
     public List<ExhiDataDto> exhiDatas;
     private final WebDriver driver;
 
@@ -100,8 +99,6 @@ public class ExhiCrawlingService {
         return false;
     }
 
-     */
-
-
+ */
 
 }

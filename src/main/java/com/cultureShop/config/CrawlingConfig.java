@@ -1,14 +1,18 @@
 package com.cultureShop.config;
 
+import com.cultureShop.API.ApiExplorer;
 import com.cultureShop.constant.ItemStartStatus;
 import com.cultureShop.crawling.exhibition.ExhiCrawlingService;
 import com.cultureShop.crawling.exhibition.ExhiDataDto;
 import com.cultureShop.crawling.festival.FestCrawlingService;
 import com.cultureShop.crawling.festival.FestDataDto;
+import com.cultureShop.dto.MusArtApiDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.ItemImg;
+import com.cultureShop.entity.MusArt;
 import com.cultureShop.repository.ItemImgRepository;
 import com.cultureShop.repository.ItemRepository;
+import com.cultureShop.repository.MusArtRepository;
 import com.cultureShop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +31,9 @@ public class CrawlingConfig {
     ItemRepository itemRepository;
 
     @Autowired
+    MusArtRepository musArtRepository;
+
+    @Autowired
     ItemImgRepository itemImgRepository;
 
     @Autowired
@@ -34,6 +41,9 @@ public class CrawlingConfig {
 
     @Autowired
     ExhiCrawlingService exhiCrawlingService;
+
+    @Autowired
+    ApiExplorer apiExplorer;
 
 /*
     @Autowired
@@ -52,14 +62,17 @@ public class CrawlingConfig {
             item.setItemStartStatus(ItemStartStatus.START);
             itemRepository.save(item);
 
-            ItemImg itemImg = new ItemImg();
-            itemImg.setImgUrl(festData.getImgUrl());
-            itemImg.setItem(item);
-            itemImg.setRepImgYn("Y");
-            itemImgRepository.save(itemImg);
+            for(int i=0; i<5; i++) {
+                ItemImg itemImg = new ItemImg();
+                if(i == 0) {
+                    itemImg.setImgUrl(festData.getImgUrl());
+                    itemImg.setRepImgYn("Y");
+                }
+                itemImg.setItem(item);
+                itemImgRepository.save(itemImg);
+            }
         }
     }
-
 
 
     @Autowired
@@ -78,15 +91,38 @@ public class CrawlingConfig {
             item.setItemStartStatus(ItemStartStatus.START);
             itemRepository.save(item);
 
-            ItemImg itemImg = new ItemImg();
-            itemImg.setImgUrl(exhiData.getImgUrl());
-            itemImg.setItem(item);
-            itemImg.setRepImgYn("Y");
-            itemImgRepository.save(itemImg);
+            for(int i=0; i<5; i++) {
+                ItemImg itemImg = new ItemImg();
+                if(i == 0) {
+                    itemImg.setImgUrl(exhiData.getImgUrl());
+                    itemImg.setRepImgYn("Y");
+                }
+                itemImg.setItem(item);
+                itemImgRepository.save(itemImg);
+            }
+        }
+    }
+
+    @Autowired
+    public void saveMusArtPlace() {
+        List<MusArtApiDto> maDatas = apiExplorer.getMusArtApiDatas();
+
+        for(MusArtApiDto maData : maDatas) {
+            MusArt musArt = new MusArt();
+            musArt.setName(maData.getName());
+            musArt.setMusArt(maData.getMusArt());
+            musArt.setAddress(maData.getAddress());
+            musArt.setTel(maData.getTel());
+            musArt.setOpenTime(maData.getOpenTime());
+            musArt.setCloseTime(maData.getCloseTime());
+            musArt.setGeoX(maData.getGeoX());
+            musArt.setGeoY(maData.getGeoY());
+            musArtRepository.save(musArt);
         }
     }
 
  */
+
 
 
 }

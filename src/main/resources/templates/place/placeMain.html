@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+    <style>
+        .placeMenu {
+            width: 100%;
+            display: flex;
+            padding: 0 30px;
+            gap: 200px;
+        }
+        .placeMenu button {
+            flex-wrap: wrap;
+            background: none;
+            border: none;
+        }
+        .placeIcon {
+            position: relative;
+        }
+        .placeIcon span {
+            font-size: 70px;
+        }
+        .placeText {
+            color: #000;
+            width: 100%;
+            line-height: 1.4;
+            padding-top: 2px;
+        }
+        .placeWrap {
+            position: relative;
+            margin-top: 100px;
+        }
+        .placeWrap span {
+            top: 20px;
+            right: 12px;
+            position: absolute;
+        }
+        .placeWrap span a {
+            color: #8D8D8D;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .placeTitle h2 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .prdPlace {
+            display: flex;
+            flex-direction: row;
+            margin-top: 20px;
+        }
+        .prdPlace div {
+            width: 200px;
+            height: 130px;
+            background-color: #8D8D8D;
+            margin-right: 10px;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+
+        function execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.sigungu;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.sigungu;
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById("address").value = addr;
+                }
+            }).open();
+        }
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="col-sm-6 mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" id="address" placeholder="주소">
+                <input class="btn btn-outline-secondary" type="button" onclick="execDaumPostcode()"
+                       value="주소검색">
+            </div>
+        </div>
+
+        <section class="placeMenu">
+            <button>
+                <div class="placeIcon">
+                    <span class="material-symbols-outlined">museum</span>
+                </div>
+                <div class="placeText">박물관</div>
+            </button>
+            <button>
+                <div class="placeIcon">
+                    <span class="material-symbols-outlined">imagesmode</span>
+                </div>
+                <div class="placeText">미술관</div>
+            </button>
+            <button>
+                <div class="placeIcon">
+                    <span class="material-symbols-outlined">festival</span>
+                </div>
+                <div class="placeText">축제</div>
+            </button>
+        </section>
+
+        <section class="placeList">
+            <div class="placeWrap">
+                <div class="placeTitle">
+                    <h2>내주변 박물관</h2>
+                </div>
+                <span><a>더보기</a></span>
+                <div class="prdPlace">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="placeWrap">
+                <div class="placeTitle">
+                    <h2>내주변 미술관</h2>
+                </div>
+                <span><a>더보기</a></span>
+                <div class="prdPlace">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="placeWrap">
+                <div class="placeTitle">
+                    <h2>내주변 축제</h2>
+                </div>
+                <span><a>더보기</a></span>
+                <div class="prdPlace">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</html>

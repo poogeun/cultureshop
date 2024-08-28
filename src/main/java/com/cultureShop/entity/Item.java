@@ -57,10 +57,6 @@ public class Item extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ItemStartStatus itemStartStatus; // 진행중 or 전
 
-    @Lob
-    @Column(length = 500)
-    private String info; // 취소/교환/반품 안내
-
     @OneToMany(mappedBy = "item")
     private List<Review> reviews;
 
@@ -74,7 +70,6 @@ public class Item extends BaseEntity {
         this.price = itemFormDto.getPrice();
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemStartStatus = itemFormDto.getItemStartStatus();
-        this.info = itemFormDto.getInfo();
     }
 
     public void removeStock(int stockNumber) {
