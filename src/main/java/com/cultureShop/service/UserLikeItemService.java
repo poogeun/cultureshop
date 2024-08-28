@@ -51,7 +51,7 @@ public class UserLikeItemService {
         return false;
     }
 
-    // 찜 추가
+    // 찜 상품 추가
     public void addLike(String email, Long itemId) {
         Member member = memberRepository.findByEmail(email);
         UserLike userLike = userLikeRepository.findByMemberId(member.getId());

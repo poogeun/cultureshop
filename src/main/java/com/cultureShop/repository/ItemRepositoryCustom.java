@@ -14,5 +14,4 @@ public interface ItemRepositoryCustom {
 
     List<MainItemDto> getSearchItemList(ItemSearchDto itemSearchDto);
 
-    //List<MainItemDto> getCateItemList(String category, int offset, int limit);
 }

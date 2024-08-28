@@ -18,7 +18,7 @@ public class MusArt {
     private  Long id;
 
     private String name; // 시설명
-    private String musArt; // 박물관미술관구분
+    private String type; // 박물관미술관구분
     private String address; // 주소
     private String tel; // 시설 전화번호
     private String openTime; // 관람시작시각

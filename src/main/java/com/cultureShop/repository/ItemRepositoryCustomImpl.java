@@ -105,18 +105,4 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return results;
     }
 
-    /*
-    @Override
-    public List<MainItemDto> getCateItemList(String category, int offset, int limit) {
-        QItem item = QItem.item;
-        QItemImg itemImg = QItemImg.itemImg;
-
-        QueryResults<MainItemDto> results = queryFactory.select(new QMainItemDto(
-                item.id, item.itemName, item.place, item.address, item.price, item.startDay, item.endDay, itemImg.imgUrl))
-                .from(itemImg).join(itemImg.item, item).where(itemImg.repImgYn.eq("Y"))
-                .where(categoryLike(category))
-
-    }
-
-     */
 }

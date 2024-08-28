@@ -45,7 +45,7 @@ public class CrawlingConfig {
     @Autowired
     ApiExplorer apiExplorer;
 
-/*
+
     @Autowired
     public void saveCrawFestItem() {
         List<FestDataDto> festDatas = festCrawlingService.getFestDatas();
@@ -120,9 +120,5 @@ public class CrawlingConfig {
             musArtRepository.save(musArt);
         }
     }
-
- */
-
-
 
 }

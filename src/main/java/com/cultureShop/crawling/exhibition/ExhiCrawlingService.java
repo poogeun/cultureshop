@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class ExhiCrawlingService {
-/*
+
     public List<ExhiDataDto> exhiDatas;
     private final WebDriver driver;
 
@@ -99,6 +99,5 @@ public class ExhiCrawlingService {
         return false;
     }
 
- */
 
 }

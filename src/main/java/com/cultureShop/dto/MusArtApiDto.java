@@ -10,7 +10,7 @@ import lombok.Setter;
 public class MusArtApiDto {
 
     private String name; // 시설명
-    private String musArt; // 박물관미술관구분
+    private String type; // 박물관미술관구분
     private String address; // 주소
     private String tel; // 시설 전화번호
     private String openTime; // 관람시작시각
@@ -18,9 +18,9 @@ public class MusArtApiDto {
     private double geoX; // 위도
     private double geoY; // 경도
 
-    public MusArtApiDto(String name, String musArt, String address, String tel, String openTime, String closeTime, double geoX, double geoY) {
+    public MusArtApiDto(String name, String type, String address, String tel, String openTime, String closeTime, double geoX, double geoY) {
         this.name = name;
-        this.musArt = getMusArt(name);
+        this.type = getType(name);
         this.address = address;
         this.tel = tel;
         this.openTime = openTime;
@@ -32,7 +32,7 @@ public class MusArtApiDto {
     public MusArtApiDto() {
     }
 
-    private String getMusArt(String name) {
+    private String getType(String name) {
         if(name.contains("박물관") || name.contains("기념관")) {
             return "museum";
         }

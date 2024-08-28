@@ -184,5 +184,11 @@ public class ItemService {
         return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
     }
 
+    // place 축제 리스트
+    @Transactional(readOnly = true)
+    public List<Item> getFestItem(String category) {
+        return itemRepository.findByCategoryOrderByRegTimeDesc(category);
+    }
+
 
 }
