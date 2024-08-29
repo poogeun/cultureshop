@@ -26,6 +26,9 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
     @Query("select i from Item i where i.address like %:address% order by i.regTime desc")
     List<Item> findByAddress(String address);
 
+    @Query("select i from Item i where i.address like %:address% and i.category = :category order by rand()")
+    List<Item> findByAddressAndCategory(String address, String category);
+
     @Query("select new com.cultureShop.dto.MainItemDto(i.id, i.itemName, i.place, i.address, i.price, i.startDay, i.endDay, iti.imgUrl) " +
             "from Item i, ItemImg iti " +
             "where iti.item.id = :itemId and i.id = :itemId and iti.repImgYn = 'Y'")

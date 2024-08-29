@@ -32,7 +32,7 @@
             position: relative;
             margin-top: 100px;
         }
-        .placeWrap span {
+        .placeWrap .more {
             top: 20px;
             right: 12px;
             position: absolute;
@@ -52,11 +52,46 @@
             flex-direction: row;
             margin-top: 20px;
         }
-        .prdPlace div {
+        .placeBox {
             width: 200px;
             height: 130px;
-            background-color: #8D8D8D;
             margin-right: 10px;
+            border: 1px solid #8d8d8d;
+            border-radius: 5px;
+            line-height: 2;
+            padding-left: 3px;
+        }
+        .placeName {
+            font-weight: 700;
+
+        }
+        .placeAddr {
+            font-weight: 400;
+            font-size: 13px;
+            color: #bbe309;
+        }
+        .placeTime {
+            font-weight: 400;
+            font-size: 13px;
+            color: #666670;
+        }
+        .prdPlace .item {
+            margin-right: 7px;
+        }
+        .placeImgWrap img {
+            width: 150px;
+            height: 100px;
+            border-radius: 8px;
+        }
+        .prdPlace .detail {
+            display: flex;
+            padding: 0 4px;
+            flex-direction: column;
+            align-items: flex-start;
+            align-self: stretch;
+            height: 100px;
+            width: 150px;
+            text-align: left;
         }
     </style>
 </th:block>
@@ -68,6 +103,11 @@
             if(errorMessage != null){
                 alert(errorMessage);
             }
+
+            $('#address').keyup(function() {
+                // 여기서 jQuery로 JavaScript 코드를 실행합니다.
+                console.log('Input value changed to:');
+            });
         });
 
         function execDaumPostcode() {
@@ -91,6 +131,10 @@
                     document.getElementById("address").value = addr;
                 }
             }).open();
+        }
+
+        function setAddress() {
+
         }
     </script>
 </th:block>
@@ -131,39 +175,52 @@
                 <div class="placeTitle">
                     <h2>내주변 박물관</h2>
                 </div>
-                <span><a>더보기</a></span>
+                <span class="more"><a>더보기</a></span>
                 <div class="prdPlace">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+                    <th:block th:each="museum : ${museums}">
+                        <div class="placeBox">
+                            <div th:text="${museum.name}" class="placeName"></div>
+                            <div th:text="${museum.address}" class="placeAddr"></div>
+                            <div th:text="${museum.openTime +' ~ '+ museum.closeTime}" class="placeTime"></div>
+                        </div>
+                    </th:block>
                 </div>
             </div>
             <div class="placeWrap">
                 <div class="placeTitle">
                     <h2>내주변 미술관</h2>
                 </div>
-                <span><a>더보기</a></span>
+                <span class="more"><a>더보기</a></span>
                 <div class="prdPlace">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+                    <th:block th:each="art : ${arts}">
+                        <div class="placeBox">
+                            <div th:text="${art.name}" class="placeName"></div>
+                            <div th:text="${art.address}" class="placeAddr"></div>
+                            <div th:text="${art.openTime +' ~ '+ art.closeTime}" class="placeTime"></div>
+                        </div>
+                    </th:block>
                 </div>
             </div>
             <div class="placeWrap">
                 <div class="placeTitle">
                     <h2>내주변 축제</h2>
                 </div>
-                <span><a>더보기</a></span>
+                <span class="more"><a>더보기</a></span>
                 <div class="prdPlace">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+                    <th:block th:each="festival : ${festivals}">
+                        <div class="item">
+                            <a th:href="'/item/' + ${festival.id}">
+                                <div class="placeImgWrap">
+                                    <img th:src="${festival.imgUrl}" th:alt="${festival.itemName}">
+                                </div>
+                                <div class="detail">
+                                    <span th:text="${festival.itemName}" class="detail_title" style="font-size: 15px"></span>
+                                    <span th:text="${festival.address}" class="detail_place" style="font-size: 14px"></span>
+                                    <span th:text="${festival.startDay +' ~ '+ festival.endDay}" class="detail_date" style="font-size: 14px"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
                 </div>
             </div>
         </section>

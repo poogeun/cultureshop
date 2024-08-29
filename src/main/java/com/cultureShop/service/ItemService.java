@@ -184,10 +184,20 @@ public class ItemService {
         return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
     }
 
-    // place 축제 리스트
+    // place 축제 리스트 (주소입력시)
     @Transactional(readOnly = true)
-    public List<Item> getFestItem(String category) {
-        return itemRepository.findByCategoryOrderByRegTimeDesc(category);
+    public List<MainItemDto> getPlaceFest(String address, String category) {
+
+        List<Item> addrItems = itemRepository.findByAddressAndCategory(address, category);
+        List<MainItemDto> itemDetails = new ArrayList<>();
+
+        for(int i=0; i<5; i++) {
+            Item addrItem = addrItems.get(i);
+            MainItemDto mainItemDto = itemRepository.findMainItemDto(addrItem.getId());
+            itemDetails.add(mainItemDto);
+        }
+
+        return itemDetails;
     }
 
 

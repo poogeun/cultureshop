@@ -45,7 +45,7 @@ public class CrawlingConfig {
     @Autowired
     ApiExplorer apiExplorer;
 
-
+/*
     @Autowired
     public void saveCrawFestItem() {
         List<FestDataDto> festDatas = festCrawlingService.getFestDatas();
@@ -75,6 +75,8 @@ public class CrawlingConfig {
     }
 
 
+
+
     @Autowired
     public void saveCrawExhiItem() {
         List<ExhiDataDto> exhiDatas = exhiCrawlingService.getExhiDatas();
@@ -85,7 +87,7 @@ public class CrawlingConfig {
             item.setPlace(exhiData.getPlace());
             item.setStartDay(exhiData.getStartDay());
             item.setEndDay(exhiData.getEndDay());
-            item.setCategory("exhibition");
+            item.setCategory("museum");
             item.setPrice(0);
             item.setStockNumber(300);
             item.setItemStartStatus(ItemStartStatus.START);
@@ -110,7 +112,7 @@ public class CrawlingConfig {
         for(MusArtApiDto maData : maDatas) {
             MusArt musArt = new MusArt();
             musArt.setName(maData.getName());
-            musArt.setMusArt(maData.getMusArt());
+            musArt.setType(maData.getType());
             musArt.setAddress(maData.getAddress());
             musArt.setTel(maData.getTel());
             musArt.setOpenTime(maData.getOpenTime());
@@ -120,5 +122,7 @@ public class CrawlingConfig {
             musArtRepository.save(musArt);
         }
     }
+
+ */
 
 }

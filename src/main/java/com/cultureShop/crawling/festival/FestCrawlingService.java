@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Getter
 @Setter
 public class FestCrawlingService{
-
+/*
     public List<FestDataDto> festDatas;
     private final WebDriver driver;
 
@@ -41,7 +41,7 @@ public class FestCrawlingService{
 
         try {
             Long stTime = new Date().getTime();
-            while(new Date().getTime() < stTime + 15000) {
+            while(new Date().getTime() < stTime + 20000) {
                 Thread.sleep(500);
                 ((JavascriptExecutor)driver).executeScript("window.scrollTo(0, document.body.scrollHeight)", item);
             }
@@ -76,6 +76,8 @@ public class FestCrawlingService{
 
         return festDatas;
     }
+
+ */
 
 
 }
