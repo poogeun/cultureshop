@@ -6,10 +6,11 @@
 <th:block layout:fragment="css">
     <style>
         .placeMenu {
-            width: 100%;
+            width: 60%;
             display: flex;
             padding: 0 30px;
-            gap: 200px;
+            gap: 33%;
+            margin: 80px auto;
         }
         .placeMenu button {
             flex-wrap: wrap;
@@ -50,10 +51,11 @@
         .prdPlace {
             display: flex;
             flex-direction: row;
-            margin-top: 20px;
+            margin-top: 30px;
+            width: 100%;
         }
         .placeBox {
-            width: 200px;
+            width: 20%;
             height: 130px;
             margin-right: 10px;
             border: 1px solid #8d8d8d;
@@ -77,10 +79,11 @@
         }
         .prdPlace .item {
             margin-right: 7px;
+            width: 20%;
         }
         .placeImgWrap img {
-            width: 150px;
-            height: 100px;
+            width: 230px;
+            height: 150px;
             border-radius: 8px;
         }
         .prdPlace .detail {
@@ -90,7 +93,7 @@
             align-items: flex-start;
             align-self: stretch;
             height: 100px;
-            width: 150px;
+            width: 230px;
             text-align: left;
         }
     </style>
@@ -108,6 +111,8 @@
                 // 여기서 jQuery로 JavaScript 코드를 실행합니다.
                 console.log('Input value changed to:');
             });
+
+
         });
 
         function execDaumPostcode() {
@@ -127,8 +132,15 @@
                         addr = data.sigungu;
                     }
 
-                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                    document.getElementById("address").value = addr;
+                    $("#address").val(addr);
+
+                    // 주소 필드의 입력이 변경될 때마다 콘솔에 출력
+                    $("#address").off('input').on('input', function() {
+                        console.log("Address changed:", $(this).val());
+                    });
+
+                    // 콘솔에 설정된 주소 값 출력 (디버깅용)
+                    console.log("Address set:", addr);
                 }
             }).open();
         }
@@ -143,9 +155,10 @@
     <div class="container">
         <div class="col-sm-6 mb-3">
             <div class="input-group">
-                <input type="text" class="form-control" id="address" placeholder="주소">
+                <input type="text" class="form-control" id="address" value="" placeholder="주소">
                 <input class="btn btn-outline-secondary" type="button" onclick="execDaumPostcode()"
                        value="주소검색">
+                <input type="hidden" id="simAddr">
             </div>
         </div>
 

@@ -36,7 +36,7 @@ public class ExhiCrawlingService {
         try {
             driver.navigate().to("https://tickets.interpark.com/contents/genre/exhibition");
             Thread.sleep(2000);
-            WebElement exhiButton = driver.findElement(By.cssSelector(".GenreFilterTab_genreFilterTab__O9JDM button[aria-label='뮤지엄']"));
+            WebElement exhiButton = driver.findElement(By.cssSelector(".GenreFilterTab_genreFilterTab__O9JDM button[aria-label='전시회']"));
             ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", exhiButton);
             exhiButton.click();
             Thread.sleep(2000);

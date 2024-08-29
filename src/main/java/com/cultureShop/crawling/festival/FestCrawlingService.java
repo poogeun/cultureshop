@@ -41,7 +41,7 @@ public class FestCrawlingService{
 
         try {
             Long stTime = new Date().getTime();
-            while(new Date().getTime() < stTime + 20000) {
+            while(new Date().getTime() < stTime + 15000) {
                 Thread.sleep(500);
                 ((JavascriptExecutor)driver).executeScript("window.scrollTo(0, document.body.scrollHeight)", item);
             }
@@ -78,6 +78,5 @@ public class FestCrawlingService{
     }
 
  */
-
 
 }
