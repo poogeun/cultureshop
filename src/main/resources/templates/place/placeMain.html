@@ -106,10 +106,31 @@
             if(errorMessage != null){
                 alert(errorMessage);
             }
+            var address = document.getElementById('address');
+            var simAddr = address.shadowRoot.querySelector('#placeholder');
+            console.log(simAddr);
+            $('simAddr').change(function() {
+                console.log(simAddr);
+            });
 
-            $('#address').keyup(function() {
-                // 여기서 jQuery로 JavaScript 코드를 실행합니다.
-                console.log('Input value changed to:');
+
+            $('#address').on('input', function() {
+                console.log(simAddr + '1111');
+            });
+
+            $('input::-webkit-input-placeholder').on('change', function() {
+                if($(this).attr('style', 'display: none !important;')) {
+                    console.log('ddd');
+                    console.log(simAddr + '22');
+                }
+                else {
+                    console.log('입력전');
+                }
+            });
+
+            // 주소 필드의 입력이 변경될 때마다 콘솔에 출력
+            $("#address").off('input').on('input', function() {
+                console.log("Address changed:");
             });
 
 
@@ -134,13 +155,9 @@
 
                     $("#address").val(addr);
 
-                    // 주소 필드의 입력이 변경될 때마다 콘솔에 출력
-                    $("#address").off('input').on('input', function() {
-                        console.log("Address changed:", $(this).val());
-                    });
 
-                    // 콘솔에 설정된 주소 값 출력 (디버깅용)
-                    console.log("Address set:", addr);
+
+
                 }
             }).open();
         }
@@ -158,7 +175,6 @@
                 <input type="text" class="form-control" id="address" value="" placeholder="주소">
                 <input class="btn btn-outline-secondary" type="button" onclick="execDaumPostcode()"
                        value="주소검색">
-                <input type="hidden" id="simAddr">
             </div>
         </div>
 
