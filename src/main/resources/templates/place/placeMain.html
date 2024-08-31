@@ -3,6 +3,11 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
 <th:block layout:fragment="css">
     <style>
         .placeMenu {
@@ -153,14 +158,9 @@
 
 <div layout:fragment="content">
     <div class="container">
-        <div class="col-sm-6 mb-3">
-            <div class="input-group">
-                <input type="text" class="form-control" id="address" value="" placeholder="주소">
-                <input class="btn btn-outline-secondary" type="button" onclick="execDaumPostcode()"
-                       value="주소검색">
-                <input type="hidden" id="simAddr">
-            </div>
-        </div>
+        <button type="button" class="searchAddr" onclick="location.href='/place/address'">
+            주소 찾기
+        </button>
 
         <section class="placeMenu">
             <button>

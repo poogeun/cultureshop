@@ -162,7 +162,7 @@ public class ItemController {
     }
 
     @PostMapping(value = "/like") // 찜 기능
-    public @ResponseBody ResponseEntity addLike(@RequestBody LikeDto likeDto, Principal principal, Model model) {
+    public @ResponseBody ResponseEntity addLike(@RequestBody LikeDto likeDto, Principal principal) {
 
         if(principal != null) {
             userLikeItemService.addLike(principal.getName(), likeDto.getItemId());

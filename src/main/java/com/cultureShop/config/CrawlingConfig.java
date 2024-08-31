@@ -1,15 +1,8 @@
 package com.cultureShop.config;
 
-import com.cultureShop.API.ApiExplorer;
-import com.cultureShop.constant.ItemStartStatus;
+import com.cultureShop.API.MusArtExplorer;
 import com.cultureShop.crawling.exhibition.ExhiCrawlingService;
-import com.cultureShop.crawling.exhibition.ExhiDataDto;
 import com.cultureShop.crawling.festival.FestCrawlingService;
-import com.cultureShop.crawling.festival.FestDataDto;
-import com.cultureShop.dto.MusArtApiDto;
-import com.cultureShop.entity.Item;
-import com.cultureShop.entity.ItemImg;
-import com.cultureShop.entity.MusArt;
 import com.cultureShop.repository.ItemImgRepository;
 import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MusArtRepository;
@@ -17,8 +10,6 @@ import com.cultureShop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Configuration
 @Transactional
@@ -43,7 +34,7 @@ public class CrawlingConfig {
     ExhiCrawlingService exhiCrawlingService;
 
     @Autowired
-    ApiExplorer apiExplorer;
+    MusArtExplorer apiExplorer;
 
     /*
     @Autowired

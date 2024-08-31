@@ -1,6 +1,6 @@
 package com.cultureShop.API;
 
-import com.cultureShop.dto.MusArtApiDto;
+import com.cultureShop.dto.ApiDto.MusArtApiDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONArray;
@@ -14,21 +14,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Getter
 @Setter
-public class ApiExplorer {
-/*
+public class MusArtExplorer {
+    /*
+
     public List<MusArtApiDto> musArtApiDatas;
 
     BufferedReader rd;
     StringBuilder sb = new StringBuilder();
 
-    public ApiExplorer() throws IOException, ParseException {
+    public MusArtExplorer() throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_P_DGMUSEUMART&geomFilter=BOX(124,33,132,43)&size=150&key=FF3C525F-23A2-31CD-8950-4EB55D2AF697&domain=localhost");
 
         URL url = new URL(urlBuilder.toString());
@@ -100,6 +100,6 @@ public class ApiExplorer {
 
     }
 
- */
+     */
 
 }

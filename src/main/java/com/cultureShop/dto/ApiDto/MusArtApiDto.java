@@ -1,4 +1,4 @@
-package com.cultureShop.dto;
+package com.cultureShop.dto.ApiDto;
 
 import lombok.Builder;
 import lombok.Getter;
