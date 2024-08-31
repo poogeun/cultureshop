@@ -14,6 +14,8 @@ public interface UserLikeItemRepository extends JpaRepository<UserLikeItem, Long
 
     UserLikeItem findByItemIdAndUserLikeId(Long itemId, Long userLikeId);
 
+    UserLikeItem findByMusArtIdAndUserLikeId(Long musArtId, Long userLikeId);
+
     List<UserLikeItem> findByUserLikeId(Long userLikeId);
 
     @Query("select new com.cultureShop.dto.LikeItemDto(uli.id, i.id, i.itemName, i.place, i.address, i.price, i.startDay, i.endDay, iti.imgUrl) " +

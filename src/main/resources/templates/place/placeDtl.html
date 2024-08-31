@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
+<th:block layout:fragment="css">
+    <style>
+        .placeInfo ul {
+            padding-left: 0;
+        }
+        .placeInfo li {
+            display: flex;
+            margin: 10px 0;
+        }
+        .placeInfo li span {
+            color: #BBE309;
+        }
+        .placeInfo li div {
+            margin-left: 20px;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var x = $('#x').val();
+            var y = $('#y').val();
+
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(x, y),
+                level: 3
+            };
+
+            var map = new kakao.maps.Map(container, options);
+
+            var markerPosition  = new kakao.maps.LatLng(x, y);  // 마커가 표시될 위치
+            var marker = new kakao.maps.Marker({  // 마커를 생성한다
+                position: markerPosition
+            });
+
+            marker.setMap(map); // 마커가 지도 위에 표시되도록 설정한다
+
+        });
+
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="container">
+        <input type="hidden" th:value="${musArt.geoY}" id="x">
+        <input type="hidden" th:value="${musArt.geoX}" id="y">
+        <h2 th:text="${musArt.name}"></h2>
+
+        <div class="mapWrap">
+            <div id="map" style="width:500px;height:400px;"></div>
+        </div>
+
+        <div class="placeInfo">
+            <h4>정보</h4>
+            <ul>
+                <li>
+                    <span class="material-symbols-outlined">schedule</span>
+                    <div th:text="${musArt.openTime + ' ~ ' + musArt.closeTime}"></div>
+                </li>
+                <li>
+                    <span class="material-symbols-outlined">call</span>
+                    <div th:text="${musArt.tel}"></div>
+                </li>
+                <li>
+                    <span class="material-symbols-outlined">location_on</span>
+                    <div th:text="${musArt.address}"></div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="comments">
+
+        </div>
+    </div>
+</div>
+</html>

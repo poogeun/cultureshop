@@ -68,13 +68,17 @@
                     if(result.length > 0) {
                         for(var i=0; i < result.length; i++) {
                             var addr = result[i];
+                            console.log(addr);
+                            var splitAddr = addr.split(" ");
+                            var resultAddr = splitAddr[1];
+                            console.log(resultAddr);
                             var addrElement =
                                 $(
-                                    "<li class='simAddr'>" +
-                                        "<button type='button'>" +
-                                            "<span>" +addr+ "</span>" +
-                                        "</button>" +
-                                    "</li>"
+                                    `<li class='simAddr'>
+                                        <button type='button' onclick='window.location.href="/place/${resultAddr}"'>
+                                            <span>${addr}</span>
+                                        </button>
+                                    </li>`
                                 );
                                 $('.simAddrBtn').append(addrElement);
                         }

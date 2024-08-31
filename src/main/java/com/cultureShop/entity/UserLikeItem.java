@@ -44,11 +44,15 @@ public class UserLikeItem extends BaseEntity {
         return userLikeItem;
     }
 
-    public void addLike(){
-        this.likeCount += 1;
+    public static UserLikeItem createLikePlace(MusArt musArt, UserLike userLike) {
+        UserLikeItem userLikeItem = new UserLikeItem();
+        userLikeItem.setMusArt(musArt);
+        userLikeItem.setUserLike(userLike);
+        userLikeItem.setItemType(ItemType.PLACE);
+        return userLikeItem;
     }
 
-    public void minusLike(){
-        this.likeCount -= 1;
+    public void addLike(){
+        this.likeCount += 1;
     }
 }

@@ -68,6 +68,12 @@
             line-height: 2;
             padding-left: 3px;
         }
+        .likeBtn {
+            background: none;
+            border: none;
+            float: right;
+            color: #808080;
+        }
         .placeName {
             font-weight: 700;
 
@@ -150,16 +156,46 @@
             }).open();
         }
 
-        function setAddress() {
+        function addLike(placeId) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
 
+            var url = "/place/like";
+            var paramData = {
+                itemId : placeId
+            }
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url : url,
+                type : "POST",
+                contentType : "application/json",
+                data : param,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function(result, status){
+                    alert('찜추가 성공');
+                },
+                error : function(jqXHR, status, error){
+                    alert('찜 기능은 로그인 후 이용 가능합니다.');
+                    location.href = '/members/login';
+                }
+            });
         }
+
+
     </script>
 </th:block>
 
 <div layout:fragment="content">
     <div class="container">
         <button type="button" class="searchAddr" onclick="location.href='/place/address'">
-            주소 찾기
+            <span th:if="${simAddr} == null">주소 찾기</span>
+            <span th:unless="${simAddr} == null" th:text="${simAddr}"></span>
         </button>
 
         <section class="placeMenu">
@@ -192,9 +228,15 @@
                 <div class="prdPlace">
                     <th:block th:each="museum : ${museums}">
                         <div class="placeBox">
-                            <div th:text="${museum.name}" class="placeName"></div>
-                            <div th:text="${museum.address}" class="placeAddr"></div>
-                            <div th:text="${museum.openTime +' ~ '+ museum.closeTime}" class="placeTime"></div>
+                            <a th:href="'/place/detail/' + ${museum.id}">
+                                <button type="button" th:value="${museum.id}" th:classappend="${isLikeItem}"
+                                        onclick="addLike(this.value)" class="likeBtn">
+                                    <span class="material-symbols-outlined">favorite</span>
+                                </button>
+                                <div th:text="${museum.name}" class="placeName"></div>
+                                <div th:text="${museum.address}" class="placeAddr"></div>
+                                <div th:text="${museum.openTime +' ~ '+ museum.closeTime}" class="placeTime"></div>
+                            </a>
                         </div>
                     </th:block>
                 </div>
@@ -207,9 +249,14 @@
                 <div class="prdPlace">
                     <th:block th:each="art : ${arts}">
                         <div class="placeBox">
-                            <div th:text="${art.name}" class="placeName"></div>
-                            <div th:text="${art.address}" class="placeAddr"></div>
-                            <div th:text="${art.openTime +' ~ '+ art.closeTime}" class="placeTime"></div>
+                            <a th:href="'/place/detail/' + ${art.id}">
+                                <button type="button" th:value="${art.id}" onclick="addLike(this.value)" class="likeBtn">
+                                    <span class="material-symbols-outlined">favorite</span>
+                                </button>
+                                <div th:text="${art.name}" class="placeName"></div>
+                                <div th:text="${art.address}" class="placeAddr"></div>
+                                <div th:text="${art.openTime +' ~ '+ art.closeTime}" class="placeTime"></div>
+                            </a>
                         </div>
                     </th:block>
                 </div>

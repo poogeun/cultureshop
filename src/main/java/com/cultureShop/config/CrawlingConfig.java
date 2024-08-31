@@ -3,6 +3,8 @@ package com.cultureShop.config;
 import com.cultureShop.API.MusArtExplorer;
 import com.cultureShop.crawling.exhibition.ExhiCrawlingService;
 import com.cultureShop.crawling.festival.FestCrawlingService;
+import com.cultureShop.dto.ApiDto.MusArtApiDto;
+import com.cultureShop.entity.MusArt;
 import com.cultureShop.repository.ItemImgRepository;
 import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MusArtRepository;
@@ -10,6 +12,8 @@ import com.cultureShop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Configuration
 @Transactional
@@ -93,6 +97,8 @@ public class CrawlingConfig {
         }
     }
 
+
+
     @Autowired
     public void saveMusArtPlace() {
         List<MusArtApiDto> maDatas = apiExplorer.getMusArtApiDatas();
@@ -111,6 +117,8 @@ public class CrawlingConfig {
         }
     }
 
- */
+     */
+
+
 
 }

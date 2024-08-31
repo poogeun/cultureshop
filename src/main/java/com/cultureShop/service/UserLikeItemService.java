@@ -2,14 +2,8 @@ package com.cultureShop.service;
 
 import com.cultureShop.dto.LikeItemDto;
 import com.cultureShop.dto.MainItemDto;
-import com.cultureShop.entity.Item;
-import com.cultureShop.entity.Member;
-import com.cultureShop.entity.UserLike;
-import com.cultureShop.entity.UserLikeItem;
-import com.cultureShop.repository.ItemRepository;
-import com.cultureShop.repository.MemberRepository;
-import com.cultureShop.repository.UserLikeItemRepository;
-import com.cultureShop.repository.UserLikeRepository;
+import com.cultureShop.entity.*;
+import com.cultureShop.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +21,7 @@ public class UserLikeItemService {
     private final MemberRepository memberRepository;
     private final UserLikeRepository userLikeRepository;
     private final ItemRepository itemRepository;
+    private final MusArtRepository musArtRepository;
 
     public List<UserLikeItem> getLikeItems(Long itemId) {
         return userLikeItemRepository.findByItemId(itemId);
@@ -66,6 +61,29 @@ public class UserLikeItemService {
 
         if(userLikeItem == null) {
             userLikeItem = UserLikeItem.createLikeItem(item,userLike);
+            userLikeItemRepository.save(userLikeItem);
+            userLikeItem.addLike();
+        }
+        else {
+            userLikeItemRepository.delete(userLikeItem);
+        }
+    }
+
+    // 찜 장소 추가
+    public void addLikePlace(String email, Long musArtId) {
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        MusArt musArt = musArtRepository.findById(musArtId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        if(userLike == null) {
+            userLike = UserLike.createLike(member);
+            userLikeRepository.save(userLike);
+        }
+        UserLikeItem userLikeItem = userLikeItemRepository.findByMusArtIdAndUserLikeId(musArtId, userLike.getId());
+
+        if(userLikeItem == null) {
+            userLikeItem = UserLikeItem.createLikePlace(musArt,userLike);
             userLikeItemRepository.save(userLikeItem);
             userLikeItem.addLike();
         }
