@@ -10,6 +10,12 @@
 
 <th:block layout:fragment="css">
     <style>
+        .searchAddr {
+            border: none;
+            background: none;
+            font-size: 20px;
+            font-weight: 700;
+        }
         .placeMenu {
             width: 60%;
             display: flex;
@@ -59,35 +65,14 @@
             margin-top: 30px;
             width: 100%;
         }
-        .placeBox {
-            width: 20%;
-            height: 130px;
-            margin-right: 10px;
-            border: 1px solid #8d8d8d;
-            border-radius: 5px;
-            line-height: 2;
-            padding-left: 3px;
-        }
+
         .likeBtn {
             background: none;
             border: none;
             float: right;
             color: #808080;
         }
-        .placeName {
-            font-weight: 700;
 
-        }
-        .placeAddr {
-            font-weight: 400;
-            font-size: 13px;
-            color: #bbe309;
-        }
-        .placeTime {
-            font-weight: 400;
-            font-size: 13px;
-            color: #666670;
-        }
         .prdPlace .item {
             margin-right: 7px;
             width: 20%;
@@ -196,6 +181,7 @@
         <button type="button" class="searchAddr" onclick="location.href='/place/address'">
             <span th:if="${simAddr} == null">주소 찾기</span>
             <span th:unless="${simAddr} == null" th:text="${simAddr}"></span>
+            <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
 
         <section class="placeMenu">
@@ -224,15 +210,21 @@
                 <div class="placeTitle">
                     <h2>내주변 박물관</h2>
                 </div>
-                <span class="more"><a>더보기</a></span>
+                <span class="more"><a th:href="'/place/list/museum/' + ${simAddr}">더보기</a></span>
                 <div class="prdPlace">
                     <th:block th:each="museum : ${museums}">
                         <div class="placeBox">
                             <a th:href="'/place/detail/' + ${museum.id}">
-                                <button type="button" th:value="${museum.id}" th:classappend="${isLikeItem}"
-                                        onclick="addLike(this.value)" class="likeBtn">
-                                    <span class="material-symbols-outlined">favorite</span>
-                                </button>
+                                <th:block th:if="${museum.userLikeYn == null}">
+                                    <button type="button" th:value="${museum.id}" onclick="addLike(this.value)" class="likeBtn">
+                                        <span class="material-symbols-outlined">favorite</span>
+                                    </button>
+                                </th:block>
+                                <th:block th:unless="${museum.userLikeYn == null}">
+                                    <button type="button" th:value="${museum.id}" onclick="addLike(this.value)" class="likeBtn">
+                                        <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                    </button>
+                                </th:block>
                                 <div th:text="${museum.name}" class="placeName"></div>
                                 <div th:text="${museum.address}" class="placeAddr"></div>
                                 <div th:text="${museum.openTime +' ~ '+ museum.closeTime}" class="placeTime"></div>
@@ -245,14 +237,21 @@
                 <div class="placeTitle">
                     <h2>내주변 미술관</h2>
                 </div>
-                <span class="more"><a>더보기</a></span>
+                <span class="more"><a th:href="'/place/list/art/' + ${simAddr}">더보기</a></span>
                 <div class="prdPlace">
                     <th:block th:each="art : ${arts}">
                         <div class="placeBox">
                             <a th:href="'/place/detail/' + ${art.id}">
-                                <button type="button" th:value="${art.id}" onclick="addLike(this.value)" class="likeBtn">
-                                    <span class="material-symbols-outlined">favorite</span>
-                                </button>
+                                <th:block th:if="${art.userLikeYn == null}">
+                                    <button type="button" th:value="${art.id}" onclick="addLike(this.value)" class="likeBtn">
+                                        <span class="material-symbols-outlined">favorite</span>
+                                    </button>
+                                </th:block>
+                                <th:block th:unless="${art.userLikeYn == null}">
+                                    <button type="button" th:value="${art.id}" onclick="addLike(this.value)" class="likeBtn">
+                                        <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                    </button>
+                                </th:block>
                                 <div th:text="${art.name}" class="placeName"></div>
                                 <div th:text="${art.address}" class="placeAddr"></div>
                                 <div th:text="${art.openTime +' ~ '+ art.closeTime}" class="placeTime"></div>

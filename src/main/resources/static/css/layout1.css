@@ -354,6 +354,19 @@ section {
     color: #cdd0d1;
 }
 
+/* itemDtl */
+.likeBtn {
+    border: 0;
+    background-color: transparent;
+    color: grey;
+}
+.likeBtn.beforeLike {
+    color: grey;
+}
+.likeBtn.afterLike {
+    color: red;
+}
+
 /* orderForm */
 .subTitle {
     padding-top: 50px;
@@ -668,4 +681,30 @@ section {
     height: 100px;
     width: 300px;
     text-align: left;
+}
+
+/* placeMain */
+.placeBox {
+    width: 20%;
+    height: 130px;
+    margin-right: 10px;
+    border: 1px solid #8d8d8d;
+    border-radius: 5px;
+    line-height: 2;
+    padding-left: 3px;
+}
+.placeName {
+    font-weight: 700;
+    color: black;
+    font-size: 20px;
+}
+.placeAddr {
+    font-weight: 400;
+    font-size: 15px;
+    color: #bbe309;
+}
+.placeTime {
+    font-weight: 400;
+    font-size: 15px;
+    color: #666670;
 }

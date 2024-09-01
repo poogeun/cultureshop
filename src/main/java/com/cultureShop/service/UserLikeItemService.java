@@ -27,7 +27,11 @@ public class UserLikeItemService {
         return userLikeItemRepository.findByItemId(itemId);
     }
 
-    // 찜 여부 확인
+    public List<UserLikeItem> getLikePlaces(Long musArtId) {
+        return userLikeItemRepository.findByMusArtId(musArtId);
+    }
+
+    // 찜 상품 여부 확인
     public boolean findLikeItem(String email, Long itemId) {
         Member member = memberRepository.findByEmail(email);
         if(member != null) {
@@ -36,8 +40,30 @@ public class UserLikeItemService {
                 List<UserLikeItem> likeItems = userLikeItemRepository.findByUserLikeId(userLike.getId());
                 if (likeItems != null) {
                     for (UserLikeItem likeItem : likeItems) {
-                        if (likeItem.getItem().getId() == itemId) {
-                            return true;
+                        if(likeItem.getItem() != null) {
+                            if (likeItem.getItem().getId() == itemId) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    // 찜 장소 여부 확인
+    public boolean findLikePlace(String email, Long musArtId) {
+        Member member = memberRepository.findByEmail(email);
+        if(member != null) {
+            UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+            if(userLike != null) {
+                List<UserLikeItem> likeItems = userLikeItemRepository.findByUserLikeId(userLike.getId());
+                if (likeItems != null) {
+                    for (UserLikeItem likeItem : likeItems) {
+                        if(likeItem.getMusArt() != null) {
+                            if (likeItem.getMusArt().getId() == musArtId) {
+                                return true;
+                            }
                         }
                     }
                 }

@@ -12,6 +12,8 @@ public interface UserLikeItemRepository extends JpaRepository<UserLikeItem, Long
 
     List<UserLikeItem> findByItemId(Long itemId);
 
+    List<UserLikeItem> findByMusArtId(Long musArtId);
+
     UserLikeItem findByItemIdAndUserLikeId(Long itemId, Long userLikeId);
 
     UserLikeItem findByMusArtIdAndUserLikeId(Long musArtId, Long userLikeId);

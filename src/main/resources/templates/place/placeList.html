@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
+<th:block layout:fragment="css">
+    <style>
+        .placeBox {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="container text-center">
+            <div class="row row-cols-4">
+                <th:block th:each="place : ${places}">
+                <div class="col">
+                    <div class="placeBox">
+                        <a th:href="'/place/detail/' + ${place.id}">
+                            <div th:text="${place.name}" class="placeName"></div>
+                            <div th:text="${place.address}" class="placeAddr"></div>
+                            <div th:text="${place.openTime +' ~ '+ place.closeTime}" class="placeTime"></div>
+                        </a>
+                    </div>
+                </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
