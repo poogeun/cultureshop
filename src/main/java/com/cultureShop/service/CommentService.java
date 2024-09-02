@@ -37,4 +37,10 @@ public class CommentService {
                 .orElseThrow(EntityNotFoundException::new);
         commentRepository.delete(comment);
     }
+
+    public void updateComment(Long commentId, String content) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(EntityNotFoundException::new);
+        comment.updateComment(content);
+    }
 }

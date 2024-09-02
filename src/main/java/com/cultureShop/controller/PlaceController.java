@@ -171,6 +171,16 @@ public class PlaceController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Long>(commentId, HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/comment/{commentId}")
+    public @ResponseBody ResponseEntity updateComment(@PathVariable("commentId") Long commentId, String content) {
+
+        if(content == null) {
+            return new ResponseEntity<String>("내용을 입력해주세요.", HttpStatus.BAD_REQUEST);
+        }
+        commentService.updateComment(commentId, content);
+        return new ResponseEntity<Long>(commentId, HttpStatus.OK);
 
     }
 

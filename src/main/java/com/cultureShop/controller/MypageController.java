@@ -1,9 +1,6 @@
 package com.cultureShop.controller;
 
-import com.cultureShop.dto.LikeItemDto;
-import com.cultureShop.dto.MainItemDto;
-import com.cultureShop.dto.OrderHistDto;
-import com.cultureShop.dto.ReviewItemDto;
+import com.cultureShop.dto.*;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.repository.OrderRepository;
@@ -69,12 +66,14 @@ public class MypageController {
         int reviewCount = reviewService.getMemReviewCount(principal.getName());
 
         List<LikeItemDto> likeItems = userLikeItemService.getLikeList(principal.getName());
+        List<MusArtMainDto> likePlaces = userLikeItemService.getLikePlaceList(principal.getName());
 
         model.addAttribute("member", member);
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("orderCount", orderCount);
         model.addAttribute("reviewCount", reviewCount);
         model.addAttribute("likeItems", likeItems);
+        model.addAttribute("likePlaces", likePlaces);
 
         return "mypage/likeList";
     }

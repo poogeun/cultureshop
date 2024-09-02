@@ -30,4 +30,8 @@ public class Comment extends BaseEntity{
         comment.setMusArt(musArt);
         return comment;
     }
+
+    public void updateComment(String content) {
+        this.content = content;
+    }
 }

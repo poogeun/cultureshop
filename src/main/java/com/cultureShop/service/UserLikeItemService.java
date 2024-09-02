@@ -2,6 +2,7 @@ package com.cultureShop.service;
 
 import com.cultureShop.dto.LikeItemDto;
 import com.cultureShop.dto.MainItemDto;
+import com.cultureShop.dto.MusArtMainDto;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -141,11 +142,29 @@ public class UserLikeItemService {
 
         List<LikeItemDto> likeItemDtls = new ArrayList<>();
         for(UserLikeItem userLikeItem : userLikeItems) {
-            Long itemId = userLikeItem.getItem().getId();
-            LikeItemDto likeItem = userLikeItemRepository.findLikeItemDto(userLikeItem.getId());
-            likeItemDtls.add(likeItem);
+            if(userLikeItem.getItem() != null) {
+                Long itemId = userLikeItem.getItem().getId();
+                LikeItemDto likeItem = userLikeItemRepository.findLikeItemDto(userLikeItem.getId());
+                likeItemDtls.add(likeItem);
+            }
         }
         return likeItemDtls;
+    }
+
+    public List<MusArtMainDto> getLikePlaceList(String email) {
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        List<UserLikeItem> userLikeItems = userLikeItemRepository.findByUserLikeId(userLike.getId());
+
+        List<MusArtMainDto> likePlaceDtls = new ArrayList<>();
+        for(UserLikeItem userLikeItem : userLikeItems) {
+            if(userLikeItem.getMusArt() != null) {
+                Long musArtId = userLikeItem.getMusArt().getId();
+                MusArtMainDto musArtMainDto = musArtRepository.findPlaceDto(musArtId);
+                likePlaceDtls.add(musArtMainDto);
+            }
+        }
+        return likePlaceDtls;
     }
 
     // 찜 주문 리스트 가져오기

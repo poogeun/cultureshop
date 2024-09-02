@@ -75,11 +75,15 @@
         .commBody {
             display: flex;
         }
+        .commBody textarea {
+            display: none;
+            width: 90%;
+        }
         .commText {
             margin: 5px;
             word-break: break-all;
         }
-        #modifyBtn {
+        .commBody button {
             display: none;
         }
     </style>
@@ -88,14 +92,6 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
-
-            $('.comm').each(function() {
-
-            })
-
-            $('#modify').on('click', function() {
-
-            })
 
             map();
             addComment();
@@ -211,6 +207,44 @@
             });
         }
 
+        function modifyComment(commentId) {
+            $('#content-'+commentId).css('display', 'none');
+            $('#contentInput-'+commentId).css('display', 'block');
+            $('#modifyBtn-'+commentId).css('display', 'block');
+        }
+
+        function updateComment(commentId) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var content = $('#contentInput-'+commentId).val();
+            var musArtId = $('#musArtId').val();
+
+            var url = "/place/comment/" +commentId+ "?content=" + content;
+
+            $.ajax({
+                url : url,
+                type : "PATCH",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function(result, status){
+                    location.href='/place/detail/' + musArtId;
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요.');
+                        location.href='/members/login';
+                    }
+                    else{
+                        alert(jqXHR.responseText);
+                    }
+                }
+            });
+        }
+
     </script>
 </th:block>
 
@@ -262,16 +296,19 @@
                                 <div class="commHead">
                                     <div th:text="${comment.createdBy}" class="writer"></div>
                                     <div th:if="${#strings.equals(userEmail, comment.createdBy)}">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" id="modify">수정</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" id="modify"
+                                                th:value=${comment.id} onclick="modifyComment(this.value)">수정</button>
                                         <button type="button" class="btn btn-outline-danger btn-sm" id="delete"
                                                 th:value=${comment.id} onclick="deleteComment(this.value)">삭제</button>
                                     </div>
                                     <div th:unless="${#strings.equals(userEmail, comment.createdBy)}"></div>
                                 </div>
                                 <div class="commBody">
-                                    <div th:text="${comment.content}" th:value="${comment.content}" class="commText"></div>
-                                    <button type="button" class="btn btn-outline-secondary" id="modifyBtn"
-                                            onclick="modifyComment()">등록</button>
+                                    <div th:text="${comment.content}" th:id="'content-' +${comment.id}"></div>
+                                    <textarea class="form-control" th:id="'contentInput-' +${comment.id}" th:value="${comment.content}"
+                                              th:text="${comment.content}" rows="3"></textarea>
+                                    <button type="button" class="btn btn-outline-secondary" th:id="'modifyBtn-' + ${comment.id}"
+                                            th:value=${comment.id} onclick="updateComment(this.value)">등록</button>
                                 </div>
                                 <div th:text="${comment.regTime}" class="regTime"></div>
                             </div>
