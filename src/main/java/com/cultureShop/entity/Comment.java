@@ -1,5 +1,6 @@
 package com.cultureShop.entity;
 
+import com.cultureShop.dto.CommentDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +18,16 @@ public class Comment extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  Long id;
 
-    private String writer;
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "musArtId")
     private MusArt musArt;
+
+    public static Comment createComment(CommentDto commentDto, MusArt musArt) {
+        Comment comment = new Comment();
+        comment.setContent(commentDto.getContent());
+        comment.setMusArt(musArt);
+        return comment;
+    }
 }

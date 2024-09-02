@@ -7,8 +7,7 @@ import lombok.Setter;
 @Setter
 public class CommentDto {
 
-    private Long id;
-    private String writer;
-    private String content;
     private Long musArtId;
+    private String content;
+
 }

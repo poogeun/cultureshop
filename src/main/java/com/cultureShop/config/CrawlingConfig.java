@@ -97,8 +97,6 @@ public class CrawlingConfig {
         }
     }
 
-
-
     @Autowired
     public void saveMusArtPlace() {
         List<MusArtApiDto> maDatas = apiExplorer.getMusArtApiDatas();
@@ -118,7 +116,6 @@ public class CrawlingConfig {
     }
 
      */
-
 
 
 }

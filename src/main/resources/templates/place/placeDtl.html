@@ -58,12 +58,50 @@
         #comment {
             width: 90%;
         }
+        .comm {
+            margin-bottom: 25px;
+        }
+        .commHead {
+            display: flex;
+        }
+        .commHead button {
+            margin: 0 3px;
+            font-size: 10px;
+        }
+        .comm .writer, .comm .regTime {
+            font-size: 14px;
+            color: #808080;
+        }
+        .commBody {
+            display: flex;
+        }
+        .commText {
+            margin: 5px;
+            word-break: break-all;
+        }
+        #modifyBtn {
+            display: none;
+        }
     </style>
 </th:block>
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
+
+            $('.comm').each(function() {
+
+            })
+
+            $('#modify').on('click', function() {
+
+            })
+
+            map();
+            addComment();
+        });
+
+        function map() {
             var x = $('#x').val();
             var y = $('#y').val();
 
@@ -81,8 +119,7 @@
             });
 
             marker.setMap(map); // 마커가 지도 위에 표시되도록 설정한다
-
-        });
+        }
 
         function addLike() {
             var token = $("meta[name='_csrf']").attr("content");
@@ -111,6 +148,65 @@
                 error : function(jqXHR, status, error){
                     alert('찜 기능은 로그인 후 이용 가능합니다.');
                     location.href = '/members/login';
+                }
+            });
+        }
+
+        function addComment() {
+            $('#commentBtn').click(function() {
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                var paramData = {
+                    musArtId : $('#musArtId').val(),
+                    content : $('#comment').val()
+                }
+
+                var param = JSON.stringify(paramData);
+
+                if(confirm("댓글을 작성하시겠습니까?")) {
+                    $.ajax({
+                        type : "POST",
+                        url : "/place/comment/write",
+                        contentType : "application/json",
+                        data : param,
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        success : function() {
+                            alert('댓글이 작성되었습니다.');
+                            window.location.href="/place/detail/" + $('#musArtId').val();
+                        }
+                    })
+                }
+            })
+        }
+
+        function deleteComment(commentId) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var musArtId = $('#musArtId').val();
+
+            $.ajax({
+                url : "/place/comment/" + commentId,
+                type : "DELETE",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function(result, status) {
+                    location.href='/place/detail/' + musArtId;
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요.');
+                        location.href='/members/login';
+                    }
+                    else{
+                        alert(jqXHR.responseText);
+                    }
                 }
             });
         }
@@ -157,7 +253,31 @@
                 <h5>리뷰</h5>
                 <div class="mb-3" id="commentWrap">
                     <textarea class="form-control" id="comment" rows="3"></textarea>
-                    <button type="button" class="btn btn-outline-secondary">등록</button>
+                    <button type="button" class="btn btn-outline-secondary" id="commentBtn">등록</button>
+                </div>
+                <div class="commentList">
+                    <div th:if="${comments != null}">
+                        <th:block th:each="comment : ${comments}">
+                            <div class="comm">
+                                <div class="commHead">
+                                    <div th:text="${comment.createdBy}" class="writer"></div>
+                                    <div th:if="${#strings.equals(userEmail, comment.createdBy)}">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" id="modify">수정</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" id="delete"
+                                                th:value=${comment.id} onclick="deleteComment(this.value)">삭제</button>
+                                    </div>
+                                    <div th:unless="${#strings.equals(userEmail, comment.createdBy)}"></div>
+                                </div>
+                                <div class="commBody">
+                                    <div th:text="${comment.content}" th:value="${comment.content}" class="commText"></div>
+                                    <button type="button" class="btn btn-outline-secondary" id="modifyBtn"
+                                            onclick="modifyComment()">등록</button>
+                                </div>
+                                <div th:text="${comment.regTime}" class="regTime"></div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div th:unless="${comment == null}"></div>
                 </div>
             </div>
         </div>
