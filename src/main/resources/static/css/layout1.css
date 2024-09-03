@@ -644,6 +644,11 @@ section {
     font-weight: 700;
 }
 
+/* reviewList */
+.mypageTab {
+    color: black;
+}
+
 /* itemCategory */
 .cateFilter {
     float: right;
