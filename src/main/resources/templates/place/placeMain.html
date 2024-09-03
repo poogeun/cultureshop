@@ -103,11 +103,13 @@
                 alert(errorMessage);
             }
 
-            $('#address').keyup(function() {
-                // 여기서 jQuery로 JavaScript 코드를 실행합니다.
-                console.log('Input value changed to:');
-            });
+            map();
 
+
+
+
+            console.log(places[1]);
+            console.log(places[9]);
 
         });
 
@@ -139,6 +141,44 @@
                     console.log("Address set:", addr);
                 }
             }).open();
+        }
+
+        function basicMap() {
+            var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+            var options = { //지도를 생성할 때 필요한 기본 옵션
+                center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+                level: 3 //지도의 레벨(확대, 축소 정도)
+            };
+
+            var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+        }
+
+        function addrMap() {
+            var places = [];
+            $('.placeBox').each(function(i) {
+                var place = $(this);
+
+                var placeId = place.find('input[name=placeId]').val();
+                var x = place.find('#geox-' +placeId).val();
+                var y = place.find('#geoy-' +placeId).val();
+                var name = place.find('#name-' +placeId).text();
+
+                var placeInfo = {
+                    x: x,
+                    y: y,
+                    name: name
+                };
+
+                places.push(placeInfo);
+            });
+
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(37.402707, 126.922044),
+                level: 4
+            };
+
+            var map = new kakao.maps.Map(container, options);
         }
 
         function addLike(placeId) {
@@ -184,25 +224,8 @@
             <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
 
-        <section class="placeMenu">
-            <button>
-                <div class="placeIcon">
-                    <span class="material-symbols-outlined">museum</span>
-                </div>
-                <div class="placeText">박물관</div>
-            </button>
-            <button>
-                <div class="placeIcon">
-                    <span class="material-symbols-outlined">imagesmode</span>
-                </div>
-                <div class="placeText">미술관</div>
-            </button>
-            <button>
-                <div class="placeIcon">
-                    <span class="material-symbols-outlined">festival</span>
-                </div>
-                <div class="placeText">축제</div>
-            </button>
+        <section class="placeMainMap">
+            <div id="map" style="width:500px;height:400px;"></div>
         </section>
 
         <section class="placeList">
@@ -214,6 +237,9 @@
                 <div class="prdPlace">
                     <th:block th:each="museum : ${museums}">
                         <div class="placeBox">
+                            <input type="hidden" th:value="${museum.id}" name="placeId">
+                            <input type="hidden" th:value="${museum.geoX}" th:id="'geox-' +${museum.id}">
+                            <input type="hidden" th:value="${museum.geoY}" th:id="'geoy-' +${museum.id}">
                             <a th:href="'/place/detail/' + ${museum.id}">
                                 <th:block th:if="${museum.userLikeYn == null}">
                                     <button type="button" th:value="${museum.id}" onclick="addLike(this.value)" class="likeBtn">
@@ -225,7 +251,7 @@
                                         <span class="material-symbols-outlined" style="color: red">favorite</span>
                                     </button>
                                 </th:block>
-                                <div th:text="${museum.name}" class="placeName"></div>
+                                <div th:text="${museum.name}" class="placeName" th:id="'name-' +${museum.id}"></div>
                                 <div th:text="${museum.address}" class="placeAddr"></div>
                                 <div th:text="${museum.openTime +' ~ '+ museum.closeTime}" class="placeTime"></div>
                             </a>
@@ -241,6 +267,9 @@
                 <div class="prdPlace">
                     <th:block th:each="art : ${arts}">
                         <div class="placeBox">
+                            <input type="hidden" th:value="${art.id}" name="placeId">
+                            <input type="hidden" th:value="${art.geoX}" th:id="'geox-' +${art.id}">
+                            <input type="hidden" th:value="${art.geoY}" th:id="'geoy-' +${art.id}">
                             <a th:href="'/place/detail/' + ${art.id}">
                                 <th:block th:if="${art.userLikeYn == null}">
                                     <button type="button" th:value="${art.id}" onclick="addLike(this.value)" class="likeBtn">
@@ -252,7 +281,7 @@
                                         <span class="material-symbols-outlined" style="color: red">favorite</span>
                                     </button>
                                 </th:block>
-                                <div th:text="${art.name}" class="placeName"></div>
+                                <div th:text="${art.name}" class="placeName" th:id="'name-' +${art.id}"></div>
                                 <div th:text="${art.address}" class="placeAddr"></div>
                                 <div th:text="${art.openTime +' ~ '+ art.closeTime}" class="placeTime"></div>
                             </a>

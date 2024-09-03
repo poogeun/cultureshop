@@ -17,6 +17,13 @@
             font-size: 40px;
             color: #bbe309;
         }
+        .placeTab .container {
+            margin-top: 50px;
+        }
+        .placeBox {
+            width: 100%;
+            margin-bottom: 20px;
+        }
 
     </style>
 </th:block>
@@ -28,6 +35,28 @@
             if(errorMessage != null){
                 alert(errorMessage);
             }
+
+            $('.likeContents').show();
+            $('.placeTab').hide();
+            $('.nav-link').on('click', function(e) {
+                $(".nav-link").each(function() {
+                    if ($(this).is(e.currentTarget)) {
+                        $(this).addClass("active");
+                    } else {
+                        $(this).removeClass("active");
+                    }
+                });
+
+                if($(e.currentTarget).is($('#likeItemTab'))) {
+                    $('.likeContents').show();
+                    $('.placeTab').hide();
+                }
+                else {
+                    $('.likeContents').hide();
+                    $('.placeTab').show();
+                }
+
+            })
         });
 
         function checkAll(){
@@ -82,11 +111,11 @@
                 <div class="likeBody">
                     <div class="likeTab">
                         <ul class="nav nav-underline">
-                            <li class="nav-item" id="likeItemTab">
-                                <a class="nav-link active" aria-current="page" href="#">상품</a>
+                            <li class="nav-item">
+                                <a class="nav-link active mypageTab" id="likeItemTab" href="#">상품</a>
                             </li>
-                            <li class="nav-item" id="likePlaceTab">
-                                <a class="nav-link" href="#">장소</a>
+                            <li class="nav-item">
+                                <a class="nav-link mypageTab" id="likePlaceTab" href="#">장소</a>
                             </li>
                         </ul>
                     </div>
@@ -129,7 +158,21 @@
 
                     <!-- 장소 탭 -->
                     <div class="placeTab">
-                        
+                        <div class="container text-center">
+                            <div class="row row-cols-4">
+                                <th:block th:each="likePlace : ${likePlaces}">
+                                    <div class="col">
+                                        <div class="placeBox">
+                                            <a th:href="'/place/detail/' + ${likePlace.id}">
+                                                <div th:text="${likePlace.name}" class="placeName"></div>
+                                                <div th:text="${likePlace.address}" class="placeAddr"></div>
+                                                <div th:text="${likePlace.openTime +' ~ '+ likePlace.closeTime}" class="placeTime"></div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

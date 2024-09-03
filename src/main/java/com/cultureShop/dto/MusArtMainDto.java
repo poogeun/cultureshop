@@ -16,27 +16,35 @@ public class MusArtMainDto {
     private String address;
     private String openTime;
     private String closeTime;
+    private double geoX;
+    private double geoY;
     private Long userLikeYn; // 해당 유저의 찜 여부
 
     // 로그인 전
     @QueryProjection
-    public MusArtMainDto(Long id, String name, String type, String address, String openTime, String closeTime) {
+    public MusArtMainDto(Long id, String name, String type, String address, String openTime,
+                         String closeTime, double geoX, double geoY) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.address = getSimpleAddr(address);
         this.openTime = openTime;
         this.closeTime = closeTime;
+        this.geoX = geoX;
+        this.geoY = geoY;
     }
 
     // 로그인 후
-    public MusArtMainDto(Long id, String name, String type, String address, String openTime, String closeTime, Long userLikeYn) {
+    public MusArtMainDto(Long id, String name, String type, String address, String openTime, String closeTime,
+                         double geoX, double geoY, Long userLikeYn) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.address = getSimpleAddr(address);
         this.openTime = openTime;
         this.closeTime = closeTime;
+        this.geoX = geoX;
+        this.geoY = geoY;
         this.userLikeYn = userLikeYn;
     }
 

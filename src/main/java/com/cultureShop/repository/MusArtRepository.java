@@ -17,11 +17,11 @@ public interface MusArtRepository extends JpaRepository<MusArt, Long> {
     @Query("select ma from MusArt ma where ma.address like %:address% and ma.type = :type order by rand()")
     List<MusArt> findBySimpleAddr(String address, String type);
 
-    @Query("select new com.cultureShop.dto.MusArtMainDto(ma.id, ma.name, ma.type, ma.address, ma.openTime, ma.closeTime) " +
+    @Query("select new com.cultureShop.dto.MusArtMainDto(ma.id, ma.name, ma.type, ma.address, ma.openTime, ma.closeTime, ma.geoX, ma.geoY) " +
             "from MusArt ma where ma.id = :musArtId")
     MusArtMainDto findPlaceDto(Long musArtId);
 
-    @Query("select new com.cultureShop.dto.MusArtMainDto(ma.id, ma.name, ma.type, ma.address, ma.openTime, ma.closeTime, uli.id) " +
+    @Query("select new com.cultureShop.dto.MusArtMainDto(ma.id, ma.name, ma.type, ma.address, ma.openTime, ma.closeTime, ma.geoX, ma.geoY, uli.id) " +
             "from MusArt ma left join UserLikeItem uli on ma.id = uli.musArt.id and uli.userLike.id = :userLikeId " +
             "where ma.id = :musArtId")
     MusArtMainDto findUserPlaceDto(Long musArtId, Long userLikeId);
