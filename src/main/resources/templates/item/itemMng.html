@@ -5,7 +5,23 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        $(document).ready(function() {
+            $('#searchBtn').on('click', function(e) {
+                e.preventDefault();
+                page(0);
+            });
+        });
 
+        function page(page) {
+            var searchDateType = $('#searchDateType').val();
+            var searchStartStatus = $('#searchStartStatus').val();
+            var searchCategory = $('#searchCategory').val();
+            var searchQuery = $('#searchQuery').val();
+
+            location.href = "/admin/items/" +page+ "?searchDateType=" +searchDateType
+            + "&searchStartStatus=" +searchStartStatus+ "&searchCategory=" +searchCategory
+            + "&searchQuery=" +searchQuery;
+        }
     </script>
 </th:block>
 
@@ -14,33 +30,63 @@
         select {
             margin-right: 10px;
         }
+        .table {
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .mngTableHead td {
+            color: #808080;
+            text-align: center;
+        }
     </style>
 </th:block>
 
 <div layout:fragment="content">
+    <div class="row justify-content-center g-3 align-items-center" th:object="${itemSearchDto}">
+        <select th:field="*{searchDateType}" class="form-control" style="width: auto;">
+            <option value="all">전체기간</option>
+            <option value="1d">1일</option>
+            <option value="1w">1주</option>
+            <option value="1m">1개월</option>
+            <option value="6m">6개월</option>
+        </select>
+        <select th:field="*{searchStartStatus}" class="form-control" style="width: auto;">
+            <option value="">오픈상태(전체)</option>
+            <option value="START">판매중</option>
+            <option value="WAIT">대기중</option>
+        </select>
+        <select th:field="*{searchCategory}" class="form-control" style="width: auto;">
+            <option value="all">카테고리(전체)</option>
+            <option value="exhibition">전시회</option>
+            <option value="museum">뮤지엄</option>
+            <option value="festival">행사/축제</option>
+        </select>
+        <input th:field="*{searchQuery}" type="text" class="form-control" style="width: auto; margin-right: 15px;"
+               placeholder="검색어를 입력해주세요">
+        <button id="searchBtn" type="submit" class="form-control btn btn-secondary" style="width: auto;">검색</button>
+    </div>
+
     <form th:action="@{'/admin/items/'+${items.number}}" role="form" method="get" th:object="${items}">
         <table class="table">
             <thead>
-            <tr>
-                <td>상품아이디</td>
+            <tr class="mngTableHead">
+                <td>품번</td>
                 <td>상품명</td>
                 <td>카테고리</td>
-                <td>가격</td>
                 <td>상태</td>
                 <td>등록일</td>
             </tr>
             </thead>
             <tbody>
             <tr th:each="item, status : ${items.getContent()}">
-                <td th:text="${item.id}"></td>
+                <td th:text="${item.id}" style="color: #808080"></td>
                 <td>
-                    <a th:href="'/admin/item/' + ${item.id}" th:text="${item.itemName}"></a>
+                    <a th:href="'/admin/item/' + ${item.id}" th:text="${item.itemName}" style="color: black"></a>
                 </td>
-                <td th:text="${item.category}"></td>
-                <td th:text="${item.price}"></td>
+                <td th:text="${item.category}" style="color: #808080"></td>
                 <td th:text="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}
-                            ? '판매중' : '대기중'"></td>
-                <td th:text="${item.regTime}"></td>
+                            ? '판매중' : '대기중'" style="color: #808080"></td>
+                <td th:text="${item.regTime}" style="color: #808080"></td>
             </tr>
             </tbody>
         </table>
@@ -52,7 +98,7 @@
                 <li class="page-item" th:classappend="${items.first}?'disabled'">
                     <a th:onclick="'javascript:page('+${items.number - 1} +')'" aria-label="Previous"
                        class="page-link">
-                        <span aria-hidden="true">Previous</span>
+                        <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"
@@ -63,34 +109,10 @@
                 <li class="page-item" th:classappend="${items.last}?'disabled'">
                     <a th:onclick="'javascript:page('+${items.number + 1}+')'" aria-label="Next"
                        class="page-link">
-                        <span aria-hidden="true">Next</span>
+                        <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
             </ul>
-        </div>
-
-        <div class="row row-cols-lg-auto g-3 align-items-center" th:object="${itemSearchDto}">
-            <select th:field="*{searchDateType}" class="form-control" style="width: auto;">
-                <option value="all">전체기간</option>
-                <option value="1d">1일</option>
-                <option value="1w">1주</option>
-                <option value="1m">1개월</option>
-                <option value="6m">6개월</option>
-            </select>
-            <select th:field="*{searchStartStatus}" class="form-control" style="width: auto;">
-                <option value="">오픈상태(전체)</option>
-                <option value="START">판매중</option>
-                <option value="WAIT">대기중</option>
-            </select>
-            <select th:field="*{searchCategory}" class="form-control" style="width: auto;">
-                <option value="">카테고리(전체)</option>
-                <option value="exhibition">전시회</option>
-                <option value="museum">뮤지엄</option>
-                <option value="festival">행사/축제</option>
-            </select>
-            <input th:field="*{searchQuery}" type="text" class="form-control" style="width: auto; margin-right: 15px;"
-                   placeholder="검색어를 입력해주세요">
-            <button id="searchBtn" type="submit" class="form-control btn btn-primary" style="width: auto;">검색</button>
         </div>
     </form>
 </div>

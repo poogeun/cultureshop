@@ -14,6 +14,11 @@
             width: 100%;
             margin-bottom: 20px;
         }
+        .placeList .placeCard {
+            width: 20%;
+            padding: 0;
+            margin: 10px;
+        }
     </style>
 </th:block>
 
@@ -24,19 +29,20 @@
 </th:block>
 
 <div layout:fragment="content">
-    <div class="container">
+    <div class="container placeList">
         <div class="container text-center">
             <div class="row row-cols-4">
                 <th:block th:each="place : ${places}">
-                <div class="col">
-                    <div class="placeBox">
-                        <a th:href="'/place/detail/' + ${place.id}">
+                    <div class="card placeCard">
+                        <h5 class="card-header">
                             <div th:text="${place.name}" class="placeName"></div>
-                            <div th:text="${place.address}" class="placeAddr"></div>
-                            <div th:text="${place.openTime +' ~ '+ place.closeTime}" class="placeTime"></div>
-                        </a>
+                        </h5>
+                        <div class="card-body">
+                            <h5 th:text="${place.address}" class="card-title placeAddr"></h5>
+                            <p th:text="${place.openTime +' ~ '+ place.closeTime}" class="card-text placeTime"></p>
+                            <a th:href="'/place/detail/' + ${place.id}" class="btn btn-outline-secondary btn-sm">자세히 보기</a>
+                        </div>
                     </div>
-                </div>
                 </th:block>
             </div>
         </div>

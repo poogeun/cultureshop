@@ -112,11 +112,8 @@
         .summary {
             position: relative;
         }
-        .summaryTop {
-            margin-bottom: 30px;
-        }
         .prdTitle {
-            font-size: 40px;
+            font-size: 30px;
             font-weight: 700;
             line-height: 150%;
         }
@@ -144,14 +141,30 @@
         .itemInfo {
             margin-top: 20px;
         }
+        .orderInput {
+            border-top: 1px solid #f0f0f0;
+            margin-top: 20px;
+            display: flex;
+        }
+        .orderInput li {
+            margin-right: 20px;
+            width: 50%;
+        }
         .resBtn {
-            margin-top: 50px;
+            margin-top: 30px;
+        }
+        .resBtn button {
+            color: #bbe309;
+            background-color: #fff;
         }
         #nav {
             background-color: #fff;
             position: sticky;
             top: 0;
             z-index: 5;
+        }
+        #itemMainBody #nav a {
+            font-weight: 600;
         }
         .itemMainBody {
             position: relative;
@@ -245,13 +258,6 @@
     <div class="itemMain">
         <div class="itemMainTop">
             <div class="summary">
-                <div class="summaryTop">
-                    <span th:if="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
-                          class="badge bg-primary mgb-15">판매중</span>
-                    <span th:unless="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
-                          class="badge bg-primary mgb-15">대기중</span>
-                    <h2 th:text="${item.itemName}" class="prdTitle"></h2>
-                </div>
                 <div class="summaryBody">
                     <div class="posterBox">
                         <button type="button" th:classappend="${isLikeItem}" onclick="addLike()" class="likeBtn">
@@ -263,6 +269,13 @@
                         <img th:src="${item.itemImgDtoList[0].imgUrl}" alt="${item.itemName}" class="posterBoxImage">
                     </div>
                     <ul class="itemInfos">
+                        <li class="itemInfoTop">
+                            <span th:if="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
+                                  class="badge bg-primary mgb-15">판매중</span>
+                            <span th:unless="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
+                                  class="badge bg-primary mgb-15">대기중</span>
+                            <h2 th:text="${item.itemName}" class="prdTitle"></h2>
+                        </li>
                         <li class="itemInfo">
                             <div th:if="${#strings.isEmpty(item.place)}">
                                 <strong class="infoLabel">주소</strong>
@@ -282,18 +295,21 @@
                             <input type="hidden" th:value="${item.price}" id="price" name="price">
                             <div th:text="${item.price + '원'}" class="infoDesc"></div>
                         </li>
-                        <li class="itemInfo">
-                            <strong class="infoLabel">수량</strong>
-                            <div class="infoDesc">
-                                <input type="number" name="count" id="count" value="1" min="1">
-                            </div>
-                        </li>
-                        <li class="itemInfo">
-                            <strong class="infoLabel">관람일</strong>
-                            <div class="infoDesc">
-                                <input type="date" th:min="${today}" th:max="${item.endDay}" name="date" id="date">
-                            </div>
-                        </li>
+                        <div class="orderInput">
+                            <li class="itemInfo">
+                                <strong class="infoLabel">수량</strong>
+                                <div class="infoDesc">
+                                    <input type="number" class="form-control" name="count" id="count" value="1" min="1">
+                                </div>
+                            </li>
+                            <li class="itemInfo">
+                                <strong class="infoLabel">관람일</strong>
+                                <div class="infoDesc">
+                                    <input type="date" class="form-control" th:min="${today}" th:max="${item.endDay}"
+                                           name="date" id="date">
+                                </div>
+                            </li>
+                        </div>
                         <li class="resBtn">
                             <div th:if="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
                                  class="text-right">
@@ -325,7 +341,6 @@
 
             <div class="itemContentsDtl">
                 <div class="content" id="detail-img-text">
-                    <h3 class="contentTitle">상세 정보</h3>
                     <div th:text="${item.itemDetail}" class="contentDtl"></div>
                     <div th:if="${#strings.isEmpty(item.itemImgDtoList[1].imgUrl)}">
                     </div>

@@ -104,18 +104,24 @@ public class PlaceController {
 
     @GetMapping(value = "/detail/{placeId}")
     public String placeDtl(@PathVariable Long placeId, Model model, Principal principal) {
-        String email = principal.getName();
+
         MusArt musArt = musArtRepository.findById(placeId)
                 .orElseThrow(EntityNotFoundException::new);
         List<UserLikeItem> likePlaces = userLikeItemService.getLikePlaces(placeId);
         int likeCount = likePlaces.size();
 
         if(principal != null) {
+            String email = principal.getName();
             if (userLikeItemService.findLikePlace(email, placeId)) {
                 model.addAttribute("isLikePlace", "afterLike");
             } else {
                 model.addAttribute("isLikePlace", "beforeLike");
             }
+
+        }
+        else{
+            model.addAttribute("isLikePlace", "beforeLike");
+            model.addAttribute("userEmail", "");
         }
 
         List<Comment> comments = commentService.getPlaceComments(placeId);
@@ -124,7 +130,7 @@ public class PlaceController {
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("musArt", musArt);
         model.addAttribute("comments", comments);
-        model.addAttribute("userEmail", email);
+
 
         return "place/placeDtl";
     }
@@ -141,7 +147,7 @@ public class PlaceController {
         }
     }
 
-    @GetMapping(value = "/list/{type}/{simAddr}")
+    @GetMapping(value = {"/list/{type}", "/list/{type}/{simAddr}"})
     public String placeList(@PathVariable("type") String type,
                             @PathVariable(value = "simAddr", required = false) String simAddr, Model model) {
 
@@ -150,6 +156,7 @@ public class PlaceController {
         if(simAddr != null) {
             places = musArtService.getAllAddrPlace(simAddr, type);
         }
+
         model.addAttribute("places", places);
 
         return "place/placeList";

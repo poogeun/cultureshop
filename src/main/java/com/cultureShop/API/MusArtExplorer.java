@@ -28,7 +28,7 @@ public class MusArtExplorer {
     StringBuilder sb = new StringBuilder();
 
     public MusArtExplorer() throws IOException, ParseException {
-        StringBuilder urlBuilder = new StringBuilder("https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_P_DGMUSEUMART&geomFilter=BOX(124,33,132,43)&size=100&page=1&key=FF3C525F-23A2-31CD-8950-4EB55D2AF697&domain=localhost");
+        StringBuilder urlBuilder = new StringBuilder("https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_P_DGMUSEUMART&geomFilter=BOX(126.5,37.5,127.5,37.6)&size=100&page=2&key=FF3C525F-23A2-31CD-8950-4EB55D2AF697&domain=localhost");
 
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();

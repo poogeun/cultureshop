@@ -59,6 +59,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
     // 카테고리별 검색으로 찾기
     private BooleanExpression searchByLike(String searchCategory, String searchQuery) {
+
         if(StringUtils.equals("exhibition", searchCategory)) {
             return QItem.item.category.eq("exhibition").and(QItem.item.itemName.like("%"+searchQuery+"%"));
         }
@@ -68,7 +69,9 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         else if(StringUtils.equals("festival", searchCategory)) {
             return QItem.item.category.eq("festival").and(QItem.item.itemName.like("%"+searchQuery+"%"));
         }
-        return null;
+        else {
+            return QItem.item.itemName.like("%"+searchQuery+"%");
+        }
     }
 
     @Override

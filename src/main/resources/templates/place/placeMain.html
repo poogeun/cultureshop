@@ -65,7 +65,23 @@
             margin-top: 30px;
             width: 100%;
         }
-
+        .placeCard {
+            width: 20%;
+            margin-right: 10px;
+        }
+        .placeCard h5 {
+            padding-left: 0;
+            display: flex;
+        }
+        .placeCard h5 div {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-wrap: break-word;
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
         .likeBtn {
             background: none;
             border: none;
@@ -103,7 +119,11 @@
                 alert(errorMessage);
             }
 
-            basicMap();
+            if($('.addrField').text() == '주소 찾기') {
+                basicMap();
+            } else {
+                addrMap();
+            }
 
             console.log(places[1]);
             console.log(places[9]);
@@ -152,7 +172,7 @@
 
         function addrMap() {
             var places = [];
-            $('.placeBox').each(function(i) {
+            $('.placeCard').each(function(i) {
                 var place = $(this);
 
                 var placeId = place.find('input[name=placeId]').val();
@@ -171,11 +191,62 @@
 
             var container = document.getElementById('map');
             var options = {
-                center: new kakao.maps.LatLng(37.402707, 126.922044),
-                level: 4
+                center: new kakao.maps.LatLng(places[0].x, places[0].y),
+                level: 6
             };
 
             var map = new kakao.maps.Map(container, options);
+
+            var positions = [
+                {
+                    title: places[0].name,
+                    latlng: new kakao.maps.LatLng(places[0].x, places[0].y)
+                },
+                {
+                    title: places[1].name,
+                    latlng: new kakao.maps.LatLng(places[1].x, places[1].y)
+                },
+                {
+                    title: places[2].name,
+                    latlng: new kakao.maps.LatLng(places[2].x, places[2].y)
+                },
+                {
+                    title: places[3].name,
+                    latlng: new kakao.maps.LatLng(places[3].x, places[3].y)
+                },
+                {
+                    title: places[4].name,
+                    latlng: new kakao.maps.LatLng(places[4].x, places[4].y)
+                },
+                {
+                    title: places[5].name,
+                    latlng: new kakao.maps.LatLng(places[5].x, places[5].y)
+                },
+                {
+                    title: places[6].name,
+                    latlng: new kakao.maps.LatLng(places[6].x, places[6].y)
+                },
+                {
+                    title: places[7].name,
+                    latlng: new kakao.maps.LatLng(places[7].x, places[7].y)
+                },
+                {
+                    title: places[8].name,
+                    latlng: new kakao.maps.LatLng(places[8].x, places[8].y)
+                },
+                {
+                    title: places[9].name,
+                    latlng: new kakao.maps.LatLng(places[9].x, places[9].y)
+                }
+            ];
+
+            for(var i=0; i < positions.length; i++) {
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: positions[i].latlng,
+                    title: positions[i].title,
+                });
+            }
         }
 
         function addLike(placeId) {
@@ -216,13 +287,13 @@
 <div layout:fragment="content">
     <div class="container">
         <button type="button" class="searchAddr" onclick="location.href='/place/address'">
-            <span th:if="${simAddr} == null">주소 찾기</span>
-            <span th:unless="${simAddr} == null" th:text="${simAddr}"></span>
+            <span th:if="${simAddr} == null" class="addrField">주소 찾기</span>
+            <span th:unless="${simAddr} == null" th:text="${simAddr}" class="addrField"></span>
             <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
 
         <section class="placeMainMap">
-            <div id="map" style="width:500px;height:400px;"></div>
+            <div id="map" style="width:700px;height:400px;margin: 0 auto;"></div>
         </section>
 
         <section class="placeList">
@@ -230,14 +301,17 @@
                 <div class="placeTitle">
                     <h2>내주변 박물관</h2>
                 </div>
-                <span class="more"><a th:href="'/place/list/museum/' + ${simAddr}">더보기</a></span>
+                <span class="more">
+                    <a th:if="${simAddr} == null" href="/place/list/museum">더보기</a>
+                    <a th:unless="${simAddr} == null" th:href="'/place/list/museum/' + ${simAddr}">더보기</a>
+                </span>
                 <div class="prdPlace">
                     <th:block th:each="museum : ${museums}">
-                        <div class="placeBox">
+                        <div class="card placeCard">
                             <input type="hidden" th:value="${museum.id}" name="placeId">
                             <input type="hidden" th:value="${museum.geoX}" th:id="'geox-' +${museum.id}">
                             <input type="hidden" th:value="${museum.geoY}" th:id="'geoy-' +${museum.id}">
-                            <a th:href="'/place/detail/' + ${museum.id}">
+                            <h5 class="card-header">
                                 <th:block th:if="${museum.userLikeYn == null}">
                                     <button type="button" th:value="${museum.id}" onclick="addLike(this.value)" class="likeBtn">
                                         <span class="material-symbols-outlined">favorite</span>
@@ -249,9 +323,12 @@
                                     </button>
                                 </th:block>
                                 <div th:text="${museum.name}" class="placeName" th:id="'name-' +${museum.id}"></div>
-                                <div th:text="${museum.address}" class="placeAddr"></div>
-                                <div th:text="${museum.openTime +' ~ '+ museum.closeTime}" class="placeTime"></div>
-                            </a>
+                            </h5>
+                            <div class="card-body">
+                                <h5 th:text="${museum.address}" class="card-title placeAddr"></h5>
+                                <p th:text="${museum.openTime +' ~ '+ museum.closeTime}" class="card-text placeTime"></p>
+                                <a th:href="'/place/detail/' + ${museum.id}" class="btn btn-outline-secondary btn-sm">자세히 보기</a>
+                            </div>
                         </div>
                     </th:block>
                 </div>
@@ -263,11 +340,11 @@
                 <span class="more"><a th:href="'/place/list/art/' + ${simAddr}">더보기</a></span>
                 <div class="prdPlace">
                     <th:block th:each="art : ${arts}">
-                        <div class="placeBox">
+                        <div class="card placeCard">
                             <input type="hidden" th:value="${art.id}" name="placeId">
                             <input type="hidden" th:value="${art.geoX}" th:id="'geox-' +${art.id}">
                             <input type="hidden" th:value="${art.geoY}" th:id="'geoy-' +${art.id}">
-                            <a th:href="'/place/detail/' + ${art.id}">
+                            <h5 class="card-header">
                                 <th:block th:if="${art.userLikeYn == null}">
                                     <button type="button" th:value="${art.id}" onclick="addLike(this.value)" class="likeBtn">
                                         <span class="material-symbols-outlined">favorite</span>
@@ -279,9 +356,12 @@
                                     </button>
                                 </th:block>
                                 <div th:text="${art.name}" class="placeName" th:id="'name-' +${art.id}"></div>
-                                <div th:text="${art.address}" class="placeAddr"></div>
-                                <div th:text="${art.openTime +' ~ '+ art.closeTime}" class="placeTime"></div>
-                            </a>
+                            </h5>
+                            <div class="card-body">
+                                <h5 th:text="${art.address}" class="card-title placeAddr"></h5>
+                                <p th:text="${art.openTime +' ~ '+ art.closeTime}" class="card-text placeTime"></p>
+                                <a th:href="'/place/detail/' + ${art.id}" class="btn btn-outline-secondary btn-sm">자세히 보기</a>
+                            </div>
                         </div>
                     </th:block>
                 </div>

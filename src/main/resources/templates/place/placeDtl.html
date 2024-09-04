@@ -93,11 +93,11 @@
     <script th:inline="javascript">
         $(document).ready(function(){
 
-            map();
+            dtlMap();
             addComment();
         });
 
-        function map() {
+        function dtlMap() {
             var x = $('#x').val();
             var y = $('#y').val();
 
@@ -250,8 +250,8 @@
 
 <div layout:fragment="content">
     <div class="container">
-        <input type="hidden" th:value="${musArt.geoY}" id="x">
-        <input type="hidden" th:value="${musArt.geoX}" id="y">
+        <input type="hidden" th:value="${musArt.geoX}" id="x">
+        <input type="hidden" th:value="${musArt.geoY}" id="y">
         <div class="placeDtlBox">
             <button type="button" th:classappend="${isLikePlace}" onclick="addLike()" class="likeBtn">
                 <span class="material-symbols-outlined" >favorite</span>
