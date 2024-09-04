@@ -18,7 +18,7 @@ body{
     margin-right: 200px;
 }
 a {
-    color: black;
+    color: black !important;
 }
 .placeCard h5 div {
     overflow: hidden;
@@ -50,8 +50,8 @@ a {
   border-color: #ccc;
 }
 
-.bg-primary {
-    background-color: #d6ff21;
+.badge.bg-primary {
+    background-color: #a3c21b !important;
 }
 
 /* header */

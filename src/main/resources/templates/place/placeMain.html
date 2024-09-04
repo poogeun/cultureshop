@@ -16,29 +16,11 @@
             font-size: 20px;
             font-weight: 700;
         }
-        .placeMenu {
-            width: 60%;
-            display: flex;
-            padding: 0 30px;
-            gap: 33%;
-            margin: 80px auto;
-        }
-        .placeMenu button {
-            flex-wrap: wrap;
-            background: none;
-            border: none;
-        }
-        .placeIcon {
-            position: relative;
-        }
-        .placeIcon span {
-            font-size: 70px;
-        }
-        .placeText {
-            color: #000;
-            width: 100%;
-            line-height: 1.4;
-            padding-top: 2px;
+        #map {
+            width: 700px;
+            height: 400px;
+            margin: 0 auto;
+            border-radius: 8px;
         }
         .placeWrap {
             position: relative;
@@ -119,7 +101,7 @@
                 alert(errorMessage);
             }
 
-            if($('.addrField').text() == '주소 찾기') {
+            if($('.addrField').text() == '주소 검색') {
                 basicMap();
             } else {
                 addrMap();
@@ -287,13 +269,13 @@
 <div layout:fragment="content">
     <div class="container">
         <button type="button" class="searchAddr" onclick="location.href='/place/address'">
-            <span th:if="${simAddr} == null" class="addrField">주소 찾기</span>
+            <span th:if="${simAddr} == null" class="addrField">주소 검색</span>
             <span th:unless="${simAddr} == null" th:text="${simAddr}" class="addrField"></span>
             <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
 
         <section class="placeMainMap">
-            <div id="map" style="width:700px;height:400px;margin: 0 auto;"></div>
+            <div id="map"></div>
         </section>
 
         <section class="placeList">
@@ -337,7 +319,10 @@
                 <div class="placeTitle">
                     <h2>내주변 미술관</h2>
                 </div>
-                <span class="more"><a th:href="'/place/list/art/' + ${simAddr}">더보기</a></span>
+                <span class="more">
+                    <a th:if="${simAddr} == null" href="/place/list/art">더보기</a>
+                    <a th:unless="${simAddr} == null" th:href="'/place/list/art/' + ${simAddr}">더보기</a>
+                </span>
                 <div class="prdPlace">
                     <th:block th:each="art : ${arts}">
                         <div class="card placeCard">

@@ -55,8 +55,10 @@ public class MainController {
     public String searchResult(ItemSearchDto itemSearchDto, Model model){
 
         List<MainItemDto> items = itemService.getSearchItemList(itemSearchDto);
+        int itemCount = items.size();
 
         model.addAttribute("items", items);
+        model.addAttribute("itemCount", itemCount);
         model.addAttribute("itemSearchDto", itemSearchDto);
 
         return "item/searchItem";

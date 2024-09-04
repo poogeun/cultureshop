@@ -5,60 +5,46 @@
 
 <th:block layout:fragment="css">
     <style>
-        .margin {
-            margin-bottom: 30px;
+        .searchHead {
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-top: 40px;
+            display: flex;
         }
-        .card_text {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-        a:hover {
-            text-decoration: none;
-        }
-        .center {
-            text-align: center;
-        }
-
-        .date {
-            font-size: 16px;
-            font-weight: 400;
-            color: #1a1a24;
-        }
-        .loc {
-            font-size: 16px;
-            font-weight: 500;
-            color: #666670;
-        }
-        .searchItem {
-            display: inline;
+        .searchHead h4 {
+            margin-left: 30px;
         }
     </style>
 </th:block>
 
 <div layout:fragment="content">
+    <div class="container">
+        <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">
+        <div class="searchHead">
+            <h4>'<span th:text="${itemSearchDto.searchQuery}" style="font-weight: 700"></span>' 검색 결과</h4>
+            <span th:text="${'(총 ' +itemCount+ '건)'}" style="color: #808080; margin-left: 20px;"></span>
+        </div>
 
-    <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">
-    <div class="center">
-        <p class="h3 font-weight-bold" th:text="${itemSearchDto.searchQuery} + '검색결과'"></p>
-    </div>
-
-    <div class="container text-center">
-        <th:block th:each="item, status: ${items}">
-            <div class="searchItem">
-                <div class="item_img">
-                    <a th:href="'/item/' + ${item.id}" class="text-dark">
-                        <img th:src="${item.imgUrl}" th:alt="${item.itemName}" style="width: 200px; height: 300px;">
-                    </a>
-                </div>
-                <div class="item_content">
-                    <strong th:text="${item.itemName}"></strong>
-                    <div th:text="${item.startDay} +'~'+ ${item.endDay}" class="date"></div>
-                    <div th:if="${#strings.isEmpty(item.place)}" th:text="${item.address}" class="loc"></div>
-                    <div th:unless="${#strings.isEmpty(item.place)}" th:text="${item.place}" class="loc"></div>
-                </div>
+        <div class="container text-center" style="margin-top: 50px">
+            <div class="row row-cols-4 itemCard">
+                <th:block th:each="item : ${items}">
+                    <div class="col cateItem">
+                        <a th:href="'/item/' + ${item.id}">
+                            <div class="cateImgWrap">
+                                <img th:src="${item.imgUrl}" th:alt="${item.itemName}">
+                            </div>
+                            <div class="cateDetail">
+                                <span th:text="${item.itemName}" class="detail_title" ></span>
+                                <span th:if="${#strings.isEmpty(item.place)}" th:text="${item.address}" class="detail_place"></span>
+                                <span th:unless="${#strings.isEmpty(item.place)}" th:text="${item.place}" class="detail_place"></span>
+                                <span th:text="${item.startDay +' ~ '+ item.endDay}" class="detail_date"></span>
+                                <span th:text="${item.price} + '원'" class="detail_price"></span>
+                            </div>
+                        </a>
+                    </div>
+                </th:block>
             </div>
-        </th:block>
+        </div>
     </div>
 </div>
 </html>
