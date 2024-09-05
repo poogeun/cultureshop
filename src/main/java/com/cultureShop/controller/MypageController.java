@@ -1,5 +1,6 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.config.CustomOAuth2UserService;
 import com.cultureShop.dto.*;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.MemberRepository;
@@ -8,9 +9,13 @@ import com.cultureShop.repository.UserLikeItemRepository;
 import com.cultureShop.repository.UserLikeRepository;
 import com.cultureShop.service.*;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.regex.Pattern;
+
+import org.json.simple.parser.JSONParser;
 
 @RequestMapping("/my-page")
 @Controller
@@ -34,17 +42,24 @@ public class MypageController {
     private final OrderRepository orderRepository;
     private final ReviewService reviewService;
     private final OrderItemService orderItemService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page")Optional<Integer> page, Principal principal, Model model) {
 
-        Member member = memberRepository.findByEmail(principal.getName());
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
-        Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(principal.getName(), pageable);
+        String email = principal.getName();
+        String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+        if(!Pattern.matches(emailPattern, principal.getName())) {
+            email = customOAuth2UserService.getSocialEmail(principal);
+        }
 
-        int likeCount = userLikeItemService.likeCount(principal.getName());
-        Long orderCount = orderRepository.countOrder(principal.getName());
-        int reviewCount = reviewService.getMemReviewCount(principal.getName());
+        Member member = memberRepository.findByEmail(email);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+        Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(email, pageable);
+
+        int likeCount = userLikeItemService.likeCount(email);
+        Long orderCount = orderRepository.countOrder(email);
+        int reviewCount = reviewService.getMemReviewCount(email);
 
         model.addAttribute("member", member);
         model.addAttribute("likeCount", likeCount);

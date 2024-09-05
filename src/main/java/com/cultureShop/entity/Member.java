@@ -53,4 +53,18 @@ public class Member extends BaseEntity{
 
         return member;
     }
+
+    public static Member socialMember(String name, String email) {
+        Member member = new Member();
+        member.setName(name);
+        member.setEmail(email);
+        member.setRole(Role.SOCIAL);
+
+        return member;
+    }
+
+    public Member updateSocialMem(String name) {
+        this.name = name;
+        return this;
+    }
 }

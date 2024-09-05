@@ -130,6 +130,7 @@ public class UserLikeItemService {
                 likeCount = userLikeItems.size();
             }
         }
+
         return likeCount;
     }
 
