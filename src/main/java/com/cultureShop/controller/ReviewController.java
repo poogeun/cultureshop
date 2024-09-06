@@ -1,5 +1,6 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.config.CustomOAuth2UserService;
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.ReviewFormDto;
 import com.cultureShop.entity.OrderItem;
@@ -33,13 +34,17 @@ public class ReviewController {
     private final OrderItemService orderItemService;
     private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @GetMapping(value = "/write/{itemId}")
     public String reviewWrite(@PathVariable("itemId")Long itemId, Principal principal, Model model) {
 
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
         MainItemDto item = itemRepository.findMainItemDto(itemId);
-
-        OrderItem orderItem = orderItemService.getOrderItem(itemId, principal.getName());
+        OrderItem orderItem = orderItemService.getOrderItem(itemId, email);
 
         model.addAttribute("reviewFormDto", new ReviewFormDto());
         model.addAttribute("item", item);
@@ -51,8 +56,13 @@ public class ReviewController {
     @PostMapping(value = "/write/{itemId}")
     public String reviewWrite(@PathVariable Long itemId, ReviewFormDto reviewFormDto,
                               Model model, Principal principal) {
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+
         MainItemDto item = itemRepository.findMainItemDto(itemId);
-        OrderItem orderItem = orderItemService.getOrderItem(itemId, principal.getName());
+        OrderItem orderItem = orderItemService.getOrderItem(itemId, email);
 
         if(reviewFormDto.getTitle().isEmpty() || reviewFormDto.getContent().isEmpty()) {
             model.addAttribute("errorMessage", "제목과 내용을 입력해주세요.");
@@ -62,7 +72,7 @@ public class ReviewController {
         }
 
         try {
-            reviewService.saveReview(reviewFormDto, itemId, principal.getName());
+            reviewService.saveReview(reviewFormDto, itemId, email);
             return "redirect:/item/" + itemId + "#detail-review";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "리뷰 등록 중 에러가 발생하였습니다.");
@@ -76,11 +86,16 @@ public class ReviewController {
     @GetMapping(value = "/update/{reviewId}")
     public String reviewUpdate(@PathVariable Long reviewId,
                                Principal principal, Model model) {
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(EntityNotFoundException::new);
         Long itemId = review.getItem().getId();
         MainItemDto item = itemRepository.findMainItemDto(itemId);
-        OrderItem orderItem = orderItemService.getOrderItem(itemId, principal.getName());
+        OrderItem orderItem = orderItemService.getOrderItem(itemId, email);
 
         try {
             ReviewFormDto reviewFormDto = reviewService.getReviewForm(reviewId);
@@ -98,16 +113,17 @@ public class ReviewController {
 
     @PostMapping(value = "/update/{reviewId}")
     public String updateReview(@PathVariable Long reviewId, ReviewFormDto reviewFormDto,
-                               Principal principal, Model model, HttpServletRequest request) {
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        model.addAttribute("_csrf", csrfToken);
+                               Principal principal, Model model) {
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
 
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(EntityNotFoundException::new);
         Long itemId = review.getItem().getId();
-
         MainItemDto item = itemRepository.findMainItemDto(itemId);
-        OrderItem orderItem = orderItemService.getOrderItem(itemId, principal.getName());
+        OrderItem orderItem = orderItemService.getOrderItem(itemId, email);
 
         if(reviewFormDto.getTitle().isEmpty() || reviewFormDto.getContent().isEmpty()) {
             model.addAttribute("errorMessage", "제목과 내용을 입력해주세요.");
@@ -136,7 +152,6 @@ public class ReviewController {
             reviewService.deleteReview(reviewId);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<String>("리뷰 삭제 중 에러가 발생하였습니다.", HttpStatus.FORBIDDEN);
-
         }
         return new ResponseEntity<Long>(reviewId, HttpStatus.OK);
     }

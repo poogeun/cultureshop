@@ -60,23 +60,26 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     public String getSocialEmail(Principal principal) {
         String email = "";
+        String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+        if(!Pattern.matches(emailPattern, principal.getName())) {
+            OAuth2AuthenticationToken auth = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+            if(auth.getAuthorizedClientRegistrationId().equals("google")){
+                Map<String, Object> userAttributes = auth.getPrincipal().getAttributes();
+                email = (String) userAttributes.get("email");
+            }
+            else if(auth.getAuthorizedClientRegistrationId().equals("kakao")) {
+                Map<String, Object> userAttributes = auth.getPrincipal().getAttributes();
+                Map<String, Object> kakaoAccount = (Map<String, Object>) userAttributes.get("kakao_account");
+                email = (String) kakaoAccount.get("email");
+            }
+            else if(auth.getAuthorizedClientRegistrationId().equals("naver")) {
+                Map<String, Object> userAttributes = auth.getPrincipal().getAttributes();
+                Map<String, Object> response = (Map<String, Object>) userAttributes.get("response");
+                email = (String) response.get("email");
+            }
+            return email;
+        }
 
-        OAuth2AuthenticationToken auth = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        if(auth.getAuthorizedClientRegistrationId().equals("google")){
-            Map<String, Object> userAttributes = auth.getPrincipal().getAttributes();
-            email = (String) userAttributes.get("email");
-        }
-        else if(auth.getAuthorizedClientRegistrationId().equals("kakao")) {
-            Map<String, Object> userAttributes = auth.getPrincipal().getAttributes();
-            Map<String, Object> kakaoAccount = (Map<String, Object>) userAttributes.get("kakao_account");
-            email = (String) kakaoAccount.get("email");
-        }
-        else if(auth.getAuthorizedClientRegistrationId().equals("naver")) {
-            Map<String, Object> userAttributes = auth.getPrincipal().getAttributes();
-            Map<String, Object> response = (Map<String, Object>) userAttributes.get("response");
-            email = (String) response.get("email");
-        }
-
-        return email;
+        return null;
     }
 }

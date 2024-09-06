@@ -3,14 +3,8 @@ package com.cultureShop.service;
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.ReviewFormDto;
 import com.cultureShop.dto.ReviewItemDto;
-import com.cultureShop.entity.Item;
-import com.cultureShop.entity.Member;
-import com.cultureShop.entity.OrderItem;
-import com.cultureShop.entity.Review;
-import com.cultureShop.repository.ItemRepository;
-import com.cultureShop.repository.MemberRepository;
-import com.cultureShop.repository.OrderItemRepository;
-import com.cultureShop.repository.ReviewRepository;
+import com.cultureShop.entity.*;
+import com.cultureShop.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +21,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderRepository orderRepository;
 
     public Long saveReview(ReviewFormDto reviewFormDto, Long itemId, String email) throws Exception {
 
@@ -39,7 +34,7 @@ public class ReviewService {
         reviewRepository.save(review);
 
         // 주문아이템에 해당 리뷰 저장
-        OrderItem orderItem = orderItemRepository.findByCreatedByAndItemId(email, itemId);
+        OrderItem orderItem = orderItemRepository.findByEmailAndItemId(email, itemId);
         orderItem.updateReview(review);
 
         return review.getId();

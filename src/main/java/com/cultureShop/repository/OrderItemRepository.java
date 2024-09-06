@@ -8,7 +8,10 @@ import java.util.List;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
-    OrderItem findByCreatedByAndItemId(String email, Long itemId);
+    @Query("select oi from OrderItem oi where oi.order.member.email = :email and oi.item.id = :itemId")
+    OrderItem findByEmailAndItemId(String email, Long itemId);
 
     List<OrderItem> findByCreatedByOrderByRegTimeDesc(String email);
+
+    List<OrderItem> findByItemIdAndCreatedBy(Long itemId, String createdBy);
 }

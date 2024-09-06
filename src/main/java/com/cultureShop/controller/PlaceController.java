@@ -1,6 +1,7 @@
 package com.cultureShop.controller;
 
 import com.cultureShop.API.SigunguExplorer;
+import com.cultureShop.config.CustomOAuth2UserService;
 import com.cultureShop.dto.ApiDto.SigunguApiDto;
 import com.cultureShop.dto.CommentDto;
 import com.cultureShop.dto.LikeDto;
@@ -37,6 +38,7 @@ public class PlaceController {
     private final MusArtRepository musArtRepository;
     private final UserLikeItemService userLikeItemService;
     private final CommentService commentService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @GetMapping(value = {"", "/{simAddr}"})
     public String placeMain(@PathVariable(required = false) String simAddr, Model model, Principal principal) {
@@ -56,13 +58,18 @@ public class PlaceController {
         }
 
         if(principal != null) {
-            museums = musArtService.getUserPlaceMainMusArt("museum", principal.getName());
-            arts = musArtService.getUserPlaceMainMusArt("art", principal.getName());
+            String email = customOAuth2UserService.getSocialEmail(principal);
+            if(email == null) {
+                email = principal.getName();
+            }
+
+            museums = musArtService.getUserPlaceMainMusArt("museum", email);
+            arts = musArtService.getUserPlaceMainMusArt("art", email);
             festivals = itemService.getCategoryItem("festival");
 
             if(simAddr != null) {
-                museums = musArtService.getUserAddrMusArt(simAddr, "museum", principal.getName());
-                arts = musArtService.getUserAddrMusArt(simAddr, "art", principal.getName());
+                museums = musArtService.getUserAddrMusArt(simAddr, "museum", email);
+                arts = musArtService.getUserAddrMusArt(simAddr, "art", email);
                 festivals = itemService.getPlaceFest(simAddr, "festival");
             }
             for(MusArtMainDto art : arts){
@@ -109,9 +116,14 @@ public class PlaceController {
                 .orElseThrow(EntityNotFoundException::new);
         List<UserLikeItem> likePlaces = userLikeItemService.getLikePlaces(placeId);
         int likeCount = likePlaces.size();
+        List<Comment> comments = commentService.getPlaceComments(placeId);
 
         if(principal != null) {
-            String email = principal.getName();
+            String email = customOAuth2UserService.getSocialEmail(principal);
+            if(email == null) {
+                email = principal.getName();
+            }
+
             if (userLikeItemService.findLikePlace(email, placeId)) {
                 model.addAttribute("isLikePlace", "afterLike");
             } else {
@@ -124,13 +136,10 @@ public class PlaceController {
             model.addAttribute("userEmail", "");
         }
 
-        List<Comment> comments = commentService.getPlaceComments(placeId);
-
         model.addAttribute("likePlaces", likePlaces);
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("musArt", musArt);
         model.addAttribute("comments", comments);
-
 
         return "place/placeDtl";
     }
@@ -139,7 +148,11 @@ public class PlaceController {
     public @ResponseBody ResponseEntity addLike(@RequestBody LikeDto likeDto, Principal principal) {
 
         if(principal != null) {
-            userLikeItemService.addLikePlace(principal.getName(), likeDto.getItemId());
+            String email = customOAuth2UserService.getSocialEmail(principal);
+            if(email == null) {
+                email = principal.getName();
+            }
+            userLikeItemService.addLikePlace(email, likeDto.getItemId());
             return new ResponseEntity<Long>(likeDto.getItemId(), HttpStatus.OK);
         }
         else {

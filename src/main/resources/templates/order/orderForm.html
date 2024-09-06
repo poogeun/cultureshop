@@ -65,6 +65,7 @@
                 count : $('#count').val(),
                 viewDay : $('#date').val(),
                 orderPrice : orderPrice,
+                orderTel: $('#orderTel').val(),
                 address: $('#address').val(),
                 dtlAddress: $('#detailAddress').val(),
                 delReq: $('#delReq').val(),
@@ -227,7 +228,7 @@
                         </div>
                         <div class="col-sm-6">
                             <label for="orderTel" class="form-label">휴대전화</label>
-                            <input class="form-control" type="text" th:value="${member.tel}" id="orderTel" readonly>
+                            <input class="form-control" type="text" th:value="${member.tel}" id="orderTel">
                         </div>
                         <div class="col-sm-6 mb-3">
                             <label for="address" class="form-label">주소</label>

@@ -25,6 +25,8 @@ public class LikeOrderFormDto {
 
     private int orderPrice;
 
+    private String orderTel;
+
     private String address;
 
     private String dtlAddress;

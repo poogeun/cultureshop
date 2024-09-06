@@ -113,6 +113,7 @@
             else {
                 orderPrice = parseInt($('#delCharge').text());
             }
+            var orderTel = $('#orderTel').val();
             var address = $('#address').val();
             var dtlAddress = $('#detailAddress').val();
             var delReq = $('#delReq').val();
@@ -131,6 +132,7 @@
                     count : count,
                     viewDay : viewDay,
                     orderPrice : orderPrice,
+                    orderTel: orderTel,
                     address : address,
                     dtlAddress : dtlAddress,
                     delReq : delReq,
@@ -295,7 +297,7 @@
                         </div>
                         <div class="col-sm-6">
                             <label for="orderTel" class="form-label">휴대전화</label>
-                            <input class="form-control" type="text" th:value="${member.tel}" id="orderTel" readonly>
+                            <input class="form-control" type="text" th:value="${member.tel}" id="orderTel">
                         </div>
                         <div class="col-sm-6 mb-3">
                             <label for="address" class="form-label">주소</label>

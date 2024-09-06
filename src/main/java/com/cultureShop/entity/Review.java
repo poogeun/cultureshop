@@ -9,7 +9,6 @@ import lombok.ToString;
 @Table(name = "review")
 @Getter
 @Setter
-@ToString
 public class Review extends BaseEntity{
 
     @Id

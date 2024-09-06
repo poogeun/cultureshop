@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -26,15 +27,11 @@ public class OrderItemService {
     private final ItemRepository itemRepository;
 
     public OrderItem getOrderItem(Long itemId, String email) {
-        Member member = memberRepository.findByEmail(email);
-        List<Order> orders = orderRepository.findByMemberId(member.getId());
+        List<OrderItem> orderItems = orderItemRepository.findByItemIdAndCreatedBy(itemId, email);
 
-        for(Order order : orders) {
-            List<OrderItem> orderItems = order.getOrderItems();
-            for(OrderItem orderItem : orderItems) {
-                if(orderItem.getItem().getId() == itemId) {
-                    return orderItem;
-                }
+        for(OrderItem orderItem : orderItems) {
+            if(Objects.equals(orderItem.getItem().getId(), itemId)) {
+                return orderItem;
             }
         }
         return null;

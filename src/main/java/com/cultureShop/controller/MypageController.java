@@ -47,10 +47,9 @@ public class MypageController {
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page")Optional<Integer> page, Principal principal, Model model) {
 
-        String email = principal.getName();
-        String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
-        if(!Pattern.matches(emailPattern, principal.getName())) {
-            email = customOAuth2UserService.getSocialEmail(principal);
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
         }
 
         Member member = memberRepository.findByEmail(email);
@@ -75,13 +74,18 @@ public class MypageController {
     @GetMapping(value = "/likes")
     public String likeList(Model model, Principal principal) {
 
-        Member member = memberRepository.findByEmail(principal.getName());
-        int likeCount = userLikeItemService.likeCount(principal.getName());
-        Long orderCount = orderRepository.countOrder(principal.getName());
-        int reviewCount = reviewService.getMemReviewCount(principal.getName());
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
 
-        List<LikeItemDto> likeItems = userLikeItemService.getLikeList(principal.getName());
-        List<MusArtMainDto> likePlaces = userLikeItemService.getLikePlaceList(principal.getName());
+        Member member = memberRepository.findByEmail(email);
+        int likeCount = userLikeItemService.likeCount(email);
+        Long orderCount = orderRepository.countOrder(email);
+        int reviewCount = reviewService.getMemReviewCount(email);
+
+        List<LikeItemDto> likeItems = userLikeItemService.getLikeList(email);
+        List<MusArtMainDto> likePlaces = userLikeItemService.getLikePlaceList(email);
 
         model.addAttribute("member", member);
         model.addAttribute("likeCount", likeCount);
@@ -96,12 +100,17 @@ public class MypageController {
     @GetMapping(value = "/reviews")
     public String reviewList(Model model, Principal principal) {
 
-        Member member = memberRepository.findByEmail(principal.getName());
-        int likeCount = userLikeItemService.likeCount(principal.getName());
-        Long orderCount = orderRepository.countOrder(principal.getName());
-        int reviewCount = reviewService.getMemReviewCount(principal.getName());
-        List<ReviewItemDto> reviews = reviewService.getMemReview(principal.getName());
-        List<MainItemDto> noRevItems = orderItemService.getNoRevOrderItems(principal.getName());
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+
+        Member member = memberRepository.findByEmail(email);
+        int likeCount = userLikeItemService.likeCount(email);
+        Long orderCount = orderRepository.countOrder(email);
+        int reviewCount = reviewService.getMemReviewCount(email);
+        List<ReviewItemDto> reviews = reviewService.getMemReview(email);
+        List<MainItemDto> noRevItems = orderItemService.getNoRevOrderItems(email);
 
         model.addAttribute("member", member);
         model.addAttribute("likeCount", likeCount);

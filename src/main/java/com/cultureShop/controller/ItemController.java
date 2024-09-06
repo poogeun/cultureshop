@@ -1,5 +1,6 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.config.CustomOAuth2UserService;
 import com.cultureShop.dto.ItemFormDto;
 import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.dto.LikeDto;
@@ -40,6 +41,7 @@ public class ItemController {
     private final MemberRepository memberRepository;
     private final ReviewService reviewService;
     private final OrderItemService orderItemService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model, HttpServletRequest request){
@@ -111,7 +113,6 @@ public class ItemController {
     @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page,
                              Model model) {
-        System.out.println("itemSearchDto==============" + itemSearchDto.toString());
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
 
@@ -125,21 +126,21 @@ public class ItemController {
     @GetMapping(value = "/item/{itemId}")
     public String itemDtl(@PathVariable("itemId")Long itemId, Model model, Principal principal){
 
-        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
-        LocalDate today = LocalDate.now();
-        List<UserLikeItem> likeItems = userLikeItemService.getLikeItems(itemId);
-        int likeCount = likeItems.size();
-
         if(principal != null) {
-            if (userLikeItemService.findLikeItem(principal.getName(), itemId)) {
+            String email = customOAuth2UserService.getSocialEmail(principal);
+            if(email == null) {
+                email = principal.getName();
+            }
+
+            if (userLikeItemService.findLikeItem(email, itemId)) {
                 model.addAttribute("isLikeItem", "afterLike");
             }
             else {
                 model.addAttribute("isLikeItem", "beforeLike");
             }
 
-            OrderItem orderItem = orderItemService.getOrderItem(itemId, principal.getName());
-            Review memReview = reviewService.getMemItemReview(itemId, principal.getName());
+            OrderItem orderItem = orderItemService.getOrderItem(itemId, email);
+            Review memReview = reviewService.getMemItemReview(itemId, email);
             model.addAttribute("orderItem", orderItem);
             model.addAttribute("memReview", memReview);
         }
@@ -148,6 +149,10 @@ public class ItemController {
             model.addAttribute("memReview", null);
         }
 
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        LocalDate today = LocalDate.now();
+        List<UserLikeItem> likeItems = userLikeItemService.getLikeItems(itemId);
+        int likeCount = likeItems.size();
         List<Review> reviews = reviewService.getItemReview(itemId);
         int reviewCount = reviews.size();
 
@@ -165,7 +170,11 @@ public class ItemController {
     public @ResponseBody ResponseEntity addLike(@RequestBody LikeDto likeDto, Principal principal) {
 
         if(principal != null) {
-            userLikeItemService.addLike(principal.getName(), likeDto.getItemId());
+            String email = customOAuth2UserService.getSocialEmail(principal);
+            if(email == null) {
+                email = principal.getName();
+            }
+            userLikeItemService.addLike(email, likeDto.getItemId());
             return new ResponseEntity<Long>(likeDto.getItemId(), HttpStatus.OK);
         }
         else {

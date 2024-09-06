@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@ToString
 public class OrderItem extends BaseEntity {
 
     @Id

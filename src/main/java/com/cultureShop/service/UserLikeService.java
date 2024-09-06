@@ -20,9 +20,6 @@ import java.util.List;
 @Transactional
 public class UserLikeService {
 
-    private final ItemRepository itemRepository;
-    private final MemberRepository memberRepository;
-    private final UserLikeRepository userLikeRepository;
     private final UserLikeItemRepository userLikeItemRepository;
     private final OrderService orderService;
 
@@ -35,6 +32,7 @@ public class UserLikeService {
             orderFormDto.setCount(likeOrderDto.getCount());
             orderFormDto.setViewDay(likeOrderDto.getViewDay());
             orderFormDto.setOrderPrice(likeOrderDto.getOrderPrice());
+            orderFormDto.setOrderTel(likeOrderDto.getOrderTel());
             orderFormDto.setAddress(likeOrderDto.getAddress());
             orderFormDto.setDtlAddress(likeOrderDto.getDtlAddress());
             orderFormDto.setDelReq(likeOrderDto.getDelReq());

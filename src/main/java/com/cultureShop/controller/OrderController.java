@@ -1,5 +1,6 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.config.CustomOAuth2UserService;
 import com.cultureShop.dto.*;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.Member;
@@ -41,10 +42,16 @@ public class OrderController {
     private final UserLikeItemService userLikeItemService;
     private final UserLikeService userLikeService;
     private final OrderRepository orderRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @GetMapping(value = "/order")
     public String order(@RequestParam("itemId")Long itemId, @RequestParam("count")int count,
                         @RequestParam(value = "date", required = false) LocalDate date, Principal principal, Model model) {
+
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
 
         if(date == null) {
             ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
@@ -57,7 +64,7 @@ public class OrderController {
             model.addAttribute("errorMessage", "관람일을 선택해주세요.");
             return "item/itemDtl";
         }
-        Member member = memberRepository.findByEmail(principal.getName());
+        Member member = memberRepository.findByEmail(email);
         MainItemDto item = itemRepository.findMainItemDto(itemId);
 
         model.addAttribute("orderFormDto", new OrderFormDto());
@@ -71,6 +78,10 @@ public class OrderController {
     @PostMapping(value = "/order")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderFormDto orderFormDto,
                                               BindingResult bindingResult, Principal principal) {
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
 
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -81,7 +92,6 @@ public class OrderController {
             return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        String email = principal.getName();
         String orderUid;
         try {
             Long orderId = orderService.order(orderFormDto, email);
@@ -98,7 +108,12 @@ public class OrderController {
     @GetMapping(value = "/order/like")
     public String orderLike(@RequestParam("likeChkBox")List<Long> likeItemIds, Principal principal, Model model){
 
-        Member member = memberRepository.findByEmail(principal.getName());
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+
+        Member member = memberRepository.findByEmail(email);
         List<LikeItemDto> likeItems = userLikeItemService.getOrderLike(likeItemIds);
         LocalDate today = LocalDate.now();
 
@@ -114,8 +129,12 @@ public class OrderController {
     @PostMapping(value = "/order/like")
     public @ResponseBody ResponseEntity orderLikeItem(@RequestBody LikeOrderFormDto likeOrderFormDto,
                                                       Principal principal) {
-        List<LikeOrderFormDto> likeOrderFormDtoList = likeOrderFormDto.getLikeOrderFormDtoList();
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
 
+        List<LikeOrderFormDto> likeOrderFormDtoList = likeOrderFormDto.getLikeOrderFormDtoList();
         for(LikeOrderFormDto likeOrderForm : likeOrderFormDtoList) {
             if(likeOrderForm.getViewDay() == null) {
                 return new ResponseEntity<String>("관람일을 선택해주세요.", HttpStatus.FORBIDDEN);
@@ -127,7 +146,7 @@ public class OrderController {
 
         String orderUid;
         try {
-            Long orderId = userLikeService.orderLikeItem(likeOrderFormDtoList, principal.getName());
+            Long orderId = userLikeService.orderLikeItem(likeOrderFormDtoList, email);
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(EntityNotFoundException::new);
             orderUid = order.getOrderUid();
@@ -146,7 +165,12 @@ public class OrderController {
     @PostMapping(value = "/order/{orderId}/cancel")
     public @ResponseBody ResponseEntity cancelOrder(@PathVariable Long orderId, Principal principal) {
 
-        if(!orderService.validateOrder(orderId, principal.getName())) {
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+
+        if(!orderService.validateOrder(orderId, email)) {
             return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
         orderService.cancelOrder(orderId);
