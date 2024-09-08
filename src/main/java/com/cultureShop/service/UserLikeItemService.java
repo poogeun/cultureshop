@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -42,7 +43,7 @@ public class UserLikeItemService {
                 if (likeItems != null) {
                     for (UserLikeItem likeItem : likeItems) {
                         if(likeItem.getItem() != null) {
-                            if (likeItem.getItem().getId() == itemId) {
+                            if (Objects.equals(likeItem.getItem().getId(), itemId)) {
                                 return true;
                             }
                         }

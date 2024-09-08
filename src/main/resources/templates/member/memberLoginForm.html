@@ -8,44 +8,56 @@
         .fieldError{
             color: #bd2130;
         }
+        .emailLogin {
+            width: 400px;
+            margin: 100px auto;
+        }
+        .emailLogin h3 {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 50px;
+        }
         .memInWrap {
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            gap: 20px;
+        }
+        .memInWrap .input {
+            width: 400px;
         }
         .memInWrap label {
-            color: #808080;
+            font-size: 14px;
             margin-bottom: 0;
         }
         .loginBtn {
             text-align: center;
             margin-top: 50px;
+            gap: 15px;
         }
     </style>
 </th:block>
 
-<div layout:fragment="content" style="margin:100px 0 650px">
+<div layout:fragment="content">
     <form action="/members/login" role="form" method="post">
-        <div class="memInWrap">
-            <div class="col-sm-4 mb-2">
-                <label th:for="email" class="form-label">이메일 주소</label>
-                <input type="email" name="email" class="form-control" placeholder="이메일을 입력해주세요.">
+        <div class="emailLogin">
+            <h3>이메일 로그인</h3>
+            <div class="memInWrap">
+                <div class="input">
+                    <label th:for="email" class="form-label">이메일 주소</label>
+                    <input type="email" name="email" class="form-control" placeholder="이메일을 입력해주세요.">
+                </div>
+                <div class="input">
+                    <label th:for="password" class="form-label">비밀번호</label>
+                    <input type="password" name="password" class="form-control" placeholder="비밀번호 입력">
+                </div>
+                <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
             </div>
-            <div class="col-sm-4">
-                <label th:for="password" class="form-label">비밀번호</label>
-                <input type="password" name="password" class="form-control" placeholder="비밀번호 입력">
+
+            <div class="loginBtn">
+                <button type="submit" class="btn btn-primary" style="width: 400px; margin-bottom: 10px;">로그인</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="location.href='/members/new'" style="width: 400px">회원가입</button>
             </div>
-            <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
         </div>
-
-        <div class="loginBtn">
-            <button class="btn btn-primary">로그인</button>
-        </div>
-
-        <a href="/oauth2/authorization/google">구글 아이디로 로그인</a>
-        <a href="/oauth2/authorization/kakao">카톡 아이디로 로그인</a>
-        <a href="/oauth2/authorization/naver">네이버 아이디로 로그인</a>
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>

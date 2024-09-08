@@ -18,14 +18,27 @@ public class AuditorAwareImpl implements AuditorAware<String> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication+"===========auth");
         String userId = "";
-        String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
         if(authentication != null) {
             userId = authentication.getName();
-            if(!Pattern.matches(emailPattern, userId)) {
-                String[] userIdStr = userId.split("email=");
-                String email = userIdStr[1];
-                String[] emailStr = email.split(",");
-                userId = emailStr[0];
+            System.out.println("userId" +userId);
+            if(authentication instanceof OAuth2AuthenticationToken) {
+                OAuth2AuthenticationToken auth = (OAuth2AuthenticationToken) authentication;
+                String social = auth.getAuthorizedClientRegistrationId();
+                if(social.equals("naver")) {
+                    String[] userIdStr = userId.split("email=");
+                    String email = userIdStr[1];
+                    String[] emailStr = email.split(",");
+                    userId = emailStr[0];
+                }
+                else if(social.equals("kakao")) {
+                    Map<String, Object> userAttributes = auth.getPrincipal().getAttributes();
+                    Map<String, Object> kakaoAccount = (Map<String, Object>) userAttributes.get("kakao_account");
+                    userId = (String) kakaoAccount.get("email");
+                }
+                else if(social.equals("google")) {
+                    Map<String, Object> userAttributes = auth.getPrincipal().getAttributes();
+                    userId = (String) userAttributes.get("email");
+                }
             }
         }
         return Optional.of(userId);

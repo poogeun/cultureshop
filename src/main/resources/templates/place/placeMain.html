@@ -16,11 +16,23 @@
             font-size: 20px;
             font-weight: 700;
         }
+        .placeMainMap {
+            background-color: #e1eda8;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .desc {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 700;
+        }
         #map {
-            width: 700px;
+            width: 900px;
             height: 400px;
             margin: 0 auto;
-            border-radius: 8px;
+            border-radius: 15px;
         }
         .placeWrap {
             position: relative;
@@ -101,14 +113,15 @@
                 alert(errorMessage);
             }
 
+            var placeTab = $('.inner #placeTab');
+            placeTab.css('font-weight', '700');
+            placeTab.css('border-bottom', '2px solid black');
+
             if($('.addrField').text() == '주소 검색') {
                 basicMap();
             } else {
                 addrMap();
             }
-
-            console.log(places[1]);
-            console.log(places[9]);
 
         });
 
@@ -269,12 +282,14 @@
 <div layout:fragment="content">
     <div class="container">
         <button type="button" class="searchAddr" onclick="location.href='/place/address'">
+            <span class="material-symbols-outlined">my_location</span>
             <span th:if="${simAddr} == null" class="addrField">주소 검색</span>
             <span th:unless="${simAddr} == null" th:text="${simAddr}" class="addrField"></span>
             <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
 
         <section class="placeMainMap">
+            <div class="desc"><span class="material-symbols-outlined">map</span> 내 주변 박물관/미술관</div>
             <div id="map"></div>
         </section>
 

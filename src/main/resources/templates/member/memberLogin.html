@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+    <style>
+        .login {
+            margin: 200px 0 300px;
+        }
+        .login h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            width: 400px;
+            margin: 0 auto;
+            gap: 8px;
+            border-top: 2px solid black;
+            padding: 40px 0;
+            border-bottom: 2px solid black;
+        }
+        .buttons button {
+            background: none;
+            border: none;
+        }
+        .buttons button img {
+            width: 400px;
+            height: 52px;
+        }
+        #emailBtn {
+            border: 1px solid black;
+            border-radius: 4px;
+            height: 52px;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="login">
+            <h3>로그인</h3>
+            <div class="buttons">
+                <button type="button" onclick="location.href='/oauth2/authorization/google'">
+                    <img th:src="@{/img/google_button.png}" alt="구글 로그인">
+                </button>
+                <button type="button" onclick="location.href='/oauth2/authorization/kakao'">
+                    <img th:src="@{/img/kakao_button.png}" alt="카카오 로그인">
+                </button>
+                <button type="button" onclick="location.href='/oauth2/authorization/naver'">
+                    <img th:src="@{/img/naver_button.png}" alt="네이버 로그인">
+                </button>
+                <button type="button" onclick="location.href='/members/email-login'" id="emailBtn">
+                    <span class="material-symbols-outlined">alternate_email</span>
+                    <span style="font-weight: 600">이메일 로그인</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

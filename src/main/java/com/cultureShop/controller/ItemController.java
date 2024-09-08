@@ -223,10 +223,13 @@ public class ItemController {
     public @ResponseBody ResponseEntity infinityScroll(@PathVariable String category,
                                                        @RequestParam("page")int page,
                                                        @RequestParam("limit")int limit) {
+        System.out.println(page);
+        System.out.println(limit);
         Pageable pageable = PageRequest.of(page, limit);
         try {
             Page<MainItemDto> items = itemService.getAllCategoryItem(category, pageable);
             List<MainItemDto> itemList = items.getContent();
+            System.out.println("itemList=========="+ itemList);
 
             return new ResponseEntity<List<MainItemDto>>(itemList, HttpStatus.OK);
         } catch (Exception e) {

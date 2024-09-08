@@ -3,15 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:fragment="header">
     <header>
-        <div class="inner">
-
-            <a href="/" class="logo">
-                <!--
-                <img th:src="@{/image/logo.png}" alt="CULTURESHOP">
-                -->
-                logo
-            </a>
-
+        <div class="headerTop">
             <div class="sub-menu">
                 <ul class="menu">
                     <li sec:authorize="isAnonymous()">
@@ -31,6 +23,11 @@
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class="inner">
+            <a href="/" class="logo">
+                <span>여기컬쳐</span>
+            </a>
 
             <ul class="nav nav-underline main-menu">
                 <li class="nav-item item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
@@ -39,16 +36,16 @@
                 <li class="nav-item item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
                     <a class="nav-link item_name" href="/admin/items">상품 관리</a>
                 </li>
-                <li class="nav-item item">
+                <li class="nav-item item" id="exhiTab">
                     <a class="nav-link item_name" href="/item/category/exhibition">전시회</a>
                 </li>
-                <li class="nav-item item">
+                <li class="nav-item item" id="museTab">
                     <a class="nav-link item_name" href="/item/category/museum">뮤지엄</a>
                 </li>
-                <li class="nav-item item">
+                <li class="nav-item item" id="festTab">
                     <a class="nav-link item_name" href="/item/category/festival">행사/축제</a>
                 </li>
-                <li class="nav-item item">
+                <li class="nav-item item" id="placeTab">
                     <a class="nav-link item_name" href="/place">내 주변</a>
                 </li>
             </ul>

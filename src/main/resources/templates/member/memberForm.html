@@ -8,19 +8,31 @@
         .fieldError{
             color: #bd2130;
         }
+        h3 {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 50px;
+        }
         .memFormWrap {
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            width: 400px;
+            margin: 0 auto;
+        }
+        .memFormWrap .input {
+            width: 400px;
+            margin-bottom: 10px;
         }
         .memFormWrap label {
-            color: #808080;
+            font-size: 14px;
             margin-bottom: 0;
         }
         .signBtn {
             text-align: center;
             margin-top: 50px;
+        }
+        .signBtn button {
+            width: 400px;
         }
     </style>
 </th:block>
@@ -64,28 +76,29 @@
 
 <div layout:fragment="content" style="margin:100px 0 200px">
     <form action="/members/new" role="form" method="post" th:object="${memberFormDto}">
+        <h3>회원가입</h3>
         <div class="memFormWrap">
-            <div class="col-sm-4 mb-3">
+            <div class="input">
                 <label th:for="name" class="form-label">이름</label>
                 <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요.">
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect date</p>
             </div>
-            <div class="col-sm-4 mb-3">
+            <div class="input">
                 <label th:for="email" class="form-label">이메일 주소</label>
                 <input type="text" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요.">
                 <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect date</p>
             </div>
-            <div class="col-sm-4 mb-3">
+            <div class="input">
                 <label th:for="password" class="form-label">비밀번호</label>
                 <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력">
                 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect date</p>
             </div>
-            <div class="col-sm-4 mb-3">
+            <div class="input">
                 <label th:for="passwordCk" class="form-label">비밀번호 확인</label>
                 <input type="password" th:field="*{passwordCk}" class="form-control" placeholder="비밀번호 확인">
                 <p th:if="${#fields.hasErrors('passwordCk')}" th:errors="*{passwordCk}" class="fieldError">Incorrect date</p>
             </div>
-            <div class="col-sm-4 mb-3">
+            <div class="input">
                 <label th:for="address" class="form-label">주소</label>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="우편번호" id="postcode">
@@ -96,7 +109,7 @@
                 <input type="text" class="form-control" th:field="*{dtlAddress}" id="detailAddress" placeholder="상세주소">
                 <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect date</p>
             </div>
-            <div class="col-sm-4 mb-3">
+            <div class="input">
                 <label th:for="tel" class="form-label">전화번호</label>
                 <input type="text" th:field="*{tel}" class="form-control" placeholder="전화번호를 입력해주세요.">
                 <p th:if="${#fields.hasErrors('tel')}" th:errors="*{tel}" class="fieldError">Incorrect date</p>

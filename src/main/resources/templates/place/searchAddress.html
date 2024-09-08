@@ -44,6 +44,11 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        $(document).ready(function(){
+            var placeTab = $('.inner #placeTab');
+            placeTab.css('font-weight', '700');
+            placeTab.css('border-bottom', '2px solid black');
+        });
 
         function findAddr() {
             var token = $("meta[name='_csrf']").attr("content");

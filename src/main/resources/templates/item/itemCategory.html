@@ -25,6 +25,8 @@
 
             changeSortButton();
 
+            categoryTab();
+
             infinityScroll();
 
         });
@@ -42,6 +44,25 @@
             }
         }
 
+        function categoryTab() {
+            var category = $('input[name=category]').val();
+            var exhiTab = $('.inner #exhiTab');
+            var museTab = $('.inner #museTab');
+            var festTab = $('.inner #festTab');
+            if(category === 'exhibition') {
+                exhiTab.css('font-weight', '700');
+                exhiTab.css('border-bottom', '2px solid black');
+            }
+            else if(category === 'museum') {
+                museTab.css('font-weight', '700');
+                museTab.css('border-bottom', '2px solid black');
+            }
+            else {
+                festTab.css('font-weight', '700');
+                festTab.css('border-bottom', '2px solid black');
+            }
+        }
+
         function infinityScroll() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -53,6 +74,7 @@
             var category = $('input[name=category]').val();
 
             function getData(limit) {
+                console.log('getData 안');
 
                 $.ajax({
                     type : "POST",
@@ -101,6 +123,7 @@
             }
 
             $(document).scroll(function(e) {
+                console.log('스크롤 감지');
                 var currentScroll = $(this).scrollTop();
                 var documentHeight = $(document).height();
 
@@ -142,7 +165,7 @@
         </div>
         <div class="cateBody">
             <div class="container text-center" style="margin-top: 50px">
-                <div class="row row-cols-4 itemCard">
+                <div class="row row-cols-4 cateItemCard">
                     <th:block th:each="item : ${items}">
                         <div class="col cateItem">
                             <a th:href="'/item/' + ${item.id}">

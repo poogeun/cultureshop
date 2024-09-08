@@ -68,7 +68,12 @@ public class MemberController {
     }
 
     @GetMapping(value = "/login")
-    public String loginMember() {
+    public String login() {
+        return "/member/memberLogin";
+    }
+
+    @GetMapping(value = "/email-login")
+    public String emailLogin() {
         return "/member/memberLoginForm";
     }
 
