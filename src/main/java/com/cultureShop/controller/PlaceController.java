@@ -123,6 +123,7 @@ public class PlaceController {
             if(email == null) {
                 email = principal.getName();
             }
+            model.addAttribute("userEmail", email);
 
             if (userLikeItemService.findLikePlace(email, placeId)) {
                 model.addAttribute("isLikePlace", "afterLike");

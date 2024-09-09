@@ -14,4 +14,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     List<OrderItem> findByCreatedByOrderByRegTimeDesc(String email);
 
     List<OrderItem> findByItemIdAndCreatedBy(Long itemId, String createdBy);
+
+    OrderItem findByReviewId(Long reviewId);
 }

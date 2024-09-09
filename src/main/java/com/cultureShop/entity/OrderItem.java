@@ -57,4 +57,8 @@ public class OrderItem extends BaseEntity {
         this.review = review;
     }
 
+    public void deleteReview() {
+        this.review = null;
+    }
+
 }

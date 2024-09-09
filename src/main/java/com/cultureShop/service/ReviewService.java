@@ -86,6 +86,8 @@ public class ReviewService {
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(EntityNotFoundException::new);
+        OrderItem orderItem = orderItemRepository.findByReviewId(review.getId());
+        orderItem.deleteReview();
         reviewRepository.delete(review);
     }
 
