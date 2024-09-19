@@ -9,10 +9,7 @@ import com.cultureShop.entity.UserLikeItem;
 import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.repository.OrderRepository;
-import com.cultureShop.service.ItemService;
-import com.cultureShop.service.OrderService;
-import com.cultureShop.service.UserLikeItemService;
-import com.cultureShop.service.UserLikeService;
+import com.cultureShop.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -43,6 +40,7 @@ public class OrderController {
     private final UserLikeService userLikeService;
     private final OrderRepository orderRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final OrderItemService orderItemService;
 
     @GetMapping(value = "/order")
     public String order(@RequestParam("itemId")Long itemId, @RequestParam("count")int count,
@@ -157,8 +155,20 @@ public class OrderController {
         return new ResponseEntity<String>(orderUid, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/order/success")
-    public String orderSuccess() {
+    @GetMapping(value = "/order/success/{orderId}")
+    public String orderSuccess(@PathVariable Long orderId, Model model, Principal principal) {
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+        Member member = memberRepository.findByEmail(email);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+        List<OrderItemDto> orderItems = orderItemService.getOrderSuccess(orderId);
+
+        model.addAttribute("member", member);
+        model.addAttribute("order", order);
+        model.addAttribute("orderItems", orderItems);
         return "order/orderSuccess";
     }
 

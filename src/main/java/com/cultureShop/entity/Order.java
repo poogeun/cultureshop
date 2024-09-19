@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class Order extends BaseEntity{
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private String orderUid; // 주문 번호
-    private LocalDateTime orderDate;
+    private LocalDate orderDate;
     private int orderPrice;
     private String orderTel;
     private String orderAddress;
@@ -61,7 +62,7 @@ public class Order extends BaseEntity{
             order.addOrderItem(orderItem);
         }
         order.setOrderUid(UUID.randomUUID().toString());
-        order.setOrderDate(LocalDateTime.now());
+        order.setOrderDate(LocalDate.now());
         order.setOrderPrice(orderFormDto.getOrderPrice());
         order.setOrderTel(orderFormDto.getOrderTel());
         order.setOrderAddress(orderFormDto.getAddress());

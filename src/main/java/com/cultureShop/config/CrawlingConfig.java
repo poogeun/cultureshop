@@ -1,9 +1,14 @@
 package com.cultureShop.config;
 
 import com.cultureShop.API.MusArtExplorer;
+import com.cultureShop.constant.ItemStartStatus;
 import com.cultureShop.crawling.exhibition.ExhiCrawlingService;
+import com.cultureShop.crawling.exhibition.ExhiDataDto;
 import com.cultureShop.crawling.festival.FestCrawlingService;
+import com.cultureShop.crawling.festival.FestDataDto;
 import com.cultureShop.dto.ApiDto.MusArtApiDto;
+import com.cultureShop.entity.Item;
+import com.cultureShop.entity.ItemImg;
 import com.cultureShop.entity.MusArt;
 import com.cultureShop.repository.ItemImgRepository;
 import com.cultureShop.repository.ItemRepository;
@@ -40,7 +45,7 @@ public class CrawlingConfig {
     @Autowired
     MusArtExplorer apiExplorer;
 
-    /*
+/*
     @Autowired
     public void saveCrawFestItem() {
         List<FestDataDto> festDatas = festCrawlingService.getFestDatas();
@@ -98,7 +103,6 @@ public class CrawlingConfig {
     }
 
 
-
     @Autowired
     public void saveMusArtPlace() {
         List<MusArtApiDto> maDatas = apiExplorer.getMusArtApiDatas();
@@ -117,6 +121,6 @@ public class CrawlingConfig {
         }
     }
 
-     */
+ */
 
 }

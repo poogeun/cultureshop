@@ -185,14 +185,13 @@ public class ItemController {
     @GetMapping(value = "/item/category/{category}")
     public String category(@PathVariable("category") String category,
                            @RequestParam(value = "sort", required = false) String sort,
-                           Model model) {
+                           Model model, Principal principal) {
         Pageable pageable = PageRequest.of(0, 20);
 
         Long count;
         Page<MainItemDto> items;
         if(category.equals("exhibition")){
             items = itemService.getAllCategoryItem(category, pageable);
-
         }
         else if(category.equals("museum")){
             items = itemService.getAllCategoryItem(category, pageable);
@@ -200,7 +199,6 @@ public class ItemController {
         else {
             items = itemService.getAllCategoryItem(category, pageable);
         }
-        count = items.getTotalElements();
 
         if(sort != null) {
             if(sort.equals("endDay")) {
@@ -210,6 +208,33 @@ public class ItemController {
                 items = itemService.getReviewCategoryItem(category, pageable);
             }
         }
+
+        if(principal != null) {
+            String email = customOAuth2UserService.getSocialEmail(principal);
+            if(email == null) {
+                email = principal.getName();
+            }
+
+            if(category.equals("exhibition")){
+                items = itemService.getUserAllCategoryItem(category, email, pageable);
+            }
+            else if(category.equals("museum")){
+                items = itemService.getUserAllCategoryItem(category, email, pageable);
+            }
+            else {
+                items = itemService.getUserAllCategoryItem(category, email, pageable);
+            }
+
+            if(sort != null) {
+                if(sort.equals("endDay")) {
+                    items = itemService.getUserEndDayCategoryItem(category, email, pageable);
+                }
+                else if(sort.equals("review")) {
+                    items = itemService.getUserReviewCategoryItem(category, email, pageable);
+                }
+            }
+        }
+        count = items.getTotalElements();
 
         model.addAttribute("items", items);
         model.addAttribute("category", category);

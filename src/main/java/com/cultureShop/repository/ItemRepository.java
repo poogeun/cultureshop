@@ -30,9 +30,14 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
     List<Item> findByAddressAndCategory(String address, String category);
 
     @Query("select new com.cultureShop.dto.MainItemDto(i.id, i.itemName, i.place, i.address, i.price, i.startDay, i.endDay, iti.imgUrl) " +
-            "from Item i, ItemImg iti " +
+            "from ItemImg iti, Item i " +
             "where iti.item.id = :itemId and i.id = :itemId and iti.repImgYn = 'Y'")
     MainItemDto findMainItemDto(Long itemId);
+
+    @Query("select new com.cultureShop.dto.MainItemDto(i.id, i.itemName, i.place, i.address, i.price, i.startDay, i.endDay, iti.imgUrl, uli.id) " +
+            "from ItemImg iti, Item i left join UserLikeItem uli on i.id = uli.item.id and uli.userLike.id = :userLikeId " +
+            "where iti.item.id = :itemId and i.id = :itemId and iti.repImgYn = 'Y'")
+    MainItemDto findUserMainItemDto(Long itemId, Long userLikeId);
 
     @Query("select i, COUNT(r) as reviewCount " +
             "from Item i left join i.reviews r " +

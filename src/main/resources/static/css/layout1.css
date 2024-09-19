@@ -19,7 +19,7 @@ body{
     margin-right: 200px;
 }
 a {
-    color: black !important;
+    color: black;
 }
 .placeCard h5 div {
     overflow: hidden;

@@ -142,7 +142,11 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>주문상세보기</td>
+                            <td>
+                                <a role="button" class="btn btn-outline-secondary" th:href="@{'/order/success/' + ${order.orderId}}">
+                                    주문상세보기
+                                </a>
+                            </td>
                             <td style="border-right: none">
                                 <th:block th:if="${order.orderStatus == T(com.cultureShop.constant.OrderStatus).ORDER}">
                                     <button type="button" class="btn btn-outline-danger" th:value="${order.orderId}"

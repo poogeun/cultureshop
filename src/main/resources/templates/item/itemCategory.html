@@ -10,8 +10,17 @@
 
 <th:block layout:fragment="css">
     <style>
-
-
+        .cateImgWrap {
+            position: relative;
+        }
+        .likeBtn {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            color: #fff;
+            width: 50px;
+            height: 50px;
+        }
     </style>
 </th:block>
 
@@ -140,6 +149,41 @@
             });
         }
 
+        function addLike(event, itemId) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/like";
+            var paramData = {
+                itemId : itemId
+            }
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url : url,
+                type : "POST",
+                contentType : "application/json",
+                data : param,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function(result, status){
+                    alert('찜추가 성공');
+
+                },
+                error : function(jqXHR, status, error){
+                    alert('찜 기능은 로그인 후 이용 가능합니다.');
+                    location.href = '/members/login';
+                }
+            });
+        }
+
     </script>
 </th:block>
 
@@ -171,6 +215,16 @@
                             <a th:href="'/item/' + ${item.id}">
                                 <div class="cateImgWrap">
                                     <img th:src="${item.imgUrl}" th:alt="${item.itemName}">
+                                    <th:block th:if="${item.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${item.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined">favorite</span>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:unless="${item.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${item.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                        </button>
+                                    </th:block>
                                 </div>
                                 <div class="cateDetail">
                                     <span th:text="${item.itemName}" class="detail_title" ></span>

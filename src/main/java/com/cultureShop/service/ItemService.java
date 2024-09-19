@@ -27,6 +27,8 @@ public class ItemService {
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
     private final FestCrawlingService festCrawlingService;
+    private final MemberRepository memberRepository;
+    private final UserLikeRepository userLikeRepository;
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
 
@@ -122,6 +124,26 @@ public class ItemService {
         return itemDetails;
     }
 
+    public List<MainItemDto> getUserAddrItem(String address, String email) {
+        List<Item> addressItems = itemRepository.findByAddress(address);
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        if(userLike == null) {
+            userLike = UserLike.createLike(member);
+            userLikeRepository.save(userLike);
+        }
+        List<MainItemDto> itemDetails = new ArrayList<>();
+
+        for(int i=0; i<5; i++) {
+            Item addressItem = addressItems.get(i);
+            Long itemId = addressItem.getId();
+            MainItemDto mainItemDto = itemRepository.findUserMainItemDto(itemId, userLike.getId());
+            itemDetails.add(mainItemDto);
+        }
+
+        return itemDetails;
+    }
+
     // 카테고리별 상품
     public List<MainItemDto> getCategoryItem(String category) {
 
@@ -132,6 +154,27 @@ public class ItemService {
             Item mainCateItem = categoryItems.get(i);
             Long itemId = mainCateItem.getId();
             MainItemDto mainItemDto = itemRepository.findMainItemDto(itemId);
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return mainItemDetails;
+    }
+
+    public List<MainItemDto> getUserCategoryItem(String category, String email) {
+
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        if(userLike == null) {
+            userLike = UserLike.createLike(member);
+            userLikeRepository.save(userLike);
+        }
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+
+        for(int i=0; i<5; i++){
+            Item mainCateItem = categoryItems.get(i);
+            Long itemId = mainCateItem.getId();
+            MainItemDto mainItemDto = itemRepository.findUserMainItemDto(itemId, userLike.getId());
             mainItemDetails.add(mainItemDto);
         }
 
@@ -154,6 +197,26 @@ public class ItemService {
         return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
     }
 
+    public Page<MainItemDto> getUserAllCategoryItem(String category, String email, Pageable pageable) {
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByRegTimeDesc(category, pageable);
+        List<Item> cateItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        int totalCount = cateItems.size();
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        if(userLike == null) {
+            userLike = UserLike.createLike(member);
+            userLikeRepository.save(userLike);
+        }
+
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+        for(Item item : categoryItems) {
+            MainItemDto mainItemDto = itemRepository.findUserMainItemDto(item.getId(), userLike.getId());
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
+    }
+
     // 카테고리 필터 (종료 임박순)
     public Page<MainItemDto> getEndDayCategoryItem(String category, Pageable pageable) {
         List<Item> categoryItems = itemRepository.findByCategoryOrderByEndDayAsc(category, pageable);
@@ -169,6 +232,26 @@ public class ItemService {
         return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
     }
 
+    public Page<MainItemDto> getUserEndDayCategoryItem(String category, String email, Pageable pageable) {
+        List<Item> categoryItems = itemRepository.findByCategoryOrderByEndDayAsc(category, pageable);
+        List<Item> cateItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        int totalCount = cateItems.size();
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        if(userLike == null) {
+            userLike = UserLike.createLike(member);
+            userLikeRepository.save(userLike);
+        }
+
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+        for(Item item : categoryItems) {
+            MainItemDto mainItemDto = itemRepository.findUserMainItemDto(item.getId(), userLike.getId());
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
+    }
+
     // 카테고리 필터 (리뷰 많은순)
     public Page<MainItemDto> getReviewCategoryItem(String category, Pageable pageable) {
         List<Item> categoryItems = itemRepository.findItemsOrderByReviewCount(category, pageable);
@@ -178,6 +261,26 @@ public class ItemService {
         List<MainItemDto> mainItemDetails = new ArrayList<>();
         for(Item item : categoryItems) {
             MainItemDto mainItemDto = itemRepository.findMainItemDto(item.getId());
+            mainItemDetails.add(mainItemDto);
+        }
+
+        return new PageImpl<MainItemDto>(mainItemDetails, pageable, totalCount);
+    }
+
+    public Page<MainItemDto> getUserReviewCategoryItem(String category, String email, Pageable pageable) {
+        List<Item> categoryItems = itemRepository.findItemsOrderByReviewCount(category, pageable);
+        List<Item> cateItems = itemRepository.findByCategoryOrderByRegTimeDesc(category);
+        int totalCount = cateItems.size();
+        Member member = memberRepository.findByEmail(email);
+        UserLike userLike = userLikeRepository.findByMemberId(member.getId());
+        if(userLike == null) {
+            userLike = UserLike.createLike(member);
+            userLikeRepository.save(userLike);
+        }
+
+        List<MainItemDto> mainItemDetails = new ArrayList<>();
+        for(Item item : categoryItems) {
+            MainItemDto mainItemDto = itemRepository.findUserMainItemDto(item.getId(), userLike.getId());
             mainItemDetails.add(mainItemDto);
         }
 

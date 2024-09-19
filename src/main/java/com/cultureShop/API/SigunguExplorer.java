@@ -24,6 +24,7 @@ import java.util.List;
 @Setter
 public class SigunguExplorer {
 
+
     public List<SigunguApiDto> sigunguApiDatas;
 
     BufferedReader rd;
@@ -80,4 +81,7 @@ public class SigunguExplorer {
         }
         return sigunguApiDatas;
     }
+
+
+
 }

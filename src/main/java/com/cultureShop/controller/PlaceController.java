@@ -93,6 +93,7 @@ public class PlaceController {
         return "place/searchAddress";
     }
 
+
     @PostMapping(value = "/address")
     public @ResponseBody ResponseEntity searchAddress(@RequestParam String simAddr) {
 
@@ -130,7 +131,6 @@ public class PlaceController {
             } else {
                 model.addAttribute("isLikePlace", "beforeLike");
             }
-
         }
         else{
             model.addAttribute("isLikePlace", "beforeLike");

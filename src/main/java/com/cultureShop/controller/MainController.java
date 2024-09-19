@@ -1,5 +1,6 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.config.CustomOAuth2UserService;
 import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.entity.Item;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -16,26 +18,51 @@ import java.util.List;
 public class MainController {
 
     private final ItemService itemService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @GetMapping(value = "/")
-    public String main(Model model){
+    public String main(Model model, Principal principal){
 
         List<MainItemDto> bannerItems = itemService.getBannerItem();
+        List<MainItemDto> seoulItems;
+        List<MainItemDto> kkItems;
+        List<MainItemDto> ksItems;
+        List<MainItemDto> jrItems;
+        List<MainItemDto> jjItems;
+        List<MainItemDto> ccItems;
+        List<MainItemDto> exhiItems;
+        List<MainItemDto> musItems;
+        List<MainItemDto> festItems;
 
-        List<MainItemDto> seoulItems = itemService.getAddressItem("서울");
-        List<MainItemDto> kkItems = itemService.getAddressItem("경기");
-        List<MainItemDto> ksItems = itemService.getAddressItem("경상");
-        List<MainItemDto> jrItems = itemService.getAddressItem("전라");
-        List<MainItemDto> jjItems = itemService.getAddressItem("제주");
-        List<MainItemDto> ccItems = itemService.getAddressItem("충청");
+        seoulItems = itemService.getAddressItem("서울");
+        kkItems = itemService.getAddressItem("경기");
+        ksItems = itemService.getAddressItem("경상");
+        jrItems = itemService.getAddressItem("전라");
+        jjItems = itemService.getAddressItem("제주");
+        ccItems = itemService.getAddressItem("충청");
+        exhiItems = itemService.getCategoryItem("exhibition");
+        musItems = itemService.getCategoryItem("museum");
+        festItems = itemService.getCategoryItem("festival");
 
-        List<MainItemDto> exhiItems = itemService.getCategoryItem("exhibition");
-        List<MainItemDto> musItems = itemService.getCategoryItem("museum");
-        List<MainItemDto> festItems = itemService.getCategoryItem("festival");
+        if(principal != null) {
+            String email = customOAuth2UserService.getSocialEmail(principal);
+            if(email == null) {
+                email = principal.getName();
+            }
+
+            seoulItems = itemService.getUserAddrItem("서울", email);
+            kkItems = itemService.getUserAddrItem("경기", email);
+            ksItems = itemService.getUserAddrItem("경상", email);
+            jrItems = itemService.getUserAddrItem("전라", email);
+            jjItems = itemService.getUserAddrItem("제주", email);
+            ccItems = itemService.getUserAddrItem("충청", email);
+            exhiItems = itemService.getUserCategoryItem("exhibition", email);
+            musItems = itemService.getUserCategoryItem("museum", email);
+            festItems = itemService.getUserCategoryItem("festival", email);
+        }
 
 
         model.addAttribute("bannerItems", bannerItems);
-
         model.addAttribute("seoulItems", seoulItems);
         model.addAttribute("kkItems", kkItems);
         model.addAttribute("ksItems", ksItems);
@@ -46,7 +73,6 @@ public class MainController {
         model.addAttribute("exhiItems", exhiItems);
         model.addAttribute("musItems", musItems);
         model.addAttribute("festItems", festItems);
-
 
         return "main";
     }

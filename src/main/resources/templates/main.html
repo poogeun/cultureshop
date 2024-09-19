@@ -97,6 +97,41 @@
             });
         })
 
+        function addLike(event, itemId) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/like";
+            var paramData = {
+                itemId : itemId
+            }
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url : url,
+                type : "POST",
+                contentType : "application/json",
+                data : param,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function(result, status){
+                    alert('찜추가 성공');
+                    location.href='/';
+                },
+                error : function(jqXHR, status, error){
+                    alert('찜 기능은 로그인 후 이용 가능합니다.');
+                    location.href = '/members/login';
+                }
+            });
+        }
+
     </script>
 </th:block>
 
@@ -107,6 +142,17 @@
             border-radius: 15px;
             padding: 3px 10px;
             color: #808080;
+        }
+        .locImgWrap {
+            position: relative;
+        }
+        .likeBtn {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            color: #fff;
+            width: 50px;
+            height: 50px;
         }
     </style>
 </th:block>
@@ -131,6 +177,7 @@
             </th:block>
         </div>
     </div>
+
 
     <!-- 검색창 -->
     <form th:action="@{/search}" method="get">
@@ -161,6 +208,16 @@
                             <a th:href="'/item/' + ${seoulItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${seoulItem.imgUrl}" alt="${seoulItem.itemName}">
+                                    <th:block th:if="${seoulItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${seoulItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined">favorite</span>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:unless="${seoulItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${seoulItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                        </button>
+                                    </th:block>
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${seoulItem.itemName}" class="locDetail_title" ></span>
@@ -179,6 +236,16 @@
                             <a th:href="'/item/' + ${kkItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${kkItem.imgUrl}" alt="${kkItem.itemName}">
+                                    <th:block th:if="${kkItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${kkItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined">favorite</span>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:unless="${kkItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${kkItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                        </button>
+                                    </th:block>
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${kkItem.itemName}" class="locDetail_title"></span>
@@ -197,6 +264,16 @@
                             <a th:href="'/item/' + ${ksItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${ksItem.imgUrl}" alt="${ksItem.itemName}">
+                                    <th:block th:if="${ksItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${ksItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined">favorite</span>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:unless="${ksItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${ksItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                        </button>
+                                    </th:block>
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${ksItem.itemName}" class="locDetail_title"></span>
@@ -215,6 +292,16 @@
                             <a th:href="'/item/' + ${jrItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${jrItem.imgUrl}" alt="${jrItem.itemName}">
+                                    <th:block th:if="${jrItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${jrItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined">favorite</span>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:unless="${jrItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${jrItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                        </button>
+                                    </th:block>
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${jrItem.itemName}" class="locDetail_title"></span>
@@ -233,6 +320,16 @@
                             <a th:href="'/item/' + ${jjItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${jjItem.imgUrl}" alt="${jjItem.itemName}">
+                                    <th:block th:if="${jjItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${jjItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined">favorite</span>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:unless="${jjItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${jjItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                        </button>
+                                    </th:block>
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${jjItem.itemName}" class="locDetail_title"></span>
@@ -251,6 +348,16 @@
                             <a th:href="'/item/' + ${ccItem.id}" class="linkLocItem">
                                 <div class="locImgWrap">
                                     <img th:src="${ccItem.imgUrl}" alt="${ccItem.itemName}">
+                                    <th:block th:if="${ccItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${ccItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined">favorite</span>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:unless="${ccItem.userLikeYn == null}">
+                                        <button type="button" class="likeBtn" th:value="${ccItem.id}" onclick="addLike(event, this.value)">
+                                            <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                        </button>
+                                    </th:block>
                                 </div>
                                 <div class="locDetail">
                                     <span th:text="${ccItem.itemName}" class="locDetail_title"></span>
@@ -282,6 +389,16 @@
                         <a th:href="'/item/' + ${exhiItem.id}" class="linkLocItem">
                             <div class="locImgWrap">
                                 <img th:src="${exhiItem.imgUrl}" alt="${exhiItem.itemName}">
+                                <th:block th:if="${exhiItem.userLikeYn == null}">
+                                    <button type="button" class="likeBtn" th:value="${exhiItem.id}" onclick="addLike(event, this.value)">
+                                        <span class="material-symbols-outlined">favorite</span>
+                                    </button>
+                                </th:block>
+                                <th:block th:unless="${exhiItem.userLikeYn == null}">
+                                    <button type="button" class="likeBtn" th:value="${exhiItem.id}" onclick="addLike(event, this.value)">
+                                        <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                    </button>
+                                </th:block>
                             </div>
                             <div class="locDetail">
                                 <span th:text="${exhiItem.itemName}" class="locDetail_title" ></span>
@@ -311,6 +428,16 @@
                         <a th:href="'/item/' + ${musItem.id}" class="linkLocItem">
                             <div class="locImgWrap">
                                 <img th:src="${musItem.imgUrl}" alt="${musItem.itemName}">
+                                <th:block th:if="${musItem.userLikeYn == null}">
+                                    <button type="button" class="likeBtn" th:value="${musItem.id}" onclick="addLike(event, this.value)">
+                                        <span class="material-symbols-outlined">favorite</span>
+                                    </button>
+                                </th:block>
+                                <th:block th:unless="${musItem.userLikeYn == null}">
+                                    <button type="button" class="likeBtn" th:value="${musItem.id}" onclick="addLike(event, this.value)">
+                                        <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                    </button>
+                                </th:block>
                             </div>
                             <div class="locDetail">
                                 <span th:text="${musItem.itemName}" class="locDetail_title" ></span>
@@ -340,6 +467,16 @@
                         <a th:href="'/item/' + ${festItem.id}" class="linkLocItem">
                             <div class="locImgWrap">
                                 <img th:src="${festItem.imgUrl}" alt="${festItem.itemName}">
+                                <th:block th:if="${festItem.userLikeYn == null}">
+                                    <button type="button" class="likeBtn" th:value="${festItem.id}" onclick="addLike(event, this.value)">
+                                        <span class="material-symbols-outlined">favorite</span>
+                                    </button>
+                                </th:block>
+                                <th:block th:unless="${festItem.userLikeYn == null}">
+                                    <button type="button" class="likeBtn" th:value="${festItem.id}" onclick="addLike(event, this.value)">
+                                        <span class="material-symbols-outlined" style="color: red">favorite</span>
+                                    </button>
+                                </th:block>
                             </div>
                             <div class="locDetail">
                                 <span th:text="${festItem.itemName}" class="locDetail_title" ></span>
@@ -353,9 +490,5 @@
             </div>
         </div>
     </section>
-
-
-
 </div>
-
 </html>

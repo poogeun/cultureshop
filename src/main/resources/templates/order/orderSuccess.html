@@ -5,9 +5,35 @@
 
 <th:block layout:fragment="css">
     <style>
+        h3 {
+            margin-bottom: 50px;
+        }
+        .osBox .date {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .buyerInfo {
+            margin-bottom: 100px;
+        }
         h4 {
             border-bottom: 2px solid;
             padding-bottom: 10px;
+        }
+        .buyerContent {
+            margin-top: 20px;
+        }
+        .buyerContent ul li {
+            display: flex;
+            margin-bottom: 5px;
+        }
+        .buyerContent .infoTitle {
+            width: 150px;
+            color: rgba(60, 60, 67, 0.6);
+            font-weight: 400;
+        }
+        .itemInfo {
+            margin-bottom: 100px;
         }
         .osItems {
             border-color: #ebebeb;
@@ -43,6 +69,14 @@
             padding-top: 20px;
             padding-left: 50px;
         }
+        .osItemText2 {
+            display: flex;
+
+        }
+        .payContent {
+            width: 500px;
+            margin: 0 auto;
+        }
     </style>
 </th:block>
 
@@ -60,45 +94,106 @@
 <div layout:fragment="content">
     <div class="container">
         <h3>주문상세내역</h3>
-        <div class="itemInfo">
-            <h4>주문상품정보</h4>
-            <div class="oiiContent">
-                <ul class="osItems">
-                        <li class="osItemDtl">
-                            <div class="osWrap">
-                                <img th:src="@{/img/example.gif}">
-                                <div class="osItemText">
-                                    <div class="os_1">
-                                        <h3 style="font-weight: bold">상품명</h3>
-                                        <div style="color: #787878">관람일</div>
-                                        <div style="color: #787878">장소</div>
-                                        <div>수량</div>
+        <div class="osBox">
+            <div class="osContent">
+                <div class="buyerInfo">
+                    <h4>주문정보</h4>
+                    <div class="buyerContent">
+                        <ul>
+                            <li>
+                                <div class="infoTitle">받는 사람</div>
+                                <span th:text="${member.name}"></span>
+                            </li>
+                            <li>
+                                <span class="infoTitle">휴대전화</span>
+                                <span th:text="${member.tel}"></span>
+                            </li>
+                            <li>
+                                <span class="infoTitle">배송주소</span>
+                                <span th:text="${order.orderAddress} +' '+ ${order.orderDtlAddress}"></span>
+                            </li>
+                            <li>
+                                <span class="infoTitle">배송 요청사항</span>
+                                <span th:text="${order.delReq}"></span>
+                            </li>
+                            <hr style="border-color: grey">
+                            <li>
+                                <span class="infoTitle">주문일자</span>
+                                <span th:text="${order.orderDate}"></span>
+                            </li>
+                            <li>
+                                <span class="infoTitle">티켓수령방법</span>
+                                <span th:text="${order.getTicket}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="itemInfo">
+                    <h4>주문상품정보</h4>
+                    <div class="oiiContent">
+                        <ul class="osItems">
+                            <th:block th:each="orderItem : ${orderItems}">
+                                <li class="osItemDtl">
+                                    <div class="osWrap">
+                                        <img th:src="${orderItem.imgUrl}" th:alt="${orderItem.itemName}">
+                                        <div class="osItemText">
+                                            <div class="os_1">
+                                                <h3 th:text="${orderItem.itemName}" style="font-weight: bold"></h3>
+                                                <div class="osItemText2">
+                                                    <div style="color: #787878; width: 100px;">관람일</div>
+                                                    <span th:text="${orderItem.viewDay}"></span>
+                                                </div>
+                                                <div class="osItemText2">
+                                                    <div style="color: #787878; width: 100px;">장소</div>
+                                                    <span th:text="${orderItem.place}"></span>
+                                                </div>
+                                                <div class="osItemText2">
+                                                    <div style="color: #787878; width: 100px;">수량</div>
+                                                    <span th:text="${orderItem.count}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </li>
-                    <li class="orderItemDtl">
-                        <div class="oidWrap">
-                            <img th:src="@{/img/example.gif}">
-                            <div class="orderItemText">
-                                <div class="oit_1">
-                                    <h3 style="font-weight: bold">상품명</h3>
-                                    <div style="color: #787878">관람일</div>
-                                    <div style="color: #787878">장소</div>
-                                    <div>수량</div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
+                <div class="payInfo">
+                    <h4>결제정보</h4>
+                    <div class="payContent">
+                        <table class="table border-top">
+                            <colgroup>
+                                <col width="30%">
+                                <col width="70%">
+                            </colgroup>
+                            <tr>
+                                <th class="p-3 bg-body-tertiary">총 상품금액</th>
+                                <td th:text="${order.orderPrice} + '원'"></td>
+                            </tr>
+                            <tr>
+                                <th class="p-3 bg-body-tertiary">배송비</th>
+                                <td th:if="${#strings.equals(order.getTicket, '배송')}">
+                                    +3,000원
+                                </td>
+                                <td th:unless="${#strings.equals(order.getTicket, '배송')}">
+                                    +0원
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="p-3 bg-body-tertiary">총 결제금액</th>
+                                <td th:if="${#strings.equals(order.getTicket, '배송')}" style="color: #C10000">
+                                    <span th:text="${order.orderPrice} + 3000"></span>원
+                                </td>
+                                <td th:unless="${#strings.equals(order.getTicket, '배송')}" style="color: #C10000">
+                                    <span th:text="${order.orderPrice}"></span>원
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
-        <div class="buyerInfo">
-
-        </div>
-        <div class="payInfo">
-
-        </div>
-    </div>
 </div>
 </html>

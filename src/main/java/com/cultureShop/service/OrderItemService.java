@@ -1,6 +1,7 @@
 package com.cultureShop.service;
 
 import com.cultureShop.dto.MainItemDto;
+import com.cultureShop.dto.OrderItemDto;
 import com.cultureShop.dto.ReviewItemDto;
 import com.cultureShop.entity.Member;
 import com.cultureShop.entity.Order;
@@ -50,5 +51,9 @@ public class OrderItemService {
         return noRevItemList;
     }
 
+    @Transactional(readOnly = true)
+    public List<OrderItemDto> getOrderSuccess(Long orderId) {
+        return orderItemRepository.findOrderItemDto(orderId);
+    }
 
 }
