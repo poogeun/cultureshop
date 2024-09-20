@@ -1,5 +1,6 @@
 package com.cultureShop.repository;
 
+import com.cultureShop.dto.MemberFormDto;
 import com.cultureShop.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +15,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m from Member m where m.email = :email")
     Optional<Member> findSocialMem(String email);
+
+    @Query("select new com.cultureShop.dto.MemberFormDto(m.name, m.email, m.password, m.address, m.dtlAddress, m.tel) " +
+            "from Member m where m.email = :email")
+    MemberFormDto findMemDto(String email);
 
 }

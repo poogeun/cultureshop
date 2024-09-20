@@ -34,4 +34,16 @@ public class MemberFormDto {
     private String tel;
 
     private String checkYn; // 개인정보이용 동의
+
+    public MemberFormDto() {
+    }
+
+    public MemberFormDto(String name, String email, String password, String address, String dtlAddress, String tel) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.dtlAddress = dtlAddress;
+        this.tel = tel;
+    }
 }

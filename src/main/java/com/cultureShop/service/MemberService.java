@@ -1,5 +1,6 @@
 package com.cultureShop.service;
 
+import com.cultureShop.dto.MemberFormDto;
 import com.cultureShop.entity.Member;
 import com.cultureShop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,16 @@ public class MemberService implements UserDetailsService {
         if(findMember != null) {
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public MemberFormDto getMemDto(String email) {
+        return memberRepository.findMemDto(email);
+    }
+
+    public void updateMember(String email, MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
+        Member member = memberRepository.findByEmail(email);
+        member.updateMember(memberFormDto, passwordEncoder);
     }
 
     @Override

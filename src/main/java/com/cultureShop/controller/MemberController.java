@@ -1,7 +1,9 @@
 package com.cultureShop.controller;
 
+import com.cultureShop.config.CustomOAuth2UserService;
 import com.cultureShop.dto.MemberFormDto;
 import com.cultureShop.entity.Member;
+import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -16,13 +18,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
 @RequestMapping("/members")
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @GetMapping(value = "/new")
     public String memberForm(Model model, HttpServletRequest request){
@@ -81,5 +87,33 @@ public class MemberController {
     public String loginError(Model model) {
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
         return "member/memberLoginForm";
+    }
+
+    @GetMapping(value = "/update")
+    public String memberUpdate(Model model, Principal principal) {
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+        MemberFormDto memberFormDto = memberService.getMemDto(email);
+
+        model.addAttribute("memberFormDto", memberFormDto);
+        return "member/memberUpdateForm";
+    }
+
+    @PostMapping(value = "/update")
+    public String memberUpdate(@Valid MemberFormDto memberFormDto, Principal principal,
+                               BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) {
+            return "member/memberUpdateForm";
+        }
+
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+        memberService.updateMember(email, memberFormDto, passwordEncoder);
+
+        return "redirect:/my-page/orders";
     }
 }

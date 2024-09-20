@@ -54,6 +54,14 @@ public class Member extends BaseEntity{
         return member;
     }
 
+    public void updateMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
+        String password = passwordEncoder.encode(memberFormDto.getPassword());
+        this.password = password;
+        this.address = memberFormDto.getAddress();
+        this.dtlAddress = memberFormDto.getDtlAddress();
+        this.tel = memberFormDto.getTel();
+    }
+
     public static Member socialMember(String name, String email) {
         Member member = new Member();
         member.setName(name);

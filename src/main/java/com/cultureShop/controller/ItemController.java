@@ -59,7 +59,7 @@ public class ItemController {
         CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         model.addAttribute("_csrf", csrfToken);
 
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors()) {
             return "item/itemForm";
         }
         if(itemImgFileList.getFirst().isEmpty() && itemFormDto.getId() == null) {
