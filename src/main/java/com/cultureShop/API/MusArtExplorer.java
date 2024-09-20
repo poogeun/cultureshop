@@ -21,7 +21,7 @@ import java.util.List;
 @Getter
 @Setter
 public class MusArtExplorer {
-/*
+    /*
     public List<MusArtApiDto> musArtApiDatas;
 
     BufferedReader rd;
@@ -99,5 +99,6 @@ public class MusArtExplorer {
 
     }
 
- */
+     */
+
 }

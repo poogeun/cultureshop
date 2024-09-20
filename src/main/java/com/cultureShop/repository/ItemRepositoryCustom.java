@@ -14,4 +14,6 @@ public interface ItemRepositoryCustom {
 
     List<MainItemDto> getSearchItemList(ItemSearchDto itemSearchDto);
 
+    Page<MainItemDto> getCateItemList(String category, String address, String sort, Pageable pageable);
+
 }

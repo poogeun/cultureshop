@@ -32,6 +32,9 @@ public class ReviewService {
                         .orElseThrow(EntityNotFoundException::new);
         review.setItem(item);
         reviewRepository.save(review);
+        item.addReview(review);
+
+        System.out.println("review 수 "+ item.getReviews().size());
 
         // 주문아이템에 해당 리뷰 저장
         OrderItem orderItem = orderItemRepository.findByEmailAndItemId(email, itemId);

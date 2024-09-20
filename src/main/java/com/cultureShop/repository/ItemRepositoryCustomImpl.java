@@ -7,7 +7,9 @@ import com.cultureShop.dto.QMainItemDto;
 import com.cultureShop.entity.Item;
 import com.cultureShop.entity.QItem;
 import com.cultureShop.entity.QItemImg;
+import com.cultureShop.entity.QReview;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -108,4 +110,58 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return results;
     }
 
+    // 상품목록 카테고리
+    private BooleanExpression itemCategory(String category) {
+        if(StringUtils.equals("exhibition", category)) {
+            return QItem.item.category.eq("exhibition");
+        }
+        else if(StringUtils.equals("museum", category)) {
+            return QItem.item.category.eq("museum");
+        }
+        else if(StringUtils.equals("festival", category)) {
+            return QItem.item.category.eq("festival");
+        }
+        else {
+            return null;
+        }
+    }
+
+    // 상품목록 지역 필터
+    private BooleanExpression itemLocation(String address) {
+        if(address == null) {
+            return QItem.item.itemStartStatus.eq(ItemStartStatus.START);
+        }
+        return QItem.item.address.like("%"+address+"%");
+    }
+
+    // 상품목록 정렬
+    private OrderSpecifier<?> getOrderSpecifier(String sort) {
+        if(sort == null) {
+            return QItem.item.regTime.desc();
+        }
+        switch (sort) {
+            case "endDay":
+                return QItem.item.endDay.asc();
+            case "review":
+                return QItem.item.reviews.size().desc();
+            default:
+                return QItem.item.regTime.desc();
+        }
+    }
+
+    @Override
+    public Page<MainItemDto> getCateItemList(String category, String address, String sort, Pageable pageable) {
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        List<MainItemDto> results = queryFactory.select(new QMainItemDto(item.id, item.itemName, item.place, item.address,
+                        item.price, item.startDay, item.endDay, itemImg.imgUrl))
+                .from(itemImg).join(itemImg.item, item).where(itemImg.repImgYn.eq("Y"))
+                .where(itemCategory(category),
+                       itemLocation(address))
+                .orderBy(getOrderSpecifier(sort)).fetch();
+
+        long total = results.size();
+        return new PageImpl<>(results, pageable, total);
+    }
 }

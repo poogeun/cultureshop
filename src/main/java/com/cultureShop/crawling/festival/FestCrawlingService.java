@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit;
 @Getter
 @Setter
 public class FestCrawlingService{
-/*
+    /*
+
     public List<FestDataDto> festDatas;
     private final WebDriver driver;
 
@@ -77,6 +78,6 @@ public class FestCrawlingService{
         return festDatas;
     }
 
- */
+     */
 
 }

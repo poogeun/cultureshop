@@ -44,7 +44,6 @@ public class CrawlingConfig {
 
     @Autowired
     MusArtExplorer apiExplorer;
-
 /*
     @Autowired
     public void saveCrawFestItem() {
@@ -102,6 +101,7 @@ public class CrawlingConfig {
         }
     }
 
+    /*
 
     @Autowired
     public void saveMusArtPlace() {

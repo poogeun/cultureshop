@@ -303,5 +303,10 @@ public class ItemService {
         return itemDetails;
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getCateItemList(String category, String address, String sort, Pageable pageable) {
+        return itemRepository.getCateItemList(category, address, sort, pageable);
+    }
+
 
 }

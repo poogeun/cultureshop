@@ -185,29 +185,13 @@ public class ItemController {
     @GetMapping(value = "/item/category/{category}")
     public String category(@PathVariable("category") String category,
                            @RequestParam(value = "sort", required = false) String sort,
+                           @RequestParam(value = "address", required = false) String address,
                            Model model, Principal principal) {
         Pageable pageable = PageRequest.of(0, 20);
 
         Long count;
         Page<MainItemDto> items;
-        if(category.equals("exhibition")){
-            items = itemService.getAllCategoryItem(category, pageable);
-        }
-        else if(category.equals("museum")){
-            items = itemService.getAllCategoryItem(category, pageable);
-        }
-        else {
-            items = itemService.getAllCategoryItem(category, pageable);
-        }
-
-        if(sort != null) {
-            if(sort.equals("endDay")) {
-                items = itemService.getEndDayCategoryItem(category, pageable);
-            }
-            else if(sort.equals("review")) {
-                items = itemService.getReviewCategoryItem(category, pageable);
-            }
-        }
+        items = itemService.getCateItemList(category, sort, address, pageable);
 
         if(principal != null) {
             String email = customOAuth2UserService.getSocialEmail(principal);

@@ -21,6 +21,14 @@
             width: 50px;
             height: 50px;
         }
+        .cateLeft {
+            float: left;
+            vertical-align: middle;
+        }
+        .cateRight {
+            float: right;
+            vertical-align: middle;
+        }
     </style>
 </th:block>
 
@@ -184,6 +192,10 @@
             });
         }
 
+        function sortFilter(sort) {
+            console.log(sort);
+        }
+
     </script>
 </th:block>
 
@@ -197,14 +209,24 @@
                         <ul class="dropdown-menu">
                             <input type="hidden" th:value="${sort}" name="sort">
                             <input type="hidden" th:value="${category}" name="category">
-                            <li><a class="dropdown-item" th:href="'/item/category/' +${category}" id="regTime">최신순</a></li>
-                            <li><a class="dropdown-item" th:href="'/item/category/' +${category}+ '?sort=review'" id="review">리뷰 많은순</a></li>
-                            <li><a class="dropdown-item" th:href="'/item/category/' +${category}+ '?sort=endDay'" id="endDay">종료 임박순</a></li>
+                            <li><a class="dropdown-item" onclick="sortFilter()" id="regTime">최신순</a></li>
+                            <li><a class="dropdown-item" onclick="sortFilter('review')" data-value="review" id="review">리뷰 많은순</a></li>
+                            <li><a class="dropdown-item" onclick="sortFilter('endDay')" data-value="endDay" id="endDay">종료 임박순</a></li>
                         </ul>
                     </div>
             </div>
             <div class="cateCount">
-                총 <span th:text="${count}"></span>개
+                <div class="cateLeft">총 <span th:text="${count}"></span>개</div>
+                <div class="cateRight">
+                    <div class="addrFilter">
+                        <span><a id="seoul" onclick="addressFilter()">서울</a></span>
+                        <span><a id="kk" onclick="addressFilter()">경기</a></span>
+                        <span><a id="ks" onclick="addressFilter()">경상</a></span>
+                        <span><a id="jr" onclick="addressFilter()">전라</a></span>
+                        <span><a id="jj" onclick="addressFilter()">제주</a></span>
+                        <span><a id="cc" onclick="addressFilter()">충청</a></span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="cateBody">

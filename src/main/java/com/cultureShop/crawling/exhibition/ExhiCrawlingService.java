@@ -16,7 +16,8 @@ import java.util.Set;
 @Getter
 @Setter
 public class ExhiCrawlingService {
-/*
+    /*
+
     public List<ExhiDataDto> exhiDatas;
     private final WebDriver driver;
 
@@ -36,7 +37,7 @@ public class ExhiCrawlingService {
         try {
             driver.navigate().to("https://tickets.interpark.com/contents/genre/exhibition");
             Thread.sleep(2000);
-            WebElement exhiButton = driver.findElement(By.cssSelector(".GenreFilterTab_genreFilterTab__O9JDM button[aria-label='전시회']"));
+            WebElement exhiButton = driver.findElement(By.cssSelector(".GenreFilterTab_genreFilterTab__O9JDM button[aria-label='뮤지엄']"));
             ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", exhiButton);
             exhiButton.click();
             Thread.sleep(2000);
@@ -99,6 +100,6 @@ public class ExhiCrawlingService {
         return false;
     }
 
+     */
 
- */
 }

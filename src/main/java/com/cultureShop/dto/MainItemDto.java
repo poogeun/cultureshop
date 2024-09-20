@@ -22,6 +22,7 @@ public class MainItemDto {
     private String imgUrl;
     private Long userLikeYn; // 해당 유저의 찜 여부
 
+    @QueryProjection
     public MainItemDto(Long id, String itemName, String place, String address, int price, LocalDate startDay, LocalDate endDay, String imgUrl) {
         this.id = id;
         this.itemName = itemName;

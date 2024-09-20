@@ -12,6 +12,7 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -57,8 +58,9 @@ public class Item extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ItemStartStatus itemStartStatus; // 진행중 or 전
 
-    @OneToMany(mappedBy = "item")
-    private List<Review> reviews;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Review> reviews = new ArrayList<>();
 
     public void updateItem(ItemFormDto itemFormDto) {
         this.itemName = itemFormDto.getItemName();
@@ -82,6 +84,10 @@ public class Item extends BaseEntity {
 
     public void addStock(int stockNumber) {
         this.stockNumber += stockNumber;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
     }
 
 }
