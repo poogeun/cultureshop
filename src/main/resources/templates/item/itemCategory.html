@@ -29,6 +29,22 @@
             float: right;
             vertical-align: middle;
         }
+        .addrBtns {
+            border-right: 2px solid #f0f0f0;
+            padding-right: 10px;
+            padding-left: 10px;
+            color: grey;
+        }
+        .addrFilter {
+            display: flex;
+        }
+        .addrFilter span:last-of-type {
+            border: none;
+        }
+        .filterIcon {
+            display: flex;
+            font-weight: 700;
+        }
     </style>
 </th:block>
 
@@ -40,11 +56,24 @@
                 alert(errorMessage);
             }
 
+            $(".addrBtn").on("click", function(e) {
+                var addrValue = $(this).text();
+                $('input[name=address]').val(addrValue);
+                $('#filterForm').submit();
+            });
+
+            $(".alignBtn").on("click", function(e) {
+                var sortValue = $(this).attr('id');
+                $('input[name=sort]').val(sortValue);
+                $('#filterForm').submit();
+            });
+
             changeSortButton();
 
             categoryTab();
 
             infinityScroll();
+
 
         });
 
@@ -109,7 +138,7 @@
                         if(result.length === 20) {
                             for(var i=0; i < result.length; i++) {
                                 var item = result[i];
-                                var itemElement =
+                                var itemElementPlace =
                                     $(
                                         "<div class='col cateItem'>" +
                                             "<a href='/item/" + item.id + "'>" +
@@ -125,7 +154,27 @@
                                             "</a>" +
                                         "</div>"
                                     );
-                                    $('.cateItemCard').append(itemElement);
+                                var itemElementAddr =
+                                    $(
+                                        "<div class='col cateItem'>" +
+                                            "<a href='/item/" + item.id + "'>" +
+                                                "<div class='cateImgWrap'>" +
+                                                    "<img src='" +item.imgUrl+ "' alt='" +item.itemName+ "'>" +
+                                                "</div>" +
+                                                "<div class='cateDetail'>" +
+                                                    "<span class='detail_title'>" +item.itemName+ "</span>" +
+                                                    "<span class='detail_place'>" +item.address+ "</span>" +
+                                                    "<span class='detail_date'>" +item.startDay+" ~ "+item.endDay+ "</span>" +
+                                                    "<span class='detail_price'></span>" +
+                                                "</div>" +
+                                            "</a>" +
+                                        "</div>"
+                                    );
+                                if(category === 'festival') {
+                                    $('.cateItemCard').append(itemElementAddr);
+                                } else {
+                                    $('.cateItemCard').append(itemElementPlace);
+                                }
                             }
                         }
 
@@ -192,43 +241,46 @@
             });
         }
 
-        function sortFilter(sort) {
-            console.log(sort);
-        }
-
     </script>
 </th:block>
 
 <div layout:fragment="content">
     <div class="container">
-        <div class="cateHead">
-            <div class="cateFilter">
+        <form th:action="@{'/item/category/' + ${category}}" method="get" id="filterForm">
+            <div class="cateHead">
+                <div class="cateFilter">
                     <div class="dropdown" id="sorting">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         </button>
                         <ul class="dropdown-menu">
                             <input type="hidden" th:value="${sort}" name="sort">
                             <input type="hidden" th:value="${category}" name="category">
-                            <li><a class="dropdown-item" onclick="sortFilter()" id="regTime">최신순</a></li>
-                            <li><a class="dropdown-item" onclick="sortFilter('review')" data-value="review" id="review">리뷰 많은순</a></li>
-                            <li><a class="dropdown-item" onclick="sortFilter('endDay')" data-value="endDay" id="endDay">종료 임박순</a></li>
+                            <li><a class="dropdown-item alignBtn" id="regTime">최신순</a></li>
+                            <li><a class="dropdown-item alignBtn" data-value="review" id="review">리뷰 많은순</a></li>
+                            <li><a class="dropdown-item alignBtn" data-value="endDay" id="endDay">종료 임박순</a></li>
                         </ul>
                     </div>
-            </div>
-            <div class="cateCount">
-                <div class="cateLeft">총 <span th:text="${count}"></span>개</div>
-                <div class="cateRight">
-                    <div class="addrFilter">
-                        <span><a id="seoul" onclick="addressFilter()">서울</a></span>
-                        <span><a id="kk" onclick="addressFilter()">경기</a></span>
-                        <span><a id="ks" onclick="addressFilter()">경상</a></span>
-                        <span><a id="jr" onclick="addressFilter()">전라</a></span>
-                        <span><a id="jj" onclick="addressFilter()">제주</a></span>
-                        <span><a id="cc" onclick="addressFilter()">충청</a></span>
-                    </div>
+                </div>
+                <div class="cateCount">
+                    <div class="cateLeft">총 <span th:text="${count}"></span>개</div>
+                    <th:block th:if="${category.equals('festival')}">
+                        <div class="cateRight">
+                            <div class="addrFilter">
+                                <input type="hidden" id="addrValue" th:value="${address}" name="address">
+                                <div class="filterIcon"><span class="material-symbols-outlined">tune</span>필터</div>
+                                <span class="addrBtns"><a id="seoul" class="addrBtn">서울</a></span>
+                                <span class="addrBtns"><a id="kk" class="addrBtn">경기</a></span>
+                                <span class="addrBtns"><a id="ks" class="addrBtn">경상</a></span>
+                                <span class="addrBtns"><a id="jr" class="addrBtn">전라</a></span>
+                                <span class="addrBtns"><a id="jj" class="addrBtn">제주</a></span>
+                                <span class="addrBtns"><a id="cc" class="addrBtn">충청</a></span>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block th:unless="${category.equals('festival')}"></th:block>
                 </div>
             </div>
-        </div>
+        </form>
         <div class="cateBody">
             <div class="container text-center" style="margin-top: 50px">
                 <div class="row row-cols-4 cateItemCard">
@@ -250,10 +302,11 @@
                                 </div>
                                 <div class="cateDetail">
                                     <span th:text="${item.itemName}" class="detail_title" ></span>
-                                    <span th:if="${#strings.isEmpty(item.place)}" th:text="${item.address}" class="detail_place"></span>
-                                    <span th:unless="${#strings.isEmpty(item.place)}" th:text="${item.place}" class="detail_place"></span>
+                                    <span th:if="${category.equals('festival')}" th:text="${item.address}" class="detail_place"></span>
+                                    <span th:unless="${category.equals('festival')}" th:text="${item.place}" class="detail_place"></span>
                                     <span th:text="${item.startDay +' ~ '+ item.endDay}" class="detail_date"></span>
-                                    <span th:text="${item.price} + '원'" class="detail_price"></span>
+                                    <span th:if="${category.equals('festival')}" class="detail_price"></span>
+                                    <span th:unless="${category.equals('festival')}" th:text="${item.price} + '원'" class="detail_price"></span>
                                 </div>
                             </a>
                         </div>

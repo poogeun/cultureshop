@@ -16,4 +16,6 @@ public interface ItemRepositoryCustom {
 
     Page<MainItemDto> getCateItemList(String category, String address, String sort, Pageable pageable);
 
+    long getCateItemCount(String category, String address, String sort);
+
 }

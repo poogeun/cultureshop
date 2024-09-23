@@ -186,39 +186,13 @@ public class ItemController {
     public String category(@PathVariable("category") String category,
                            @RequestParam(value = "sort", required = false) String sort,
                            @RequestParam(value = "address", required = false) String address,
-                           Model model, Principal principal) {
+                           Model model) {
         Pageable pageable = PageRequest.of(0, 20);
 
         Long count;
         Page<MainItemDto> items;
-        items = itemService.getCateItemList(category, sort, address, pageable);
-
-        if(principal != null) {
-            String email = customOAuth2UserService.getSocialEmail(principal);
-            if(email == null) {
-                email = principal.getName();
-            }
-
-            if(category.equals("exhibition")){
-                items = itemService.getUserAllCategoryItem(category, email, pageable);
-            }
-            else if(category.equals("museum")){
-                items = itemService.getUserAllCategoryItem(category, email, pageable);
-            }
-            else {
-                items = itemService.getUserAllCategoryItem(category, email, pageable);
-            }
-
-            if(sort != null) {
-                if(sort.equals("endDay")) {
-                    items = itemService.getUserEndDayCategoryItem(category, email, pageable);
-                }
-                else if(sort.equals("review")) {
-                    items = itemService.getUserReviewCategoryItem(category, email, pageable);
-                }
-            }
-        }
-        count = items.getTotalElements();
+        items = itemService.getCateItemList(category, address, sort, pageable);
+        count = itemService.getCateItemCount(category, address, sort);
 
         model.addAttribute("items", items);
         model.addAttribute("category", category);
@@ -232,8 +206,7 @@ public class ItemController {
     public @ResponseBody ResponseEntity infinityScroll(@PathVariable String category,
                                                        @RequestParam("page")int page,
                                                        @RequestParam("limit")int limit) {
-        System.out.println(page);
-        System.out.println(limit);
+
         Pageable pageable = PageRequest.of(page, limit);
         try {
             Page<MainItemDto> items = itemService.getAllCategoryItem(category, pageable);

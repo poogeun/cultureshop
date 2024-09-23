@@ -308,5 +308,9 @@ public class ItemService {
         return itemRepository.getCateItemList(category, address, sort, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public long getCateItemCount(String category, String address, String sort) {
+        return itemRepository.getCateItemCount(category, address, sort);
+    }
 
 }

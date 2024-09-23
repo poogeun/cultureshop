@@ -728,6 +728,7 @@ section {
     border-bottom: 1px solid #cdd0d1;
     padding-top: 50px;
     padding-bottom: 10px;
+    height: 80px;
 }
 .cateItem {
     display: flex;
