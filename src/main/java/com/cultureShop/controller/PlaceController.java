@@ -2,11 +2,8 @@ package com.cultureShop.controller;
 
 import com.cultureShop.API.SigunguExplorer;
 import com.cultureShop.config.CustomOAuth2UserService;
+import com.cultureShop.dto.*;
 import com.cultureShop.dto.ApiDto.SigunguApiDto;
-import com.cultureShop.dto.CommentDto;
-import com.cultureShop.dto.LikeDto;
-import com.cultureShop.dto.MainItemDto;
-import com.cultureShop.dto.MusArtMainDto;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.MusArtRepository;
 import com.cultureShop.service.CommentService;
@@ -119,6 +116,12 @@ public class PlaceController {
         int likeCount = likePlaces.size();
         List<Comment> comments = commentService.getPlaceComments(placeId);
 
+        List<Comment> reCommentList = new ArrayList<>();
+        for(Comment comment : comments) {
+            List<Comment> reComments = commentService.getReComment(comment.getId());
+            reCommentList.addAll(reComments);
+        }
+
         if(principal != null) {
             String email = customOAuth2UserService.getSocialEmail(principal);
             if(email == null) {
@@ -141,6 +144,7 @@ public class PlaceController {
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("musArt", musArt);
         model.addAttribute("comments", comments);
+        model.addAttribute("reCommentList", reCommentList);
 
         return "place/placeDtl";
     }
@@ -203,6 +207,16 @@ public class PlaceController {
         commentService.updateComment(commentId, content);
         return new ResponseEntity<Long>(commentId, HttpStatus.OK);
 
+    }
+
+    @PostMapping(value = "/recomment/write")
+    public @ResponseBody ResponseEntity reCommentWrite(@RequestBody ReCommentDto reCommentDto) {
+        try{
+            Comment recomment = commentService.saveReComment(reCommentDto);
+            return new ResponseEntity<Comment>(recomment, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

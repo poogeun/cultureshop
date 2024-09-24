@@ -1,6 +1,7 @@
 package com.cultureShop.entity;
 
 import com.cultureShop.dto.CommentDto;
+import com.cultureShop.dto.ReCommentDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +25,23 @@ public class Comment extends BaseEntity{
     @JoinColumn(name = "musArtId")
     private MusArt musArt;
 
+    private Long cDepth; // 일반댓글이면 0 대댓글이면 1
+    private Long cGroup; // 대댓글일경우 id값 저장
+
     public static Comment createComment(CommentDto commentDto, MusArt musArt) {
         Comment comment = new Comment();
         comment.setContent(commentDto.getContent());
         comment.setMusArt(musArt);
+        comment.setCDepth(0L);
+        return comment;
+    }
+
+    public static Comment createReComment(ReCommentDto reCommentDto, MusArt musArt) {
+        Comment comment = new Comment();
+        comment.setContent(reCommentDto.getContent());
+        comment.setMusArt(musArt);
+        comment.setCDepth(1L);
+        comment.setCGroup(reCommentDto.getCommentId());
         return comment;
     }
 
