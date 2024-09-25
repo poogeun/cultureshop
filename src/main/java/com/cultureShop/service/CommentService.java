@@ -2,6 +2,7 @@ package com.cultureShop.service;
 
 import com.cultureShop.dto.CommentDto;
 import com.cultureShop.dto.ReCommentDto;
+import com.cultureShop.dto.ReCommentViewDto;
 import com.cultureShop.entity.Comment;
 import com.cultureShop.entity.MusArt;
 import com.cultureShop.repository.CommentRepository;
@@ -56,5 +57,11 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<Comment> getReComment(Long commentId) {
         return commentRepository.findReComments(commentId);
+    }
+
+    @Transactional(readOnly = true)
+    public ReCommentViewDto getViewReComment(Long commentId) {
+        ReCommentViewDto comment = commentRepository.findReCommentViewDto(commentId);
+        return comment;
     }
 }

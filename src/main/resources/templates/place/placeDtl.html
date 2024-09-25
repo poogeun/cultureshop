@@ -300,12 +300,12 @@
             var header = $("meta[name='_csrf_header']").attr("content");
             console.log(commentId);
             console.log($('#musArtId').val());
-            console.log($('#reComment').val());
+            console.log($('#reComment-' +commentId).val());
 
             var paramData = {
                 commentId : commentId,
                 musArtId : $('#musArtId').val(),
-                content : $('#reComment').val()
+                content : $('#reComment-' +commentId).val()
             }
             var param = JSON.stringify(paramData);
 
@@ -318,33 +318,8 @@
                     xhr.setRequestHeader(header, token);
                 },
                 success : function(result, status) {
-                    var resultId = result.id;
-                    var element =
-                        $(
-                            `<div class="reComm">
-                                <span class="material-symbols-outlined" style="color: #BBE309">comment</span>
-                                <div class="commHead">
-                                    <div class="commHead_left">
-                                        <div class="writer">${result.createdBy}</div>
-                                        <div>
-                                            <button type="button" class="btn btn-outline-primary btn-sm"
-                                                    value="${result.id}" onclick="modifyComment(this.value)">수정</button>
-                                            <button type="button" class="btn btn-outline-danger btn-sm"
-                                                    value="${result.id}" onclick="deleteComment(this.value)">삭제</button>
-                                        </div>
-                                    </div>
-                                    <div class="regTime">${result.regTime}</div>
-                                </div>
-                                <div class="commBody">
-                                    <div id="content-${result.id}">${result.content}</div>
-                                    <textarea class="form-control" id="contentInput-${result.id}" value="${result.content}"
-                                              rows="3">${result.content}</textarea>
-                                    <button type="button" class="btn btn-outline-secondary" id="modifyReCBtn-${result.id}"
-                                            value="${result.id}" onclick="updateComment(this.value)">등록</button>
-                                </div>
-                            </div>`
-                        );
-                    $('#reComm-'+resultId).append(element);
+                    $('#reComment-' +commentId).val('');
+                    getReComment(result, commentId);
                 },
                 error : function(jqXHR, status, error){
                     if(jqXHR.status == '401'){
@@ -354,6 +329,55 @@
                     else{
                         alert(jqXHR.responseText);
                     }
+                }
+            });
+        }
+
+        function getReComment(recommentId, commentId) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            console.log('commentId' + commentId);
+
+            $.ajax({
+                url : "/place/recomment/write",
+                type : "GET",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                data : {
+                    "commentId" : recommentId
+                },
+                success : function(result, status) {
+                    console.log(result);
+                    var element =
+                        $(
+                            `<div class="reComm">
+                                <span class="material-symbols-outlined" style="color: #BBE309">comment</span>
+                                <div class="commHead">
+                                    <div class="commHead_left">
+                                        <div class="writer">${result.createdBy}</div>
+                                        <div>
+                                            <button type="button" class="btn btn-outline-primary btn-sm"
+                                                    value="${result.commentId}" onclick="modifyComment(this.value)">수정</button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm"
+                                                    value="${result.commentId}" onclick="deleteComment(this.value)">삭제</button>
+                                        </div>
+                                    </div>
+                                    <div class="regTime">${result.regTime}</div>
+                                </div>
+                                <div class="commBody">
+                                    <div id="content-${result.commentId}">${result.content}</div>
+                                    <textarea class="form-control" id="contentInput-${result.commentId}" value="${result.content}"
+                                              rows="3">${result.content}</textarea>
+                                    <button type="button" class="btn btn-outline-secondary" id="modifyReCBtn-${result.commentId}"
+                                            value="${result.commentId}" onclick="updateComment(this.value)">등록</button>
+                                </div>
+                            </div>`
+                        );
+                    $('#reComm-' +commentId).append(element);
+                },
+                error : function(jqXHR, status, error){
+                    alert('출력 실패');
                 }
             });
         }
@@ -459,9 +483,9 @@
                                 </th:block>
                             </div>
                             <div class="mb-3 reCommentWrap" th:id="'rcWrap-' + ${comment.id}">
-                                <textarea class="form-control" id="reComment" rows="3"></textarea>
+                                <textarea class="form-control" th:id="'reComment-' + ${comment.id}" rows="3"></textarea>
                                 <button type="button" class="btn btn-outline-secondary" id="reCommentBtn2"
-                                        th:value="${comment.id}" onclick="addReComment(this.value)">답글 등록</button>
+                                        th:value="${comment.id}" onclick="addReComment(this.value)">등록</button>
                             </div>
                         </th:block>
                     </div>

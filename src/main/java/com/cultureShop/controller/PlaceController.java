@@ -122,8 +122,9 @@ public class PlaceController {
             reCommentList.addAll(reComments);
         }
 
+        String email;
         if(principal != null) {
-            String email = customOAuth2UserService.getSocialEmail(principal);
+            email = customOAuth2UserService.getSocialEmail(principal);
             if(email == null) {
                 email = principal.getName();
             }
@@ -211,9 +212,21 @@ public class PlaceController {
 
     @PostMapping(value = "/recomment/write")
     public @ResponseBody ResponseEntity reCommentWrite(@RequestBody ReCommentDto reCommentDto) {
+        System.out.println("content========" + reCommentDto.getContent());
         try{
             Comment recomment = commentService.saveReComment(reCommentDto);
-            return new ResponseEntity<Comment>(recomment, HttpStatus.OK);
+            return new ResponseEntity<Long>(recomment.getId(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/recomment/write")
+    public @ResponseBody ResponseEntity reCommentWrite(@RequestParam Long commentId) {
+        try {
+            ReCommentViewDto recomment = commentService.getViewReComment(commentId);
+            System.out.println("recomment========="+recomment.toString());
+            return new ResponseEntity<ReCommentViewDto>(recomment, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
