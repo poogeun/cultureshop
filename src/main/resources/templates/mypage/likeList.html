@@ -20,7 +20,6 @@
         .placeList {
             padding-top: 50px;
         }
-
     </style>
 </th:block>
 
@@ -34,6 +33,20 @@
 
             $('.likeContents').show();
             $('.placeTab').hide();
+            navTab();
+        });
+
+        function checkAll(){
+            if($('#likeAll').prop('checked')) {
+                $('input[name=likeChkBox]').prop('checked', true);
+            }
+            else {
+                $('input[name=likeChkBox]').prop('checked', false);
+            }
+        }
+
+        // 상품/장소 탭 클릭 시
+        function navTab() {
             $('.nav-link').on('click', function(e) {
                 $(".nav-link").each(function() {
                     if ($(this).is(e.currentTarget)) {
@@ -51,16 +64,7 @@
                     $('.likeContents').hide();
                     $('.placeTab').show();
                 }
-            })
-        });
-
-        function checkAll(){
-            if($('#likeAll').prop('checked')) {
-                $('input[name=likeChkBox]').prop('checked', true);
-            }
-            else {
-                $('input[name=likeChkBox]').prop('checked', false);
-            }
+            });
         }
     </script>
 </th:block>
@@ -68,6 +72,7 @@
 <div layout:fragment="content">
     <div class="container">
         <form th:action="@{/order/like}" method="get">
+            <!-- 마이페이지 메뉴 -->
             <section class="mypageHead">
                 <div class="mypageBox">
                     <div class="mypageText">

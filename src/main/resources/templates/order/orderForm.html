@@ -8,13 +8,6 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
-<th:block layout:fragment="css">
-    <style>
-
-
-    </style>
-</th:block>
-
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
@@ -23,6 +16,13 @@
                 alert(errorMessage);
             }
 
+            selectDelReq();
+            getTicket();
+
+        });
+
+        // 배송요청사항 직접입력 선택 시 입력창 출력
+        function selectDelReq() {
             $('#reqWrite').hide();
             $('#delReq').change(function() {
                 if($(this).val() === '직접 입력') {
@@ -32,7 +32,10 @@
                     $('#reqWrite').hide();
                 }
             });
+        }
 
+        // 티켓수령방법 선택 시 가격변동
+        function getTicket() {
             $('.delFree').show();
             $('.delCharge').hide();
             $('input[name="getTicket"]').change(function() {
@@ -45,9 +48,9 @@
                     $('.delFree').hide();
                 }
             });
+        }
 
-        });
-
+        // 주문 저장
         function order() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -75,8 +78,6 @@
 
             var param = JSON.stringify(paramData);
 
-            console.log("Sending request with data:", param);
-
             $.ajax({
                 url : url,
                 type : "POST",
@@ -101,16 +102,14 @@
                     }
                 }
             });
-
         }
 
+        // 아임포트 API
         var IMP = window.IMP;
         IMP.init("imp16131530");
         function requestPay(orderUid) {
 
             var itemName = $('#itemName').val();
-
-            console.log(orderUid);
 
             var paymentPrice;
             if($('input[name="getTicket"]').val() === '현장수령'){
@@ -143,7 +142,6 @@
                 var header = $("meta[name='_csrf_header']").attr("content");
 
                 if (rsp.success) {
-                    alert('call back!! ' + JSON.stringify(rsp));
 
                     jQuery.ajax({
                         url: "/payment",
@@ -186,23 +184,17 @@
         function execDaumPostcode() {
             new daum.Postcode({
                 oncomplete: function(data) {
-                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
                     var addr = ''; // 주소 변수
 
-                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
                     if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
                         addr = data.roadAddress;
                     } else { // 사용자가 지번 주소를 선택했을 경우(J)
                         addr = data.jibunAddress;
                     }
 
-                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
                     document.getElementById('postcode').value = data.zonecode;
                     document.getElementById("address").value = addr;
-                    // 커서를 상세주소 필드로 이동한다.
                     document.getElementById("detailAddress").focus();
                 }
             }).open();
@@ -215,6 +207,7 @@
     <div class="container">
         <input type="hidden" th:value="${item.id}" id="itemId">
         <input type="hidden" th:value="${member.email}" id="email">
+        <!-- 배송정보 -->
         <section class="orderInfo">
             <div class="subTitle">
                 <div>배송정보</div>
@@ -260,7 +253,7 @@
                 </div>
             </div>
         </section>
-
+        <!-- 티켓수령방법 -->
         <section class="getTicket">
             <div class="subTitle">
                 <div>티켓 수령 방법</div>
@@ -282,7 +275,7 @@
                 </div>
             </div>
         </section>
-
+        <!-- 상품정보 -->
         <section class="orderItemInfo">
             <div class="subTitle">
                 <div>상품 정보</div>
@@ -312,7 +305,7 @@
                 </div>
             </div>
         </section>
-
+        <!-- 결제금액 -->
         <section class="payment">
             <div class="subTitle">
                 <div>결제금액</div>
@@ -346,8 +339,6 @@
                 </div>
             </div>
         </section>
-
-
         <div class="d-grid gap-2 payBtn">
             <button class="btn btn-primary btn-lg" type="button" onclick="order()">결제하기</button>
         </div>

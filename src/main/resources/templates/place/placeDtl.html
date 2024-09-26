@@ -8,124 +8,6 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
-<th:block layout:fragment="css">
-    <style>
-        .placeDtlBox {
-            border: 1px solid #f0f0f0;
-            width: 60%;
-            margin: 0 auto;
-            border-radius: 10px;
-        }
-        .placeDtlBox button {
-            float: right;
-        }
-        #map {
-            margin: 0 auto;
-        }
-        .placeDtlBox h2 {
-            margin: 40px;
-            font-weight: 700;
-            text-align: center;
-        }
-        .placeInfo {
-            margin: 30px;
-        }
-        .placeDtlBox h5{
-            border-top: 1px solid #f0f0f0;
-            padding-top: 15px;
-            font-weight: 600;
-            font-size: 18px;
-        }
-        .placeInfo ul {
-            padding-left: 0;
-        }
-        .placeInfo li {
-            display: flex;
-            margin: 10px 0;
-        }
-        .placeInfo li span {
-            color: #BBE309;
-        }
-        .placeInfo li div {
-            margin-left: 20px;
-        }
-        .comments {
-            margin: 30px;
-        }
-        #commentWrap {
-            display: flex;
-        }
-        #comment {
-            width: 90%;
-        }
-        .comm {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 25px;
-        }
-        .commHead {
-
-        }
-        .commHead button {
-            margin: 0 3px;
-            font-size: 10px;
-        }
-        .commHead_left {
-            display: flex;
-            float: left;
-            vertical-align: middle;
-        }
-        .regTime {
-            float: right;
-            vertical-align: middle;
-        }
-        .writer, .regTime {
-            font-size: 14px;
-            color: #808080;
-        }
-        .commBody {
-            display: flex;
-        }
-        .commBody textarea {
-            display: none;
-            width: 90%;
-        }
-        .commText {
-            margin: 5px;
-            word-break: break-all;
-        }
-        .commBody button {
-            display: none;
-        }
-        .reComm {
-            padding-left: 20px;
-            display: flex;
-            flex-direction: column;
-            border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        .regTime {
-            float: right;
-        }
-        .reCommentWrap {
-            display: flex;
-            margin-top: 15px;
-        }
-        #reComment {
-            width: 85%;
-        }
-        .reCommentBtn1 {
-            background: none;
-            border: none;
-            width: 50px;
-            text-align: left;
-            font-size: 15px;
-            font-weight: 400;
-        }
-    </style>
-</th:block>
-
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
@@ -142,6 +24,7 @@
 
         });
 
+        // 카카오 맵 api
         function dtlMap() {
             var x = $('#x').val();
             var y = $('#y').val();
@@ -162,6 +45,7 @@
             marker.setMap(map); // 마커가 지도 위에 표시되도록 설정한다
         }
 
+        // 찜 추가
         function addLike() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -193,6 +77,7 @@
             });
         }
 
+        // 댓글 작성
         function addComment() {
             $('#commentBtn').click(function() {
                 var token = $("meta[name='_csrf']").attr("content");
@@ -223,6 +108,7 @@
             })
         }
 
+        // 댓글 삭제
         function deleteComment(commentId) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -252,12 +138,14 @@
             });
         }
 
+        // 댓글 수정 화면 출력
         function modifyComment(commentId) {
             $('#content-'+commentId).css('display', 'none');
             $('#contentInput-'+commentId).css('display', 'block');
             $('#modifyBtn-'+commentId).css('display', 'block');
         }
 
+        // 댓글 수정
         function updateComment(commentId) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -290,17 +178,16 @@
             });
         }
 
+        // 답글 화면 출력
         function openReComment(commentId) {
             $('#rcWrap-'+commentId).toggle();
             $('#reComm-'+commentId).toggle();
         }
 
+        // 답글 등록
         function addReComment(commentId) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
-            console.log(commentId);
-            console.log($('#musArtId').val());
-            console.log($('#reComment-' +commentId).val());
 
             var paramData = {
                 commentId : commentId,
@@ -333,10 +220,10 @@
             });
         }
 
+        // 등록한 답글 html 추가
         function getReComment(recommentId, commentId) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
-            console.log('commentId' + commentId);
 
             $.ajax({
                 url : "/place/recomment/write",
@@ -348,7 +235,6 @@
                     "commentId" : recommentId
                 },
                 success : function(result, status) {
-                    console.log(result);
                     var element =
                         $(
                             `<div class="reComm">
@@ -381,15 +267,15 @@
                 }
             });
         }
-
     </script>
 </th:block>
 
 <div layout:fragment="content">
-    <div class="container">
+    <div class="container" id="placeDtl">
         <input type="hidden" th:value="${musArt.geoX}" id="x">
         <input type="hidden" th:value="${musArt.geoY}" id="y">
         <div class="placeDtlBox">
+            <!-- 찜 버튼 -->
             <button type="button" th:classappend="${isLikePlace}" onclick="addLike()" class="likeBtn">
                 <span class="material-symbols-outlined" >favorite</span>
                 <span th:if="${likePlaces == null}" style="color: grey">찜 0</span>
@@ -398,6 +284,7 @@
             </button>
             <h2 th:text="${musArt.name}"></h2>
 
+            <!-- 카카오 맵 -->
             <div class="mapWrap">
                 <div id="map" style="width:700px;height:300px;"></div>
             </div>
@@ -422,13 +309,16 @@
 
             <div class="comments">
                 <h5>리뷰</h5>
+                <!-- 리뷰 입력창 -->
                 <div class="mb-3" id="commentWrap">
                     <textarea class="form-control" id="comment" rows="3"></textarea>
                     <button type="button" class="btn btn-outline-secondary" id="commentBtn">등록</button>
                 </div>
+                <!-- 리뷰 목록 -->
                 <div class="commentList">
                     <div th:if="${comments != null}">
                         <th:block th:each="comment : ${comments}">
+                            <!-- 댓글 -->
                             <div th:if="${comment.cDepth == 0}" class="comm">
                                 <div class="commHead">
                                     <div class="commHead_left">
@@ -454,6 +344,7 @@
                                    th:value="${comment.id}" onclick="openReComment(this.value)">답글</button>
                             </div>
                             <div th:unless="${comment.cDepth == 0}"></div>
+                            <!-- 답글 -->
                             <div th:id="'reComm-' + ${comment.id}" class="reComms">
                                 <th:block th:each="reComment : ${reCommentList}">
                                     <div th:if="${reComment.cGroup == comment.id}" class="reComm">

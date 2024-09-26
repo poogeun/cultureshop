@@ -3,83 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
-<th:block layout:fragment="css">
-    <style>
-        h3 {
-            margin-bottom: 50px;
-        }
-        .osBox .date {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .buyerInfo {
-            margin-bottom: 100px;
-        }
-        h4 {
-            border-bottom: 2px solid;
-            padding-bottom: 10px;
-        }
-        .buyerContent {
-            margin-top: 20px;
-        }
-        .buyerContent ul li {
-            display: flex;
-            margin-bottom: 5px;
-        }
-        .buyerContent .infoTitle {
-            width: 150px;
-            color: rgba(60, 60, 67, 0.6);
-            font-weight: 400;
-        }
-        .itemInfo {
-            margin-bottom: 100px;
-        }
-        .osItems {
-            border-color: #ebebeb;
-        }
-        .osItemDtl {
-            padding: 0;
-            border-color: #ebebeb;
-            display: flex;
-            flex-direction: column;
-            border-bottom: 1px solid #ebebeb;
-        }
-        .osWrap {
-            width: 100%;
-            padding: 20px 0;
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .osItemDtl img {
-            width: 150px;
-        }
-        .osItemText {
-            padding: 0;
-            align-items: stretch;
-            display: flex;
-            flex-direction: row;
-            width: 970px;
-        }
-        .os_1 {
-            width: 100%;
-            display: flex;
-            align-items: flex-start;
-            flex-direction: column;
-            padding-top: 20px;
-            padding-left: 50px;
-        }
-        .osItemText2 {
-            display: flex;
-
-        }
-        .payContent {
-            width: 500px;
-            margin: 0 auto;
-        }
-    </style>
-</th:block>
-
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
@@ -92,7 +15,7 @@
 </th:block>
 
 <div layout:fragment="content">
-    <div class="container">
+    <div class="container" id="orderSuccess">
         <h3>주문상세내역</h3>
         <div class="osBox">
             <div class="osContent">

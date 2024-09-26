@@ -42,6 +42,7 @@
 </th:block>
 
 <div layout:fragment="content">
+    <!-- 검색필터, 입력창 -->
     <div class="row justify-content-center g-3 align-items-center" th:object="${itemSearchDto}">
         <select th:field="*{searchDateType}" class="form-control" style="width: auto;">
             <option value="all">전체기간</option>
@@ -67,6 +68,7 @@
     </div>
 
     <form th:action="@{'/admin/items/'+${items.number}}" role="form" method="get" th:object="${items}">
+        <!-- 상품목록 -->
         <table class="table">
             <thead>
             <tr class="mngTableHead">
@@ -91,6 +93,7 @@
             </tbody>
         </table>
 
+        <!-- 페이지네이션 -->
         <div th:with="start=${(items.number/maxPage) * maxPage + 1},
         end=(${(items.totalPages == 0) ?
         1 : (start * (maxPage-1) < items.totalPages ? start + (maxPage-1) : items.totalPages)})">

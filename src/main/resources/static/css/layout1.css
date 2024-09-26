@@ -424,6 +424,23 @@ section {
     line-height: 150%;
     color: #cdd0d1;
 }
+#main .moreItems a {
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 3px 10px;
+    color: #808080;
+}
+#main .locImgWrap {
+    position: relative;
+}
+#main .likeBtn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+}
 
 /* itemDtl */
 .likeBtn {
@@ -436,6 +453,190 @@ section {
 }
 .likeBtn.afterLike {
     color: red;
+}
+.itemMain {
+    width: 1200px;
+    margin: 50px auto;
+}
+.summary {
+    position: relative;
+}
+.prdTitle {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 150%;
+}
+.posterBox {
+    display: inline-block;
+    width: 300px;
+}
+.posterBoxImage {
+    width: 330px;
+    height: 430px;
+    border: 1px solid #dadee3;
+}
+.itemInfos {
+    display: inline-block;
+    width: 450px;
+    margin-left: 50px;
+    margin-top: 10px;
+    vertical-align: top;
+}
+ul {
+    list-style: none;
+}
+.itemInfo {
+    margin-top: 20px;
+}
+.orderInput {
+    border-top: 1px solid #f0f0f0;
+    margin-top: 20px;
+    display: flex;
+}
+.orderInput li {
+    margin-right: 20px;
+    width: 50%;
+}
+.resBtn {
+    margin-top: 30px;
+}
+.resBtn button {
+    color: #bbe309;
+    border-color: #bbe309;
+    background-color: #fff;
+}
+.resBtn button:hover {
+    color: #fff;
+    background-color: #bbe309;
+}
+.nav-link {
+    color: black;
+}
+#itemMainBody #nav {
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+#itemMainBody #nav a {
+    font-weight: 600;
+}
+.itemMainBody {
+    position: relative;
+    margin-top: 100px;
+}
+.navList {
+    border: 1px solid #dadee3;
+}
+.itemContentsDtl .content {
+    margin-bottom: 100px;
+    margin-left: 0;
+}
+#detail-sales {
+    line-height: 2.5;
+}
+#detail-review .reviewTop {
+    padding: 50px 0;
+    border-bottom: 1px solid #dadee3;
+}
+#detail-review .leftSide {
+    float: left;
+    vertical-align: middle;
+}
+.prdStar span {
+    color: #dfe5ed;
+}
+.starPoint1.active, .starPoint2.active, .starPoint3.active, .starPoint4.active, .starPoint5.active {
+    color: #ffb400;
+}
+#detail-review .rightSide {
+    float: right;
+    vertical-align: middle;
+}
+#detail-review .reviewList {
+    padding-left: 0;
+}
+#detail-review .reviewContent {
+    padding: 10px 30px 40px;
+    margin: 40px 0;
+    border: 1px solid #dfe5ed;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+#noReview {
+    line-height: 11;
+    color: #808080;
+    height: 200px;
+    text-align: center;
+}
+#detail-review .reviewItemHead {
+    display: table;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.reviewItemHead .rightSide {
+    text-align: right;
+}
+#detail-review .reviewInfos {
+    display: inline-block;
+    color: #999;
+    vertical-align: middle;
+}
+#detail-review .reviewInfo {
+    display: inline-block;
+    position: relative;
+    margin-left: 15px;
+    padding-left: 15px;
+    vertical-align: middle;
+}
+#detail-review .reviewTitle {
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+#detail-review .reviewText {
+    line-height: 2;
+    margin-top: 20px;
+}
+#detail-review .bodyRight {
+    float: right;
+}
+
+/* itemCategory */
+#itemCategory .cateImgWrap {
+    position: relative;
+}
+#itemCategory .likeBtn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+}
+#itemCategory .cateLeft {
+    float: left;
+    vertical-align: middle;
+}
+#itemCategory .cateRight {
+    float: right;
+    vertical-align: middle;
+}
+#itemCategory .addrBtns {
+    border-right: 2px solid #f0f0f0;
+    padding-right: 10px;
+    padding-left: 10px;
+    color: grey;
+}
+#itemCategory .addrFilter {
+    display: flex;
+}
+#itemCategory .addrFilter span:last-of-type {
+    border: none;
+}
+#itemCategory .filterIcon {
+    display: flex;
+    font-weight: 700;
 }
 
 /* orderForm */
@@ -533,6 +734,79 @@ section {
 }
 .delReq textarea {
     margin-top: 20px;
+}
+
+/* orderSuccess */
+#orderSuccess h3 {
+    margin-bottom: 50px;
+}
+.osBox .date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#orderSuccess .buyerInfo {
+    margin-bottom: 100px;
+}
+#orderSuccess h4 {
+    border-bottom: 2px solid;
+    padding-bottom: 10px;
+}
+#orderSuccess .buyerContent {
+    margin-top: 20px;
+}
+#orderSuccess .buyerContent ul li {
+    display: flex;
+    margin-bottom: 5px;
+}
+#orderSuccess .buyerContent .infoTitle {
+    width: 150px;
+    color: rgba(60, 60, 67, 0.6);
+    font-weight: 400;
+}
+#orderSuccess .itemInfo {
+    margin-bottom: 100px;
+}
+#orderSuccess .osItems {
+    border-color: #ebebeb;
+}
+.osItemDtl {
+    padding: 0;
+    border-color: #ebebeb;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #ebebeb;
+}
+.osWrap {
+    width: 100%;
+    padding: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+.osItemDtl img {
+    width: 150px;
+}
+.osItemText {
+    padding: 0;
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    width: 970px;
+}
+#orderSuccess .os_1 {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-left: 50px;
+}
+#orderSuccess .osItemText2 {
+    display: flex;
+}
+#orderSuccess .payContent {
+    width: 500px;
+    margin: 0 auto;
 }
 
 /* orderHist */
@@ -785,6 +1059,298 @@ section {
     font-size: 15px;
     color: #666670;
 }
+.searchAddr {
+    border: none;
+    background: none;
+    font-size: 20px;
+    font-weight: 700;
+}
+.placeMainMap {
+    background-color: #e1eda8;
+    padding: 20px;
+    border-radius: 20px;
+}
+#placeMain .desc {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 700;
+}
+#placeMain #map {
+    width: 900px;
+    height: 400px;
+    margin: 0 auto;
+    border-radius: 15px;
+}
+#placeMain .placeWrap {
+    position: relative;
+    margin-top: 100px;
+}
+#placeMain .placeWrap .more {
+    top: 20px;
+    right: 12px;
+    position: absolute;
+}
+#placeMain .placeWrap span a {
+    color: #8D8D8D;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+.placeTitle h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+.prdPlace {
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+    width: 100%;
+}
+#placeMain .placeCard {
+    width: 20%;
+    margin-right: 10px;
+}
+#placeMain .placeCard h5 {
+    padding-left: 0;
+    display: flex;
+}
+#placeMain .placeCard h5 div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+#placeMain .likeBtn {
+    background: none;
+    border: none;
+    float: right;
+    color: #808080;
+}
+#placeMain .prdPlace .item {
+    margin-right: 7px;
+    width: 20%;
+}
+#placeMain .placeImgWrap img {
+    width: 230px;
+    height: 150px;
+    border-radius: 8px;
+}
+#placeMain .prdPlace .detail {
+    display: flex;
+    padding: 0 4px;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    height: 100px;
+    width: 230px;
+    text-align: left;
+}
+
+/* searchAddress */
+.addrInput {
+    display: flex;
+    margin: 0 auto;
+}
+.addrInput button {
+    background: none;
+    border: none;
+}
+.addrBtn {
+    margin-top: 20px;
+}
+.addrResult {
+    text-align: center;
+    margin-top: 30px;
+    display: none;
+}
+.addrResult div {
+    font-weight: 700;
+}
+.addrResult ul {
+    padding-left: 0;
+}
+.addrResult li {
+    margin: 10px 0;
+}
+.addrResult button {
+    background: none;
+    border: none;
+}
+
+/* placeDtl */
+.placeDtlBox {
+    border: 1px solid #f0f0f0;
+    width: 60%;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+.placeDtlBox button {
+    float: right;
+}
+#placeDtl #map {
+    margin: 0 auto;
+}
+.placeDtlBox h2 {
+    margin: 40px;
+    font-weight: 700;
+    text-align: center;
+}
+.placeInfo {
+    margin: 30px;
+}
+.placeDtlBox h5{
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
+    font-weight: 600;
+    font-size: 18px;
+}
+.placeInfo ul {
+    padding-left: 0;
+}
+.placeInfo li {
+    display: flex;
+    margin: 10px 0;
+}
+.placeInfo li span {
+    color: #BBE309;
+}
+.placeInfo li div {
+    margin-left: 20px;
+}
+.comments {
+    margin: 30px;
+}
+#commentWrap {
+    display: flex;
+}
+#comment {
+    width: 90%;
+}
+.comm {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+.commHead button {
+    margin: 0 3px;
+    font-size: 10px;
+}
+.commHead_left {
+    display: flex;
+    float: left;
+    vertical-align: middle;
+}
+.regTime {
+    float: right;
+    vertical-align: middle;
+}
+.writer, .regTime {
+    font-size: 14px;
+    color: #808080;
+}
+.commBody {
+    display: flex;
+}
+.commBody textarea {
+    display: none;
+    width: 90%;
+}
+.commText {
+    margin: 5px;
+    word-break: break-all;
+}
+.commBody button {
+    display: none;
+}
+.reComm {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+.reCommentWrap {
+    display: flex;
+    margin-top: 15px;
+}
+#reComment {
+    width: 85%;
+}
+.reCommentBtn1 {
+    background: none;
+    border: none;
+    width: 50px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+/* reviewWrite */
+.reviewWriteBox {
+    border: 1px solid #cfcccc;
+    overflow: hidden;
+    border-radius: 4px;
+}
+.rwTop {
+    background-color: #F4F4F5;
+    text-align: center;
+    padding: 15px 0;
+}
+.rwBody {
+    padding: 0;
+    border-top: 1px solid #cfcfd0;
+    border-bottom: 1px solid #cfcfd0;
+    display: flex;
+    justify-content: center;
+}
+.rwItem {
+    display: flex;
+    align-items: center;
+    margin: 50px 0;
+}
+.rwItemImg img {
+    width: 130px;
+}
+.rwItemInfo {
+    margin-left: 30px;
+    width: 400px;
+}
+#reviewWrite .starRadio {
+    display: flex;
+    align-items: center;
+    margin: 50px 0;
+    flex-direction: column;
+}
+#reviewWrite .starRadio h5 {
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+#reviewWrite .radioWrap {
+    display: flex;
+    flex-direction: row;
+}
+#reviewWrite .starRadio span {
+    color: #ffb400;
+}
+.rwText {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 50px 0;
+}
+.rwForm {
+    width: 500px;
+}
+.rwBtn {
+    margin-top: 100px;
+    text-align: center;
+}
 
 /* memberForm */
 .fieldError{
@@ -815,4 +1381,27 @@ h3 {
 }
 .signBtn button {
     width: 400px;
+}
+
+/* itemForm */
+#itemForm .h2 {
+    margin-bottom: 50px;
+}
+.img-div{
+    margin-bottom: 10px;
+}
+.fieldError{
+    color: #bd2130;
+}
+#itemForm .itemInput {
+    width: 40%;
+    margin-bottom: 15px;
+    margin-right: 50px;
+}
+#itemForm .itemFormBtn {
+    text-align: center;
+    margin-top: 30px;
+}
+#itemForm .itemFormBtn button {
+    width: 350px;
 }

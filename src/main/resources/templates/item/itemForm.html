@@ -31,35 +31,9 @@
     </script>
 </th:block>
 
-<th:block layout:fragment="css">
-    <style>
-        .h2 {
-            margin-bottom: 50px;
-        }
-        .img-div{
-            margin-bottom: 10px;
-        }
-        .fieldError{
-            color: #bd2130;
-        }
-        .itemInput {
-            width: 40%;
-            margin-bottom: 15px;
-            margin-right: 50px;
-        }
-        .itemFormBtn {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .itemFormBtn button {
-            width: 350px;
-        }
-    </style>
-</th:block>
-
 <div layout:fragment="content">
     <form role="form" class="row g-3" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
-        <div class="container">
+        <div class="container" id="itemForm">
             <p class="h2">상품 등록</p>
             <input type="hidden" th:field="*{id}">
             <div class="input-group" style="justify-content: center;">

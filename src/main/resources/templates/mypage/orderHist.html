@@ -20,8 +20,6 @@
             color: #bbe309;
             font-weight: 700;
         }
-
-
     </style>
 </th:block>
 
@@ -34,6 +32,7 @@
             }
         });
 
+        // 주문 취소
         function cancelOrder(orderId) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -74,6 +73,7 @@
 
 <div layout:fragment="content">
     <div class="container">
+        <!-- 마이페이지 메뉴 -->
         <section class="mypageHead">
             <div class="mypageBox">
                 <div class="mypageText">
@@ -108,6 +108,7 @@
             </div>
         </section>
 
+        <!-- 주문상품목록 -->
         <section class="mypageBody">
             <div class="mypage-body">
                 <table class="orderList">

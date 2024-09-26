@@ -20,6 +20,11 @@
                 loop: true
             });
 
+            locButton();
+        })
+
+        // 지역버튼 css, 상품목록
+        function locButton() {
             $('#locItem1').show();
             $('#locItem2').hide();
             $('#locItem3').hide();
@@ -36,7 +41,7 @@
                 var $loc5 = $("#loc5");
                 var $loc6 = $("#loc6");
 
-                // 모든 버튼의 활성화 상태를 업데이트합니다.
+                // 모든 버튼의 활성화 상태 업데이트
                 $btns.each(function() {
                     if ($(this).is(e.currentTarget)) {
                         $(this).addClass("active");
@@ -93,10 +98,10 @@
                     $('#locItem4').hide();
                     $('#locItem5').hide();
                 }
-
             });
-        })
+        }
 
+        // 찜 추가
         function addLike(event, itemId) {
             event.preventDefault();
             event.stopPropagation();
@@ -135,32 +140,10 @@
     </script>
 </th:block>
 
-<th:block layout:fragment="css">
-    <style>
-        .moreItems a {
-            border: 1px solid #ddd;
-            border-radius: 15px;
-            padding: 3px 10px;
-            color: #808080;
-        }
-        .locImgWrap {
-            position: relative;
-        }
-        .likeBtn {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            color: #fff;
-            width: 50px;
-            height: 50px;
-        }
-    </style>
-</th:block>
-
 <div layout:fragment="content">
 
     <!-- 배너 -->
-    <div class="container mt-5">
+    <div class="container mt-5" id="main">
         <div class="owl-carousel owl-theme">
             <th:block th:each="bannerItem : ${bannerItems}">
                 <div class="ms-2 me-2">
@@ -202,6 +185,7 @@
                 <button role="tab" class="radioButton" id="loc6" aria-label="충청">충청</button>
             </div>
             <div class="itemGroup">
+                <!-- 서울 상품목록 -->
                 <div id="locItem1" style="display: flex">
                     <th:block th:each="seoulItem : ${seoulItems}" id="itemList">
                         <div class="locItem">
@@ -230,6 +214,7 @@
                     </th:block>
                 </div>
 
+                <!-- 경기 상품목록 -->
                 <div id="locItem2" style="display: flex">
                     <th:block th:each="kkItem : ${kkItems}">
                         <div class="locItem">
@@ -258,6 +243,7 @@
                     </th:block>
                 </div>
 
+                <!-- 경상 상품목록 -->
                 <div id="locItem3" style="display: flex">
                     <th:block th:each="ksItem : ${ksItems}">
                         <div class="locItem">
@@ -286,6 +272,7 @@
                     </th:block>
                 </div>
 
+                <!-- 전라 상품목록 -->
                 <div id="locItem4" style="display: flex">
                     <th:block th:each="jrItem : ${jrItems}">
                         <div class="locItem">
@@ -314,6 +301,7 @@
                     </th:block>
                 </div>
 
+                <!-- 제주 상품목록 -->
                 <div id="locItem5" style="display: flex">
                     <th:block th:each="jjItem : ${jjItems}">
                         <div class="locItem">
@@ -342,6 +330,7 @@
                     </th:block>
                 </div>
 
+                <!-- 충청 상품목록 -->
                 <div id="locItem6" style="display: flex">
                     <th:block th:each="ccItem : ${ccItems}">
                         <div class="locItem">
@@ -369,7 +358,6 @@
                         </div>
                     </th:block>
                 </div>
-
             </div>
         </div>
     </section>

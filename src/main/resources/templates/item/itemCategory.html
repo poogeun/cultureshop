@@ -8,46 +8,6 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
-<th:block layout:fragment="css">
-    <style>
-        .cateImgWrap {
-            position: relative;
-        }
-        .likeBtn {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            color: #fff;
-            width: 50px;
-            height: 50px;
-        }
-        .cateLeft {
-            float: left;
-            vertical-align: middle;
-        }
-        .cateRight {
-            float: right;
-            vertical-align: middle;
-        }
-        .addrBtns {
-            border-right: 2px solid #f0f0f0;
-            padding-right: 10px;
-            padding-left: 10px;
-            color: grey;
-        }
-        .addrFilter {
-            display: flex;
-        }
-        .addrFilter span:last-of-type {
-            border: none;
-        }
-        .filterIcon {
-            display: flex;
-            font-weight: 700;
-        }
-    </style>
-</th:block>
-
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
@@ -56,12 +16,13 @@
                 alert(errorMessage);
             }
 
+            // 주소필터 클릭 시 폼 전송
             $(".addrBtn").on("click", function(e) {
                 var addrValue = $(this).text();
                 $('input[name=address]').val(addrValue);
                 $('#filterForm').submit();
             });
-
+            // 정렬기준 클릭 시 폼 전송
             $(".alignBtn").on("click", function(e) {
                 var sortValue = $(this).attr('id');
                 $('input[name=sort]').val(sortValue);
@@ -77,6 +38,7 @@
 
         });
 
+        // 정렬기준 드롭다운 클릭 시 버튼 이름 변경
         function changeSortButton() {
             var sort = $('input[name=sort]').val();
             console.log(sort);
@@ -90,6 +52,7 @@
             }
         }
 
+        // 현재 카테고리탭
         function categoryTab() {
             var category = $('input[name=category]').val();
             var exhiTab = $('.inner #exhiTab');
@@ -109,6 +72,7 @@
             }
         }
 
+        // 무한스크롤
         function infinityScroll() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -120,8 +84,6 @@
             var category = $('input[name=category]').val();
 
             function getData(limit) {
-                console.log('getData 안');
-
                 $.ajax({
                     type : "POST",
                     enctype : 'multipart/form-data',
@@ -206,6 +168,7 @@
             });
         }
 
+        // 찜 추가
         function addLike(event, itemId) {
             event.preventDefault();
             event.stopPropagation();
@@ -245,8 +208,9 @@
 </th:block>
 
 <div layout:fragment="content">
-    <div class="container">
+    <div class="container" id="itemCategory">
         <form th:action="@{'/item/category/' + ${category}}" method="get" id="filterForm">
+            <!-- 상품정렬/필터 -->
             <div class="cateHead">
                 <div class="cateFilter">
                     <div class="dropdown" id="sorting">
@@ -281,6 +245,7 @@
                 </div>
             </div>
         </form>
+        <!-- 상품 목록 -->
         <div class="cateBody">
             <div class="container text-center" style="margin-top: 50px">
                 <div class="row row-cols-4 cateItemCard">

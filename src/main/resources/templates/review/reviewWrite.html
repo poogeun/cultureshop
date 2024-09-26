@@ -11,84 +11,18 @@
                 alert(errorMessage);
             }
         });
-
-
     </script>
-</th:block>
-
-<th:block layout:fragment="css">
-    <style>
-        .reviewWriteBox {
-            border: 1px solid #cfcccc;
-            overflow: hidden;
-            border-radius: 4px;
-        }
-        .rwTop {
-            background-color: #F4F4F5;
-            text-align: center;
-            padding: 15px 0;
-        }
-        .rwBody {
-            padding: 0;
-            border-top: 1px solid #cfcfd0;
-            border-bottom: 1px solid #cfcfd0;
-            display: flex;
-            justify-content: center;
-        }
-        .rwItem {
-            display: flex;
-            align-items: center;
-            margin: 50px 0;
-        }
-        .rwItemImg img {
-            width: 130px;
-        }
-        .rwItemInfo {
-            margin-left: 30px;
-            width: 400px;
-        }
-        .starRadio {
-            display: flex;
-            align-items: center;
-            margin: 50px 0;
-            flex-direction: column;
-        }
-        .starRadio h5 {
-            text-align: center;
-            font-weight: 500;
-            margin-bottom: 25px;
-        }
-        .radioWrap {
-            display: flex;
-            flex-direction: row;
-        }
-        .starRadio span {
-            color: #ffb400;
-        }
-        .rwText {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            margin: 50px 0;
-        }
-        .rwForm {
-            width: 500px;
-        }
-        .rwBtn {
-            margin-top: 100px;
-            text-align: center;
-        }
-    </style>
 </th:block>
 
 <div layout:fragment="content">
     <form role="form" method="post" th:object="${reviewFormDto}">
-    <div class="container">
+    <div class="container" id="reviewWrite">
         <div class="reviewWriteBox">
             <div class="rwTop">
                 구매후기 작성
             </div>
             <div class="rwBody">
+                <!-- 상품정보 -->
                 <div class="rwItem">
                     <div class="rwItemImg">
                         <img th:src="${item.imgUrl}" alt="${item.itemName}">
@@ -103,6 +37,7 @@
                 </div>
             </div>
             <div class="rwBody">
+                <!-- 별점 -->
                 <div class="starRadio">
                     <h5>전시/공연은 어떠셨나요?</h5>
                     <div class="radioWrap">
@@ -150,6 +85,7 @@
                 </div>
             </div>
             <div class="rwBody">
+                <!-- 후기입력 -->
                 <div class="rwText">
                     <div class="mb-3 rwForm">
                         <label for="rwTitle" class="form-label">제목</label>

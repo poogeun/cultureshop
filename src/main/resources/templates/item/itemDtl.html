@@ -22,6 +22,7 @@
                 calculateTotalPrice();
             });
 
+            // 네비게이션탭 활성화
             $(".nav-link").on("click", function(e) {
                 $(".nav-link").each(function() {
                     if ($(this).is(e.currentTarget)) {
@@ -33,6 +34,7 @@
             });
         });
 
+        // 총 상품금액
         function calculateTotalPrice(){
             var count = $("#count").val();
             var price = $("#price").val();
@@ -40,6 +42,7 @@
             $("#totalPrice").html(totalPrice + '원');
         }
 
+        // 찜 추가
         function addLike() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -71,6 +74,7 @@
             });
         }
 
+        // 리뷰 별점 표시
         function starActive() {
             var starPoint = $('.rvPoint').val();
             console.log(starPoint);
@@ -105,156 +109,7 @@
 
 <th:block layout:fragment="css">
     <style>
-        .itemMain {
-            width: 1200px;
-            margin: 50px auto;
-        }
-        .summary {
-            position: relative;
-        }
-        .prdTitle {
-            font-size: 30px;
-            font-weight: 700;
-            line-height: 150%;
-        }
 
-
-        .posterBox {
-            display: inline-block;
-            width: 300px;
-        }
-        .posterBoxImage {
-            width: 330px;
-            height: 430px;
-            border: 1px solid #dadee3;
-        }
-        .itemInfos {
-            display: inline-block;
-            width: 450px;
-            margin-left: 50px;
-            margin-top: 10px;
-            vertical-align: top;
-        }
-        ul {
-            list-style: none;
-        }
-        .itemInfo {
-            margin-top: 20px;
-        }
-        .orderInput {
-            border-top: 1px solid #f0f0f0;
-            margin-top: 20px;
-            display: flex;
-        }
-        .orderInput li {
-            margin-right: 20px;
-            width: 50%;
-        }
-        .resBtn {
-            margin-top: 30px;
-        }
-        .resBtn button {
-            color: #bbe309;
-            border-color: #bbe309;
-            background-color: #fff;
-        }
-        .resBtn button:hover {
-            color: #fff;
-            background-color: #bbe309;
-        }
-        #nav {
-            background-color: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-        #itemMainBody #nav a {
-            font-weight: 600;
-        }
-        .itemMainBody {
-            position: relative;
-            margin-top: 100px;
-        }
-        .navList {
-            border: 1px solid #dadee3;
-        }
-        .itemContentsDtl .content {
-            margin-bottom: 100px;
-            margin-left: 0;
-        }
-        #detail-sales {
-            line-height: 2.5;
-        }
-        .reviewWrap {
-
-        }
-        .reviewTop {
-            padding: 50px 0;
-            border-bottom: 1px solid #dadee3;
-        }
-        .leftSide {
-            float: left;
-            vertical-align: middle;
-        }
-        .prdStar span {
-            color: #dfe5ed;
-        }
-        .starPoint1.active, .starPoint2.active, .starPoint3.active, .starPoint4.active, .starPoint5.active {
-            color: #ffb400;
-        }
-        .rightSide {
-            float: right;
-            vertical-align: middle;
-        }
-        .reviewList {
-            padding-left: 0;
-        }
-        .reviewContent {
-            padding: 10px 30px 40px;
-            margin: 40px 0;
-            border: 1px solid #dfe5ed;
-            border-radius: 15px;
-            box-sizing: border-box;
-        }
-        #noReview {
-            line-height: 11;
-            color: #808080;
-            height: 200px;
-            text-align: center;
-        }
-        .reviewItemHead {
-            display: table;
-            width: 100%;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-        .reviewItemHead .rightSide {
-            text-align: right;
-        }
-        .reviewInfos {
-            display: inline-block;
-            color: #999;
-            vertical-align: middle;
-
-        }
-        .reviewInfo {
-            display: inline-block;
-            position: relative;
-            margin-left: 15px;
-            padding-left: 15px;
-            vertical-align: middle;
-        }
-        .reviewTitle {
-            margin-top: 20px;
-            margin-bottom: 15px;
-        }
-        .reviewText {
-            line-height: 2;
-            margin-top: 20px;
-        }
-        .bodyRight {
-            float: right;
-        }
     </style>
 </th:block>
 

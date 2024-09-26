@@ -8,13 +8,6 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
-<th:block layout:fragment="css">
-    <style>
-
-
-    </style>
-</th:block>
-
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
@@ -23,6 +16,18 @@
                 alert(errorMessage);
             }
 
+            selectDelReq();
+            getTicket();
+            getPerPrice();
+
+            // 수량 변경 시 총 결제금액 변동
+            $('.count').on('change', function() {
+                 getTotalPrice();
+            });
+        });
+
+        // 배송요청사항 직접입력 선택 시 입력창 출력
+        function selectDelReq() {
             $('#reqWrite').hide();
             $('#delReq').change(function() {
                 if($(this).val() === '직접 입력') {
@@ -32,7 +37,10 @@
                     $('#reqWrite').hide();
                 }
             });
+        }
 
+        // 티켓수령방법 선택 시 가격변동
+        function getTicket() {
             $('.delFree').show();
             $('.delCharge').hide();
             $('input[name="getTicket"]').change(function() {
@@ -45,15 +53,9 @@
                     $('.delFree').hide();
                 }
             });
+        }
 
-           getPerPrice();
-
-           $('.count').on('change', function() {
-                getTotalPrice();
-           });
-
-        });
-
+        // 수량 변경 시 총 상품가격
         function getPerPrice() {
 
             var totalPrice = 0;
@@ -63,13 +65,14 @@
                 var item = $(this);
                 var price = parseInt(item.find('.price').text().replace('원', '').trim());
 
+                // 결제금액 가격
                 totalPrice += price;
                 delPayPrice = totalPrice + 3000;
                 $('#totalPrice').html(totalPrice + '원');
                 $('#delFree').html(totalPrice + '원');
                 $('#delCharge').html(delPayPrice + '원');
 
-
+                // 상품정보 가격
                 item.find('.count').on('change', function(e) {
                     if($(this).is(e.currentTarget)) {
                         var perCount = $(this).val();
@@ -80,8 +83,8 @@
             });
         }
 
+        // 수량 변경 시 총 결제금액
         function getTotalPrice() {
-
             var totalPrice = 0;
             var delPayPrice = 0;
 
@@ -97,6 +100,7 @@
             });
         }
 
+        // 주문
         function orders() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -120,7 +124,7 @@
             var reqWrite = $('#reqWrite').val();
             var getTicket = $('input[name=getTicket]:checked').val();
 
-            $('.orderItemDtl').each(function() {
+            $('.orderItemDtl').each(function() { // 주문 상품만큼 반복
                 var likeItemId = $(this).find('input[name=likeItemId]').val();
                 var itemId = $(this).find('input[name=itemId]').val();
                 var count = $(this).find('input[name=count]').val();
@@ -145,7 +149,6 @@
             paramData['likeOrderFormDtoList'] = dataList;
             var param = JSON.stringify(paramData);
 
-            console.log(param);
             $.ajax({
                 url : url,
                 type : "POST",
@@ -172,14 +175,12 @@
             });
         }
 
+        // 아임포트 API
         var IMP = window.IMP;
         IMP.init("imp16131530");
         function requestPay(orderUid) {
 
             var itemName = $('ul li:first-child h3').text();
-
-            console.log(orderUid);
-
             var paymentPrice;
             if($('input[name="getTicket"]').val() === '현장수령'){
                 paymentPrice = parseInt($('#delFree').text().replace('원', '').trim());
@@ -187,8 +188,6 @@
             else {
                 paymentPrice = parseInt($('#delCharge').text().replace('원', '').trim());
             }
-            console.log(paymentPrice);
-
             var buyerName = $('#orderName').val();
             var buyerEmail = $('#email').val();
             var buyerAddress = $('#address').val();
@@ -207,12 +206,10 @@
                 buyer_postcode : '123-456',
             },
             function(rsp) {
-
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
 
                 if (rsp.success) {
-                    alert('call back!! ' + JSON.stringify(rsp));
 
                     jQuery.ajax({
                         url: "/payment",
@@ -255,30 +252,21 @@
         function execDaumPostcode() {
             new daum.Postcode({
                 oncomplete: function(data) {
-                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
                     var addr = ''; // 주소 변수
 
-                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
                     if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
                         addr = data.roadAddress;
                     } else { // 사용자가 지번 주소를 선택했을 경우(J)
                         addr = data.jibunAddress;
                     }
 
-                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
                     document.getElementById('postcode').value = data.zonecode;
                     document.getElementById("address").value = addr;
-                    // 커서를 상세주소 필드로 이동한다.
                     document.getElementById("detailAddress").focus();
                 }
             }).open();
         }
-
-
-
     </script>
 </th:block>
 
@@ -368,6 +356,7 @@
                                     <div class="orderItemText">
                                         <div class="oit_1">
                                             <h3 th:text=${likeItem.itemName} style="font-weight: bold"></h3>
+                                            <!-- 찜주문은 주문 페이지에서 관람일, 수량 입력 받음 -->
                                             <div class="row g-3 align-items-center">
                                                 <div class="col-auto">
                                                     <label class="col-form-label">관람일</label>
@@ -431,12 +420,9 @@
                 </div>
             </div>
         </section>
-
-
         <div class="d-grid gap-2 payBtn">
             <button class="btn btn-primary btn-lg" type="button" onclick="orders()">결제하기</button>
         </div>
-
     </div>
 </div>
 </html>

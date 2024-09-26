@@ -8,40 +8,6 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
-<th:block layout:fragment="css">
-    <style>
-        .addrInput {
-            display: flex;
-            margin: 0 auto;
-        }
-        .addrInput button {
-            background: none;
-            border: none;
-        }
-        .addrBtn {
-            margin-top: 20px;
-        }
-        .addrResult {
-            text-align: center;
-            margin-top: 30px;
-            display: none;
-        }
-        .addrResult div {
-            font-weight: 700;
-        }
-        .addrResult ul {
-            padding-left: 0;
-        }
-        .addrResult li {
-            margin: 10px 0;
-        }
-        .addrResult button {
-            background: none;
-            border: none;
-        }
-    </style>
-</th:block>
-
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
@@ -50,6 +16,7 @@
             placeTab.css('border-bottom', '2px solid black');
         });
 
+        // 주소 검색 시 해당주소버튼 출력
         function findAddr() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -73,10 +40,8 @@
                     if(result.length > 0) {
                         for(var i=0; i < result.length; i++) {
                             var addr = result[i];
-                            console.log(addr);
                             var splitAddr = addr.split(" ");
-                            var resultAddr = splitAddr[1];
-                            console.log(resultAddr);
+                            var resultAddr = splitAddr[1]; // xx구 추출
                             var addrElement =
                                 $(
                                     `<li class='simAddr'>
@@ -114,10 +79,10 @@
         </div>
         <div class="addrResult">
             <div>'<span class="inputResult"></span>' 검색결과</div>
+            <!-- 주소버튼 -->
             <ul class="simAddrBtn">
             </ul>
         </div>
     </div>
-
 </div>
 </html>

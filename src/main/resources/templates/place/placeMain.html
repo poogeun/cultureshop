@@ -8,103 +8,6 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
-<th:block layout:fragment="css">
-    <style>
-        .searchAddr {
-            border: none;
-            background: none;
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .placeMainMap {
-            background-color: #e1eda8;
-            padding: 20px;
-            border-radius: 20px;
-        }
-
-        .desc {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 20px;
-            font-weight: 700;
-        }
-        #map {
-            width: 900px;
-            height: 400px;
-            margin: 0 auto;
-            border-radius: 15px;
-        }
-        .placeWrap {
-            position: relative;
-            margin-top: 100px;
-        }
-        .placeWrap .more {
-            top: 20px;
-            right: 12px;
-            position: absolute;
-        }
-        .placeWrap span a {
-            color: #8D8D8D;
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        .placeTitle h2 {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .prdPlace {
-            display: flex;
-            flex-direction: row;
-            margin-top: 30px;
-            width: 100%;
-        }
-        .placeCard {
-            width: 20%;
-            margin-right: 10px;
-        }
-        .placeCard h5 {
-            padding-left: 0;
-            display: flex;
-        }
-        .placeCard h5 div {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            word-wrap: break-word;
-            word-break: break-all;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-        }
-        .likeBtn {
-            background: none;
-            border: none;
-            float: right;
-            color: #808080;
-        }
-
-        .prdPlace .item {
-            margin-right: 7px;
-            width: 20%;
-        }
-        .placeImgWrap img {
-            width: 230px;
-            height: 150px;
-            border-radius: 8px;
-        }
-        .prdPlace .detail {
-            display: flex;
-            padding: 0 4px;
-            flex-direction: column;
-            align-items: flex-start;
-            align-self: stretch;
-            height: 100px;
-            width: 230px;
-            text-align: left;
-        }
-    </style>
-</th:block>
-
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
@@ -125,49 +28,21 @@
 
         });
 
-        function execDaumPostcode() {
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                    var addr = ''; // 주소 변수
-                    var extraAddr = ''; // 참고항목 변수
-
-                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                        addr = data.sigungu;
-                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                        addr = data.sigungu;
-                    }
-
-                    $("#address").val(addr);
-
-                    // 주소 필드의 입력이 변경될 때마다 콘솔에 출력
-                    $("#address").off('input').on('input', function() {
-                        console.log("Address changed:", $(this).val());
-                    });
-
-                    // 콘솔에 설정된 주소 값 출력 (디버깅용)
-                    console.log("Address set:", addr);
-                }
-            }).open();
-        }
-
+        // 주소 입력 전
         function basicMap() {
-            var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-            var options = { //지도를 생성할 때 필요한 기본 옵션
-                center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667),
                 level: 3 //지도의 레벨(확대, 축소 정도)
             };
 
-            var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+            var map = new kakao.maps.Map(container, options);
         }
 
+        // 주소 입력 후 마커 생성
         function addrMap() {
-            var places = [];
-            $('.placeCard').each(function(i) {
+            var places = []; // 배열
+            $('.placeCard').each(function(i) { // 박물관5, 미술관5 만큼 반복
                 var place = $(this);
 
                 var placeId = place.find('input[name=placeId]').val();
@@ -181,7 +56,7 @@
                     name: name
                 };
 
-                places.push(placeInfo);
+                places.push(placeInfo); // 위 정보 순서대로 배열에 넣기
             });
 
             var container = document.getElementById('map');
@@ -192,7 +67,7 @@
 
             var map = new kakao.maps.Map(container, options);
 
-            var positions = [
+            var positions = [ // 배열 places 사용해서 마커 생성
                 {
                     title: places[0].name,
                     latlng: new kakao.maps.LatLng(places[0].x, places[0].y)
@@ -244,6 +119,7 @@
             }
         }
 
+        // 찜 추가
         function addLike(placeId) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -278,7 +154,8 @@
 </th:block>
 
 <div layout:fragment="content">
-    <div class="container">
+    <div class="container" id="placeMain">
+        <!-- 주소검색 버튼 -->
         <button type="button" class="searchAddr" onclick="location.href='/place/address'">
             <span class="material-symbols-outlined">my_location</span>
             <span th:if="${simAddr} == null" class="addrField">주소 검색</span>
@@ -286,6 +163,7 @@
             <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
 
+        <!-- 카카오 맵 -->
         <section class="placeMainMap">
             <div class="desc"><span class="material-symbols-outlined">map</span> 내 주변 박물관/미술관</div>
             <div id="map"></div>
@@ -301,17 +179,20 @@
                     <a th:unless="${simAddr} == null" th:href="'/place/list/museum/' + ${simAddr}">더보기</a>
                 </span>
                 <div class="prdPlace">
+                    <!-- 내주변 박물관 목록 (5) -->
                     <th:block th:each="museum : ${museums}">
                         <div class="card placeCard">
                             <input type="hidden" th:value="${museum.id}" name="placeId">
                             <input type="hidden" th:value="${museum.geoX}" th:id="'geox-' +${museum.id}">
                             <input type="hidden" th:value="${museum.geoY}" th:id="'geoy-' +${museum.id}">
                             <h5 class="card-header">
+                                <!-- userLikeYn이 null이면 찜한 상품 아님 -->
                                 <th:block th:if="${museum.userLikeYn == null}">
                                     <button type="button" th:value="${museum.id}" onclick="addLike(this.value)" class="likeBtn">
                                         <span class="material-symbols-outlined">favorite</span>
                                     </button>
                                 </th:block>
+                                <!-- userLikeYn이 null이 아니면 찜한 상품, css 추가 -->
                                 <th:block th:unless="${museum.userLikeYn == null}">
                                     <button type="button" th:value="${museum.id}" onclick="addLike(this.value)" class="likeBtn">
                                         <span class="material-symbols-outlined" style="color: red">favorite</span>
@@ -337,6 +218,7 @@
                     <a th:unless="${simAddr} == null" th:href="'/place/list/art/' + ${simAddr}">더보기</a>
                 </span>
                 <div class="prdPlace">
+                    <!-- 내주변 미술관 목록 (5) -->
                     <th:block th:each="art : ${arts}">
                         <div class="card placeCard">
                             <input type="hidden" th:value="${art.id}" name="placeId">
@@ -370,6 +252,7 @@
                 </div>
                 <span class="more"><a>더보기</a></span>
                 <div class="prdPlace">
+                    <!-- 내주변 축제/행사 목록 (5) -->
                     <th:block th:each="festival : ${festivals}">
                         <div class="item">
                             <a th:href="'/item/' + ${festival.id}">
