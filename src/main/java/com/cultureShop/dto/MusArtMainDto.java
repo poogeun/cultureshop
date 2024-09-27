@@ -48,10 +48,11 @@ public class MusArtMainDto {
         this.userLikeYn = userLikeYn;
     }
 
+    /* 간단한 주소로 받기 (서울특별시 종로구)*/
     private String getSimpleAddr(String address) {
         String[] list = address.split(" ");
 
-        if (list.length < 2) {
+        if (list.length < 2) { // 이미 데이터가 간단한 주소이면
             return address;
         }
         String simpleAddr = list[0] +" "+ list[1];

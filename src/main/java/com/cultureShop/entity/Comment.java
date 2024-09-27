@@ -26,13 +26,13 @@ public class Comment extends BaseEntity{
     private MusArt musArt;
 
     private Long cDepth; // 일반댓글이면 0 대댓글이면 1
-    private Long cGroup; // 대댓글일경우 id값 저장
+    private Long cGroup; // 답글일경우 id값 저장
 
     public static Comment createComment(CommentDto commentDto, MusArt musArt) {
         Comment comment = new Comment();
         comment.setContent(commentDto.getContent());
         comment.setMusArt(musArt);
-        comment.setCDepth(0L);
+        comment.setCDepth(0L); // 댓글이면 0
         return comment;
     }
 
@@ -40,8 +40,8 @@ public class Comment extends BaseEntity{
         Comment comment = new Comment();
         comment.setContent(reCommentDto.getContent());
         comment.setMusArt(musArt);
-        comment.setCDepth(1L);
-        comment.setCGroup(reCommentDto.getCommentId());
+        comment.setCDepth(1L); // 답글이면 1
+        comment.setCGroup(reCommentDto.getCommentId()); // 현재 댓글 id
         return comment;
     }
 

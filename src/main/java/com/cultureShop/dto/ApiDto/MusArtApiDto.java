@@ -32,6 +32,7 @@ public class MusArtApiDto {
     public MusArtApiDto() {
     }
 
+    /* 시설명에 포함된 단어로 박물관,미술관 구분 */
     private String getType(String name) {
         if(name.contains("박물관") || name.contains("기념관")) {
             return "museum";

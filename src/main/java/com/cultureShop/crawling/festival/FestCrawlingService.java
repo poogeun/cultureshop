@@ -22,7 +22,6 @@ public class FestCrawlingService{
     public List<FestDataDto> festDatas;
     private final WebDriver driver;
 
-
     public FestCrawlingService() {
 
         ChromeOptions options = new ChromeOptions();
@@ -33,8 +32,6 @@ public class FestCrawlingService{
 
         festCrawling();
     }
-
-
 
     public List<FestDataDto> festCrawling() {
         driver.navigate().to("https://korean.visitkorea.or.kr/kfes/list/wntyFstvlList.do");

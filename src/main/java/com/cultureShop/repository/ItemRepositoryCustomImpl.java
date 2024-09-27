@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.thymeleaf.util.StringUtils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
@@ -27,13 +26,13 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    // 상품 오픈인지, 오픈 전인지 찾는 메소드
+    // 상품 오픈인지, 오픈 전
     private BooleanExpression searchStartStatusEq(ItemStartStatus searchStartStatus) {
         return searchStartStatus == null ?
                 null : QItem.item.itemStartStatus.eq(searchStartStatus);
     }
 
-    // 날짜 얼마나 지났는지 찾는 메소드
+    // 날짜 얼마나 지났는지
     private BooleanExpression regDtsAfter(String searchDateType) {
         LocalDate dateTime = LocalDate.now();
 
@@ -73,6 +72,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         }
     }
 
+    // 관리자 상품 목록 조회
     @Override
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         QueryResults<Item> results = queryFactory.selectFrom(QItem.item)
@@ -90,10 +90,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemName.like("%"+searchQuery+"%");
     }
 
-    private BooleanExpression categoryLike(String category) {
-        return StringUtils.isEmpty(category) ? null : QItem.item.category.like(category);
-    }
-
+    // 검색된 상품 조회
     @Override
     public List<MainItemDto> getSearchItemList(ItemSearchDto itemSearchDto) {
         QItem item = QItem.item;
@@ -135,6 +132,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         }
     }
 
+    // 상품 카테고리 목록 조회
     @Override
     public Page<MainItemDto> getCateItemList(String category, String address, String sort, Pageable pageable) {
         QItem item = QItem.item;
@@ -152,6 +150,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return new PageImpl<>(results, pageable, total);
     }
 
+    // 카테고리 상품 총 개수 조회
     @Override
     public long getCateItemCount(String category, String address, String sort) {
         QItem item = QItem.item;

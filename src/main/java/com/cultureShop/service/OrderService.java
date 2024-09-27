@@ -96,10 +96,6 @@ public class OrderService {
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
     }
 
-    public Order getOrder(String email) {
-        return orderRepository.findLatestOrder(email);
-    }
-
     public void deleteOrder(String orderUid) {
         Order order = orderRepository.findByOrderUid(orderUid);
         orderRepository.delete(order);

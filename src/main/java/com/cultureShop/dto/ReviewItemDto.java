@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+/* 리뷰 작성 가능한 상품 */
 public class ReviewItemDto {
 
     private Long reviewId;

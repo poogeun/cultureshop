@@ -145,7 +145,6 @@ public class UserLikeItemService {
         List<LikeItemDto> likeItemDtls = new ArrayList<>();
         for(UserLikeItem userLikeItem : userLikeItems) {
             if(userLikeItem.getItem() != null) {
-                Long itemId = userLikeItem.getItem().getId();
                 LikeItemDto likeItem = userLikeItemRepository.findLikeItemDto(userLikeItem.getId());
                 likeItemDtls.add(likeItem);
             }

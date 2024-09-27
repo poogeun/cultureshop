@@ -1,14 +1,12 @@
 package com.cultureShop.entity;
 
 import com.cultureShop.constant.OrderStatus;
-import com.cultureShop.constant.PaymentStatus;
 import com.cultureShop.dto.OrderFormDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +34,7 @@ public class Order extends BaseEntity{
                     orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    private String orderUid; // 주문 번호
+    private String orderUid; // 주문고유번호
     private LocalDate orderDate;
     private int orderPrice;
     private String orderTel;
@@ -74,13 +72,4 @@ public class Order extends BaseEntity{
 
         return order;
     }
-
-    public int getTotalPrice() {
-        int totalPrice = 0;
-        for(OrderItem orderItem : orderItems) {
-            totalPrice += orderItem.getTotalPrice();
-        }
-        return totalPrice;
-    }
-
 }

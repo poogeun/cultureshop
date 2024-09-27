@@ -27,6 +27,7 @@ public class Payment {
         this.status = status;
     }
 
+    /* 결제 성공하면 상태, 결제고유번호 업데이트 */
     public void changePaymentBySuccess(PaymentStatus status, String paymentUid) {
         this.status = status;
         this.paymentUid = paymentUid;

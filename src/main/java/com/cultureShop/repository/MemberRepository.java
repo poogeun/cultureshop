@@ -13,9 +13,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Member findByName(String name);
 
+    // 소셜로그인 회원 조회
     @Query("select m from Member m where m.email = :email")
     Optional<Member> findSocialMem(String email);
 
+    // 회원정보 조회 - 정보수정시
     @Query("select new com.cultureShop.dto.MemberFormDto(m.name, m.email, m.password, m.address, m.dtlAddress, m.tel) " +
             "from Member m where m.email = :email")
     MemberFormDto findMemDto(String email);

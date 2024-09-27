@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
+/* 등록된 답글 출력 */
 public class ReCommentViewDto {
 
     private Long commentId;

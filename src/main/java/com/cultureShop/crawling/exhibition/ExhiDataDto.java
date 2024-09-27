@@ -15,7 +15,7 @@ public class ExhiDataDto {
 
     private String imgUrl;
     private String itemName;
-    private String startEnd;
+    private String startEnd; // 시작일 ~ 마감일
     private String place;
 
     private LocalDate startDay;
@@ -36,6 +36,7 @@ public class ExhiDataDto {
 
     public ExhiDataDto() {}
 
+    /* 문자열 startEnd: 시작일, 마감일을 각각 날짜 형식으로 변환 */
     private LocalDate[] parseDates(String startEnd) {
         LocalDate[] startEndDay = new LocalDate[2];
         if(startEnd != null && !startEnd.isEmpty()) {
@@ -44,11 +45,11 @@ public class ExhiDataDto {
                 LocalDate startDate = LocalDate.parse(dates[0].trim(), DATE_TIME_FORMATTER);
                 startEndDay[0] = startDate;
                 String endDate = dates[1].trim();
+                /* 마감일의 년도가 생략된 경우 (2024.08.05 ~ 10.20) */
                 if(endDate.length() <= 5){
                     endDate = startDate.getYear() + "." + endDate;
                 }
                 startEndDay[1] = LocalDate.parse(endDate, DATE_TIME_FORMATTER);
-
             } catch (DateTimeParseException e) {
                 e.printStackTrace();
             }

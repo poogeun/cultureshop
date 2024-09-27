@@ -41,6 +41,7 @@ public class FestDataDto {
 
     public FestDataDto() {}
 
+    /* 문자열 startEnd: 시작일, 마감일을 각각 날짜 형식으로 변환 */
     private LocalDate[] parseDates(String startEnd) {
         LocalDate[] startEndDay = new LocalDate[2];
         if(startEnd != null && !startEnd.isEmpty()) {
