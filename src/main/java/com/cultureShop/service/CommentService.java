@@ -22,6 +22,7 @@ public class CommentService {
     private final MusArtRepository musArtRepository;
     private final CommentRepository commentRepository;
 
+    /* 댓글 저장 */
     public void saveComment(CommentDto commentDto) {
         MusArt musArt = musArtRepository.findById(commentDto.getMusArtId())
                 .orElseThrow(EntityNotFoundException::new);
@@ -29,6 +30,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    /* 답글 저장 */
     public Comment saveReComment(ReCommentDto reCommentDto) {
         MusArt musArt = musArtRepository.findById(reCommentDto.getMusArtId())
                 .orElseThrow(EntityNotFoundException::new);
@@ -37,6 +39,7 @@ public class CommentService {
         return comment;
     }
 
+    /* 특정 장소의 댓글,답글 */
     @Transactional(readOnly = true)
     public List<Comment> getPlaceComments(Long musArtId) {
         return commentRepository.findByMusArtIdOrderByRegTimeDesc(musArtId);
@@ -54,11 +57,13 @@ public class CommentService {
         comment.updateComment(content);
     }
 
+    /* 상세페이지 답글 조회 시 */
     @Transactional(readOnly = true)
     public List<Comment> getReComment(Long commentId) {
         return commentRepository.findReComments(commentId);
     }
 
+    /* 답글 작성 후 화면 추가 시 (ajax) */
     @Transactional(readOnly = true)
     public ReCommentViewDto getViewReComment(Long commentId) {
         ReCommentViewDto comment = commentRepository.findReCommentViewDto(commentId);

@@ -201,7 +201,7 @@ public class ItemController {
         Page<MainItemDto> items;
 
         /* 카테고리, 정렬기준(sort), 주소필터(address)가 적용된 상품목록 */
-        items = itemService.getCateItemList(category, address, sort, pageable);
+        items = itemService.getAllCategoryItem(category, address, sort, pageable);
 
         count = itemService.getCateItemCount(category, address, sort); // 총 상품개수
 

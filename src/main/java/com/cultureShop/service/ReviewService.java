@@ -1,6 +1,5 @@
 package com.cultureShop.service;
 
-import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.ReviewFormDto;
 import com.cultureShop.dto.ReviewItemDto;
 import com.cultureShop.entity.*;
@@ -21,9 +20,8 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final OrderItemRepository orderItemRepository;
-    private final OrderRepository orderRepository;
 
-    public Long saveReview(ReviewFormDto reviewFormDto, Long itemId, String email) throws Exception {
+    public Long saveReview(ReviewFormDto reviewFormDto, Long itemId, String email) {
 
         Member member = memberRepository.findByEmail(email);
         Review review = reviewFormDto.createReview();
@@ -32,9 +30,7 @@ public class ReviewService {
                         .orElseThrow(EntityNotFoundException::new);
         review.setItem(item);
         reviewRepository.save(review);
-        item.addReview(review);
-
-        System.out.println("review 수 "+ item.getReviews().size());
+        item.addReview(review); // 상품정렬기준 사용 (리뷰많은순)
 
         // 주문아이템에 해당 리뷰 저장
         OrderItem orderItem = orderItemRepository.findByEmailAndItemId(email, itemId);

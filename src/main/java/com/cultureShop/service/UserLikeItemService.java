@@ -1,7 +1,6 @@
 package com.cultureShop.service;
 
 import com.cultureShop.dto.LikeItemDto;
-import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.MusArtMainDto;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.*;
@@ -43,6 +42,7 @@ public class UserLikeItemService {
                 if (likeItems != null) {
                     for (UserLikeItem likeItem : likeItems) {
                         if(likeItem.getItem() != null) {
+                            // 회원의 찜 상품 id와 상품 id 비교
                             if (Objects.equals(likeItem.getItem().getId(), itemId)) {
                                 return true;
                             }
@@ -63,6 +63,7 @@ public class UserLikeItemService {
                 if (likeItems != null) {
                     for (UserLikeItem likeItem : likeItems) {
                         if(likeItem.getMusArt() != null) {
+                            // 회원의 찜 장소 id와 상품 id 비교
                             if (likeItem.getMusArt().getId() == musArtId) {
                                 return true;
                             }
@@ -87,12 +88,12 @@ public class UserLikeItemService {
         }
         UserLikeItem userLikeItem = userLikeItemRepository.findByItemIdAndUserLikeId(itemId, userLike.getId());
 
-        if(userLikeItem == null) {
+        if(userLikeItem == null) { // 유저의 찜상품에 해당 상품이 없으면 새로 저장
             userLikeItem = UserLikeItem.createLikeItem(item,userLike);
             userLikeItemRepository.save(userLikeItem);
             userLikeItem.addLike();
         }
-        else {
+        else { // 이미 있으면 찜 취소
             userLikeItemRepository.delete(userLikeItem);
         }
     }
@@ -110,12 +111,12 @@ public class UserLikeItemService {
         }
         UserLikeItem userLikeItem = userLikeItemRepository.findByMusArtIdAndUserLikeId(musArtId, userLike.getId());
 
-        if(userLikeItem == null) {
+        if(userLikeItem == null) { // 유저의 찜장소에 해당 장소가 없으면 새로 저장
             userLikeItem = UserLikeItem.createLikePlace(musArt,userLike);
             userLikeItemRepository.save(userLikeItem);
             userLikeItem.addLike();
         }
-        else {
+        else { // 이미 있으면 찜 취소
             userLikeItemRepository.delete(userLikeItem);
         }
     }
@@ -152,6 +153,7 @@ public class UserLikeItemService {
         return likeItemDtls;
     }
 
+    // 찜 장소 리스트
     public List<MusArtMainDto> getLikePlaceList(String email) {
         Member member = memberRepository.findByEmail(email);
         UserLike userLike = userLikeRepository.findByMemberId(member.getId());

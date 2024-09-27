@@ -2,11 +2,7 @@ package com.cultureShop.service;
 
 import com.cultureShop.dto.MainItemDto;
 import com.cultureShop.dto.OrderItemDto;
-import com.cultureShop.dto.ReviewItemDto;
-import com.cultureShop.entity.Member;
-import com.cultureShop.entity.Order;
 import com.cultureShop.entity.OrderItem;
-import com.cultureShop.entity.Review;
 import com.cultureShop.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,12 +17,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class OrderItemService {
 
-    private final MemberRepository memberRepository;
-    private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final ReviewRepository reviewRepository;
     private final ItemRepository itemRepository;
 
+    /* 특정 상품이 유저의 주문상품인지 */
     public OrderItem getOrderItem(Long itemId, String email) {
         List<OrderItem> orderItems = orderItemRepository.findByItemIdAndCreatedBy(itemId, email);
 
@@ -38,6 +32,7 @@ public class OrderItemService {
         return null;
     }
 
+    /* 리뷰 작성 전인 주문상품 리스트 */
     public List<MainItemDto> getNoRevOrderItems(String email) {
         List<OrderItem> orderItems = orderItemRepository.findByCreatedByOrderByRegTimeDesc(email);
         List<MainItemDto> noRevItemList = new ArrayList<>();

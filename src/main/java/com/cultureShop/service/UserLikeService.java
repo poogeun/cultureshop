@@ -3,10 +3,7 @@ package com.cultureShop.service;
 import com.cultureShop.dto.LikeOrderFormDto;
 import com.cultureShop.dto.OrderFormDto;
 import com.cultureShop.entity.UserLikeItem;
-import com.cultureShop.repository.ItemRepository;
-import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.repository.UserLikeItemRepository;
-import com.cultureShop.repository.UserLikeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,9 +38,9 @@ public class UserLikeService {
             orderFormDtoList.add(orderFormDto);
         }
 
-        Long orderId = orderService.orders(orderFormDtoList, email);
+        Long orderId = orderService.orders(orderFormDtoList, email); // 찜 상품 주문
 
-        for(LikeOrderFormDto likeOrderFormDto : likeOrderDtoList) {
+        for(LikeOrderFormDto likeOrderFormDto : likeOrderDtoList) { // 주문된 상품 찜 취소
             UserLikeItem likeItem = userLikeItemRepository.findById(likeOrderFormDto.getLikeItemId())
                     .orElseThrow(EntityNotFoundException::new);
             userLikeItemRepository.delete(likeItem);
@@ -51,6 +48,4 @@ public class UserLikeService {
 
         return orderId;
     }
-
-
 }
