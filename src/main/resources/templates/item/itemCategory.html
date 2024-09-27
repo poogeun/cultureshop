@@ -82,6 +82,8 @@
             let nowPageLimit = 0;
             let nextPageLimit = 0;
             var category = $('input[name=category]').val();
+            var sort = $('input[name=sort]').val();
+            var address = $('input[name=address]').val();
 
             function getData(limit) {
                 $.ajax({
@@ -93,6 +95,8 @@
                         xhr.setRequestHeader(header, token);
                     },
                     data : {
+                        "address" : address,
+                        "sort" : sort,
                         "page" : page,
                         "limit" : limit
                     },

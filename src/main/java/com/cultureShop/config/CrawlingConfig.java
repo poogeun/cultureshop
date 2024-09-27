@@ -13,7 +13,6 @@ import com.cultureShop.entity.MusArt;
 import com.cultureShop.repository.ItemImgRepository;
 import com.cultureShop.repository.ItemRepository;
 import com.cultureShop.repository.MusArtRepository;
-import com.cultureShop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +22,6 @@ import java.util.List;
 @Configuration
 @Transactional
 public class CrawlingConfig {
-
-    @Autowired
-    ItemService itemService;
 
     @Autowired
     ItemRepository itemRepository;
@@ -44,9 +40,10 @@ public class CrawlingConfig {
 
     @Autowired
     MusArtExplorer apiExplorer;
-/*
+
+    /*
     @Autowired
-    public void saveCrawFestItem() {
+    public void saveCrawFestItem() { // 상품 크롤링 데이터 db 저장
         List<FestDataDto> festDatas = festCrawlingService.getFestDatas();
 
         for(FestDataDto festData : festDatas) {
@@ -74,7 +71,7 @@ public class CrawlingConfig {
     }
 
     @Autowired
-    public void saveCrawExhiItem() {
+    public void saveCrawExhiItem() { // 상품 크롤링 데이터 db 저장
         List<ExhiDataDto> exhiDatas = exhiCrawlingService.getExhiDatas();
 
         for(ExhiDataDto exhiData : exhiDatas) {
@@ -101,10 +98,10 @@ public class CrawlingConfig {
         }
     }
 
-    /*
+
 
     @Autowired
-    public void saveMusArtPlace() {
+    public void saveMusArtPlace() { // 박물관,미술관 공공데이터 db 저장
         List<MusArtApiDto> maDatas = apiExplorer.getMusArtApiDatas();
 
         for(MusArtApiDto maData : maDatas) {
@@ -121,6 +118,6 @@ public class CrawlingConfig {
         }
     }
 
- */
+     */
 
 }

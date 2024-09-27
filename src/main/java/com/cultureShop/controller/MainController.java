@@ -3,7 +3,6 @@ package com.cultureShop.controller;
 import com.cultureShop.config.CustomOAuth2UserService;
 import com.cultureShop.dto.ItemSearchDto;
 import com.cultureShop.dto.MainItemDto;
-import com.cultureShop.entity.Item;
 import com.cultureShop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,6 +19,7 @@ public class MainController {
     private final ItemService itemService;
     private final CustomOAuth2UserService customOAuth2UserService;
 
+    /* 메인 페이지 */
     @GetMapping(value = "/")
     public String main(Model model, Principal principal){
 
@@ -34,22 +34,26 @@ public class MainController {
         List<MainItemDto> musItems;
         List<MainItemDto> festItems;
 
+        /* 지역별 상품목록 */
         seoulItems = itemService.getAddressItem("서울");
         kkItems = itemService.getAddressItem("경기");
         ksItems = itemService.getAddressItem("경상");
         jrItems = itemService.getAddressItem("전라");
         jjItems = itemService.getAddressItem("제주");
         ccItems = itemService.getAddressItem("충청");
+
+        /* 카테고리별 상품목록 */
         exhiItems = itemService.getCategoryItem("exhibition");
         musItems = itemService.getCategoryItem("museum");
         festItems = itemService.getCategoryItem("festival");
 
-        if(principal != null) {
+        if(principal != null) { // 로그인된 경우
             String email = customOAuth2UserService.getSocialEmail(principal);
             if(email == null) {
                 email = principal.getName();
             }
 
+            /* 찜 상품 여부 포함된 상품목록 */
             seoulItems = itemService.getUserAddrItem("서울", email);
             kkItems = itemService.getUserAddrItem("경기", email);
             ksItems = itemService.getUserAddrItem("경상", email);
@@ -69,7 +73,6 @@ public class MainController {
         model.addAttribute("jrItems", jrItems);
         model.addAttribute("jjItems", jjItems);
         model.addAttribute("ccItems", ccItems);
-
         model.addAttribute("exhiItems", exhiItems);
         model.addAttribute("musItems", musItems);
         model.addAttribute("festItems", festItems);
@@ -77,6 +80,7 @@ public class MainController {
         return "main";
     }
 
+    /* 검색 결과 페이지 */
     @GetMapping(value = "/search")
     public String searchResult(ItemSearchDto itemSearchDto, Model model){
 

@@ -10,8 +10,9 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
-            var errorMessage = [[${errorMessage}]];
-            if(errorMessage != null){
+            var errorMessage = $('input[name=error]').val();
+            if(errorMessage === "관람일을 선택해주세요."){
+                console.log(errorMessage);
                 alert(errorMessage);
             }
 
@@ -114,6 +115,7 @@
 </th:block>
 
 <div layout:fragment="content">
+    <input type="hidden" th:value="${errorMessage}" name="error">
     <form th:action="@{/order}" method="get">
     <div class="itemMain">
         <div class="itemMainTop">

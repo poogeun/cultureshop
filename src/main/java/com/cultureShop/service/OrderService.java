@@ -119,7 +119,7 @@ public class OrderService {
         return true;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);

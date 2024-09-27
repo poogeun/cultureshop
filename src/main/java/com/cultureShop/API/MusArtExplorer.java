@@ -80,7 +80,7 @@ public class MusArtExplorer {
             String openTime = (String) properties.get("wds_tme");
             String closeTime = (String) properties.get("wde_tme");
 
-
+            // dto 리스트에 추가
             musArtApiDatas.add(
                     MusArtApiDto.builder()
                             .name(name)
@@ -93,12 +93,10 @@ public class MusArtExplorer {
                             .build()
             );
         }
-        System.out.println(musArtApiDatas.size());
 
         return musArtApiDatas;
 
     }
-
      */
 
 }

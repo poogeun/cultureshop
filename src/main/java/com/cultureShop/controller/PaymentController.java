@@ -20,20 +20,19 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final OrderService orderService;
 
+    /* 아임포트 api */
     @ResponseBody
     @PostMapping(value = "/payment")
     public ResponseEntity<IamportResponse<Payment>> validationPayment(@RequestBody PaymentCallbackRequest request){
-
-        System.out.println(request.toString());
         IamportResponse<Payment> iamportResponse = paymentService.paymentByCallback(request);
 
         return new ResponseEntity<>(iamportResponse, HttpStatus.OK);
     }
 
+    /* 주문 취소 시 결제 취소 */
     @DeleteMapping("/order/{orderUid}")
     public @ResponseBody ResponseEntity cancelPayment(@PathVariable String orderUid) {
         try{
-            System.out.println(orderUid);
             orderService.deleteOrder(orderUid);
             return new ResponseEntity<String>(orderUid, HttpStatus.OK);
         } catch (Exception e) {

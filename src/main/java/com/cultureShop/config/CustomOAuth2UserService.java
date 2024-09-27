@@ -58,6 +58,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         return memberRepository.save(member);
     }
 
+    // 소셜 로그인일 경우 email값 추출
     public String getSocialEmail(Principal principal) {
         String email = "";
         String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
@@ -79,7 +80,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             }
             return email;
         }
-
         return null;
     }
 }

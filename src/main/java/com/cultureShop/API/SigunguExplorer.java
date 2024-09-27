@@ -2,7 +2,6 @@ package com.cultureShop.API;
 
 import com.cultureShop.dto.ApiDto.SigunguApiDto;
 
-import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONArray;
@@ -53,7 +52,6 @@ public class SigunguExplorer {
 
         rd.close();
         conn.disconnect();
-
         sigunguApiDatas = new ArrayList<>();
         parseSigunguData();
     }
@@ -61,6 +59,7 @@ public class SigunguExplorer {
     public List<SigunguApiDto> parseSigunguData() throws ParseException {
         String results = sb.toString();
 
+        // json 파싱
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(results);
         JSONObject response = (JSONObject) object.get("response");
@@ -73,6 +72,7 @@ public class SigunguExplorer {
             JSONObject properties = (JSONObject) feature.get("properties");
             String simAddr = (String) properties.get("full_nm");
 
+            // dto 리스트에 추가
             sigunguApiDatas.add(
                     SigunguApiDto.builder()
                             .simAddr(simAddr)

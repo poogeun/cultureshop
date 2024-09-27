@@ -5,17 +5,11 @@ import com.cultureShop.dto.*;
 import com.cultureShop.entity.*;
 import com.cultureShop.repository.MemberRepository;
 import com.cultureShop.repository.OrderRepository;
-import com.cultureShop.repository.UserLikeItemRepository;
-import com.cultureShop.repository.UserLikeRepository;
 import com.cultureShop.service.*;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
-
-import org.json.simple.parser.JSONParser;
 
 @RequestMapping("/my-page")
 @Controller
@@ -38,24 +28,27 @@ public class MypageController {
     private final OrderService orderService;
     private final MemberRepository memberRepository;
     private final UserLikeItemService userLikeItemService;
-    private final UserLikeRepository userLikeRepository;
     private final OrderRepository orderRepository;
     private final ReviewService reviewService;
     private final OrderItemService orderItemService;
     private final CustomOAuth2UserService customOAuth2UserService;
 
+    /* 구매목록 페이지 */
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page")Optional<Integer> page, Principal principal, Model model) {
 
-        String email = customOAuth2UserService.getSocialEmail(principal);
-        if(email == null) {
+        String email = customOAuth2UserService.getSocialEmail(principal); // 소셜 로그인일 경우
+        if(email == null) { // 이메일 로그인일 경우
             email = principal.getName();
         }
 
         Member member = memberRepository.findByEmail(email);
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+
+        /* 주문상품 목록 */
         Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(email, pageable);
 
+        /* 마이페이지 메뉴 (건수) */
         int likeCount = userLikeItemService.likeCount(email);
         Long orderCount = orderRepository.countOrder(email);
         int reviewCount = reviewService.getMemReviewCount(email);
@@ -71,6 +64,7 @@ public class MypageController {
         return "mypage/orderHist";
     }
 
+    /* 찜목록 페이지 */
     @GetMapping(value = "/likes")
     public String likeList(Model model, Principal principal) {
 
@@ -84,7 +78,9 @@ public class MypageController {
         Long orderCount = orderRepository.countOrder(email);
         int reviewCount = reviewService.getMemReviewCount(email);
 
+        /* 찜 상품 */
         List<LikeItemDto> likeItems = userLikeItemService.getLikeList(email);
+        /* 찜 장소 */
         List<MusArtMainDto> likePlaces = userLikeItemService.getLikePlaceList(email);
 
         model.addAttribute("member", member);
@@ -97,6 +93,7 @@ public class MypageController {
         return "mypage/likeList";
     }
 
+    /* 리뷰목록 페이지 */
     @GetMapping(value = "/reviews")
     public String reviewList(Model model, Principal principal) {
 
@@ -109,7 +106,10 @@ public class MypageController {
         int likeCount = userLikeItemService.likeCount(email);
         Long orderCount = orderRepository.countOrder(email);
         int reviewCount = reviewService.getMemReviewCount(email);
+
+        /* 작성한 리뷰 */
         List<ReviewItemDto> reviews = reviewService.getMemReview(email);
+        /* 리뷰 작성 가능한 상품 */
         List<MainItemDto> noRevItems = orderItemService.getNoRevOrderItems(email);
 
         model.addAttribute("member", member);

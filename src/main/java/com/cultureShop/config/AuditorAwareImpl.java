@@ -16,12 +16,10 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication+"===========auth");
         String userId = "";
         if(authentication != null) {
             userId = authentication.getName();
-            System.out.println("userId" +userId);
-            if(authentication instanceof OAuth2AuthenticationToken) {
+            if(authentication instanceof OAuth2AuthenticationToken) { // 소셜 로그인일 경우
                 OAuth2AuthenticationToken auth = (OAuth2AuthenticationToken) authentication;
                 String social = auth.getAuthorizedClientRegistrationId();
                 if(social.equals("naver")) {
