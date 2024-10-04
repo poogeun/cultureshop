@@ -58,6 +58,7 @@ public class SigunguExplorer {
 
     public List<SigunguApiDto> parseSigunguData() throws ParseException {
         String results = sb.toString();
+        //System.out.println("results=====" +results);
 
         // json 파싱
         JSONParser parser = new JSONParser();
@@ -81,7 +82,4 @@ public class SigunguExplorer {
         }
         return sigunguApiDatas;
     }
-
-
-
 }

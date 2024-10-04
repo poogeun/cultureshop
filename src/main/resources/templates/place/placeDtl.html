@@ -19,10 +19,16 @@
             $('.reCommentWrap').hide();
             $('.reComms').hide();
 
+            titleSetting();
             dtlMap();
             addComment();
 
         });
+
+        function titleSetting() {
+            var placeName = $('input[name=placeName]').val();
+            document.title = placeName;
+        }
 
         // 카카오 맵 api
         function dtlMap() {
@@ -274,6 +280,7 @@
     <div class="container" id="placeDtl">
         <input type="hidden" th:value="${musArt.geoX}" id="x">
         <input type="hidden" th:value="${musArt.geoY}" id="y">
+        <input type="hidden" th:value="${musArt.name}" name="placeName">
         <div class="placeDtlBox">
             <!-- 찜 버튼 -->
             <button type="button" th:classappend="${isLikePlace}" onclick="addLike()" class="likeBtn">

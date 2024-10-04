@@ -3,9 +3,15 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <title>로그인 | 여기컬쳐</title>
+</head>
+
 <th:block layout:fragment="css">
     <style>
-        .fieldError{
+        .error{
             color: #bd2130;
         }
         .emailLogin {

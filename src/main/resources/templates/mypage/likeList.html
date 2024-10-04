@@ -6,6 +6,7 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>찜 | 여기컬쳐</title>
 </head>
 
 <th:block layout:fragment="css">
@@ -32,7 +33,7 @@
             }
 
             $('.likeContents').show();
-            $('.placeTab').hide();
+            $('.placeList').hide();
             navTab();
         });
 
@@ -58,11 +59,11 @@
 
                 if($(e.currentTarget).is($('#likeItemTab'))) {
                     $('.likeContents').show();
-                    $('.placeTab').hide();
+                    $('.placeList').hide();
                 }
                 else {
                     $('.likeContents').hide();
-                    $('.placeTab').show();
+                    $('.placeList').show();
                 }
             });
         }

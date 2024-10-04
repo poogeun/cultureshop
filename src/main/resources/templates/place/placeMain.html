@@ -6,6 +6,7 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>내 주변 | 여기컬쳐</title>
 </head>
 
 <th:block layout:fragment="script">
@@ -142,7 +143,13 @@
                 dataType : "json",
                 cache : false,
                 success : function(result, status){
-                    alert('찜추가 성공');
+                    var itemId = result;
+                    var button = $(`button.likeBtn[value='${itemId}']`);
+                    if(button.css('color') === 'rgb(255, 0, 0)') {
+                        button.css('color', 'white');
+                    } else {
+                        button.css('color', 'red');
+                    }
                 },
                 error : function(jqXHR, status, error){
                     alert('찜 기능은 로그인 후 이용 가능합니다.');

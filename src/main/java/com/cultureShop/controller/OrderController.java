@@ -177,6 +177,25 @@ public class OrderController {
         return "order/orderSuccess";
     }
 
+    /* 주문 성공 페이지 */
+    @GetMapping(value = "/order/success")
+    public String orderSuccess(Model model, Principal principal) {
+        String email = customOAuth2UserService.getSocialEmail(principal);
+        if(email == null) {
+            email = principal.getName();
+        }
+        Member member = memberRepository.findByEmail(email);
+        /* 주문서 */
+        Order order = orderRepository.findByMemberLate(email);
+        /* 주문 상품 리스트 */
+        List<OrderItemDto> orderItems = orderItemService.getOrderSuccess(order.getId());
+
+        model.addAttribute("member", member);
+        model.addAttribute("order", order);
+        model.addAttribute("orderItems", orderItems);
+        return "order/orderSuccess";
+    }
+
     // 주문 취소
     @PostMapping(value = "/order/{orderId}/cancel")
     public @ResponseBody ResponseEntity cancelOrder(@PathVariable Long orderId, Principal principal) {

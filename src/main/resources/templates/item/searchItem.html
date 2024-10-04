@@ -17,6 +17,20 @@
     </style>
 </th:block>
 
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            settingTitle();
+        });
+
+        function settingTitle() {
+            var searchQuery = $('input[name=searchQuery]').val();
+            document.title = searchQuery + ' | 여기컬쳐';
+        }
+
+    </script>
+</th:block>
+
 <div layout:fragment="content">
     <div class="container">
         <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">

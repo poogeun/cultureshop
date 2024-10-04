@@ -6,6 +6,7 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>주문 | 여기컬쳐</title>
 </head>
 
 <th:block layout:fragment="script">
@@ -160,9 +161,9 @@
                 dataType : "text",
                 cache : false,
                 success : function(result, status){
-                    alert('주문성공');
-                    //var orderUid = result;
-                    //requestPay(orderUid);
+                    //alert('주문성공');
+                    var orderUid = result;
+                    requestPay(orderUid);
                 },
                 error : function(jqXHR, status, error) {
                     if(jqXHR.status == '401') {
@@ -223,7 +224,7 @@
                             "order_uid": rsp.merchant_uid   // 주문번호
                         })
                     }).done(function (response) {
-                        window.location.href = "/order/success"
+                        window.location.href = '/order/success';
                     })
                 } else {
                     alert('결제 취소' + rsp);
@@ -272,6 +273,7 @@
 
 <div layout:fragment="content">
     <div class="container">
+        <input type="hidden" th:value="${member.email}" id="email">
         <section class="orderInfo">
             <div class="subTitle">
                 <div>배송정보</div>

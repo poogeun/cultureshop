@@ -31,4 +31,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findOrderAndPayment(String orderUid);
 
     Order findByOrderUid(String orderUid);
+
+    @Query("select o from Order o where o.member.email = :email order by regTime desc limit 1")
+    Order findByMemberLate(String email);
 }

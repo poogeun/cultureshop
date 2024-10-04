@@ -189,6 +189,7 @@ public class PlaceController {
             places = musArtService.getAllAddrPlace(simAddr, type);
         }
         model.addAttribute("places", places);
+        model.addAttribute("type", type);
         return "place/placeList";
     }
 

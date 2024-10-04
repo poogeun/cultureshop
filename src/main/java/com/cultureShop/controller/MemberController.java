@@ -34,8 +34,8 @@ public class MemberController {
     }
 
     @PostMapping(value = "/new")
-    public String memberForm(@Valid MemberFormDto memberFormDto, @RequestParam("checkYn") String checkYn,
-                             BindingResult bindingResult, Model model){
+    public String memberForm(@Valid MemberFormDto memberFormDto, BindingResult bindingResult,
+                             @RequestParam("checkYn") String checkYn, Model model){
         if(bindingResult.hasErrors()){
             return "member/memberForm";
         }

@@ -546,7 +546,7 @@ ul {
 .prdStar span {
     color: #dfe5ed;
 }
-.starPoint1.active, .starPoint2.active, .starPoint3.active, .starPoint4.active, .starPoint5.active {
+#itemDtl .starPoint1.active, #itemDtl .starPoint2.active, #itemDtl .starPoint3.active, #itemDtl .starPoint4.active, #itemDtl .starPoint5.active {
     color: #ffb400;
 }
 #detail-review .rightSide {

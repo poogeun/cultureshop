@@ -6,6 +6,7 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>리뷰 | 여기컬쳐</title>
 </head>
 
 <th:block layout:fragment="css">
@@ -32,7 +33,7 @@
             }
 
             $('#wriReview').show();
-            $('#noReview').hide();
+            $('#nonReview').hide();
             navTab();
         });
 
@@ -88,10 +89,10 @@
                 var noReviewTab = $('#noReviewTab');
                 if($(e.currentTarget).is(wriReviewTab)) {
                     $('#wriReview').show();
-                    $('#noReview').hide();
+                    $('#nonReview').hide();
                 }
                 else {
-                    $('#noReview').show();
+                    $('#nonReview').show();
                     $('#wriReview').hide();
                 }
             });
@@ -192,7 +193,7 @@
                         </tbody>
                     </table>
                     <!-- 작성가능한 탭 -->
-                    <table class="orderList" id="noReview">
+                    <table class="orderList" id="nonReview">
                         <colgroup>
                             <col width="80%">
                             <col width="20%">

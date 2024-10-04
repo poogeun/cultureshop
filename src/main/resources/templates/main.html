@@ -6,6 +6,7 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>여기컬쳐</title>
 </head>
 
 <th:block layout:fragment="script">
@@ -127,8 +128,13 @@
                 dataType : "json",
                 cache : false,
                 success : function(result, status){
-                    alert('찜추가 성공');
-                    location.href='/';
+                    var itemId = result;
+                    var button = $(`button.likeBtn[value='${itemId}']`);
+                    if(button.css('color') === 'rgb(255, 0, 0)') {
+                        button.css('color', 'white');
+                    } else {
+                        button.css('color', 'red');
+                    }
                 },
                 error : function(jqXHR, status, error){
                     alert('찜 기능은 로그인 후 이용 가능합니다.');
@@ -140,10 +146,10 @@
     </script>
 </th:block>
 
-<div layout:fragment="content">
+<div layout:fragment="content" id="main">
 
     <!-- 배너 -->
-    <div class="container mt-5" id="main">
+    <div class="container mt-5">
         <div class="owl-carousel owl-theme">
             <th:block th:each="bannerItem : ${bannerItems}">
                 <div class="ms-2 me-2">

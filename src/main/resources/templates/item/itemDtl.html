@@ -16,6 +16,7 @@
                 alert(errorMessage);
             }
 
+            titleSetting();
             calculateTotalPrice();
             starActive();
 
@@ -34,6 +35,11 @@
                 });
             });
         });
+
+        function titleSetting() {
+            var itemName = $('input[name=itemName]').val();
+            document.title = itemName;
+        }
 
         // 총 상품금액
         function calculateTotalPrice(){
@@ -77,33 +83,37 @@
 
         // 리뷰 별점 표시
         function starActive() {
-            var starPoint = $('.rvPoint').val();
-            console.log(starPoint);
-            if(starPoint == 5) {
-                $('.starPoint1').addClass('active');
-                $('.starPoint2').addClass('active');
-                $('.starPoint3').addClass('active');
-                $('.starPoint4').addClass('active');
-                $('.starPoint5').addClass('active');
-            }
-            if(starPoint == 4) {
-                $('.starPoint1').addClass('active');
-                $('.starPoint2').addClass('active');
-                $('.starPoint3').addClass('active');
-                $('.starPoint4').addClass('active');
-            }
-            if(starPoint == 3) {
-                $('.starPoint1').addClass('active');
-                $('.starPoint2').addClass('active');
-                $('.starPoint3').addClass('active');
-            }
-            if(starPoint == 2) {
-                $('.starPoint1').addClass('active');
-                $('.starPoint2').addClass('active');
-            }
-            if(starPoint == 1) {
-                $('.starPoint1').addClass('active');
-            }
+            $('.prdStar').each(function() {
+                var review = $(this);
+                var starPoint = review.find('.rvPoint').val();
+                console.log(starPoint);
+                if(starPoint == 5) {
+                    review.find('.starPoint1').addClass('active');
+                    review.find('.starPoint2').addClass('active');
+                    review.find('.starPoint3').addClass('active');
+                    review.find('.starPoint4').addClass('active');
+                    review.find('.starPoint5').addClass('active');
+
+                }
+                if(starPoint == 4) {
+                    review.find('.starPoint1').addClass('active');
+                    review.find('.starPoint2').addClass('active');
+                    review.find('.starPoint3').addClass('active');
+                    review.find('.starPoint4').addClass('active');
+                }
+                if(starPoint == 3) {
+                    review.find('.starPoint1').addClass('active');
+                    review.find('.starPoint2').addClass('active');
+                    review.find('.starPoint3').addClass('active');
+                }
+                if(starPoint == 2) {
+                    review.find('.starPoint1').addClass('active');
+                    review.find('.starPoint2').addClass('active');
+                }
+                if(starPoint == 1) {
+                    review.find('.starPoint1').addClass('active');
+                }
+            });
         }
     </script>
 </th:block>
@@ -114,7 +124,7 @@
     </style>
 </th:block>
 
-<div layout:fragment="content">
+<div layout:fragment="content" id="itemDtl">
     <input type="hidden" th:value="${errorMessage}" name="error">
     <form th:action="@{/order}" method="get">
     <div class="itemMain">
@@ -137,6 +147,7 @@
                             <span th:unless="${item.itemStartStatus == T(com.cultureShop.constant.ItemStartStatus).START}"
                                   class="badge bg-primary mgb-15">대기중</span>
                             <h2 th:text="${item.itemName}" class="prdTitle"></h2>
+                            <input type="hidden" th:value="${item.itemName}" name="itemName">
                         </li>
                         <li class="itemInfo">
                             <div th:if="${#strings.isEmpty(item.place)}">

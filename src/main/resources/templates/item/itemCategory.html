@@ -58,18 +58,23 @@
             var exhiTab = $('.inner #exhiTab');
             var museTab = $('.inner #museTab');
             var festTab = $('.inner #festTab');
+            var text = '';
             if(category === 'exhibition') {
                 exhiTab.css('font-weight', '700');
                 exhiTab.css('border-bottom', '2px solid black');
+                text = '전시회 | 여기컬쳐'
             }
             else if(category === 'museum') {
                 museTab.css('font-weight', '700');
                 museTab.css('border-bottom', '2px solid black');
+                text = '뮤지엄 | 여기컬쳐'
             }
             else {
                 festTab.css('font-weight', '700');
                 festTab.css('border-bottom', '2px solid black');
+                text = '행사/축제 | 여기컬쳐'
             }
+            document.title = text;
         }
 
         // 무한스크롤
@@ -198,8 +203,13 @@
                 dataType : "json",
                 cache : false,
                 success : function(result, status){
-                    alert('찜추가 성공');
-
+                    var itemId = result;
+                    var button = $(`button.likeBtn[value='${itemId}']`);
+                    if(button.css('color') === 'rgb(255, 0, 0)') {
+                        button.css('color', 'white');
+                    } else {
+                        button.css('color', 'red');
+                    }
                 },
                 error : function(jqXHR, status, error){
                     alert('찜 기능은 로그인 후 이용 가능합니다.');
