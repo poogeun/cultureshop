@@ -38,7 +38,7 @@
             var container = document.getElementById('map');
             var options = {
                 center: new kakao.maps.LatLng(x, y),
-                level: 3
+                level: 2
             };
 
             var map = new kakao.maps.Map(container, options);
@@ -74,7 +74,7 @@
                 dataType : "json",
                 cache : false,
                 success : function(result, status){
-                    location.href = '/place/detail' + [[${musArt.id}]]
+                    location.href = '/place/detail/' + [[${musArt.id}]]
                 },
                 error : function(jqXHR, status, error){
                     alert('찜 기능은 로그인 후 이용 가능합니다.');
@@ -106,7 +106,6 @@
                             xhr.setRequestHeader(header, token);
                         },
                         success : function() {
-                            alert('댓글이 작성되었습니다.');
                             window.location.href="/place/detail/" + $('#musArtId').val();
                         }
                     })
@@ -283,7 +282,7 @@
         <input type="hidden" th:value="${musArt.name}" name="placeName">
         <div class="placeDtlBox">
             <!-- 찜 버튼 -->
-            <button type="button" th:classappend="${isLikePlace}" onclick="addLike()" class="likeBtn">
+            <button type="button" th:classappend="${isLikePlace}" th:value="${musArt.id}" onclick="addLike()" class="likeBtn">
                 <span class="material-symbols-outlined" >favorite</span>
                 <span th:if="${likePlaces == null}" style="color: grey">찜 0</span>
                 <span th:unless="${likePlaces == null}" th:text="${'찜 '+ likeCount}" style="color: grey"></span>

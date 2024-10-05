@@ -43,7 +43,8 @@
                             </li>
                             <li>
                                 <span class="infoTitle">배송 요청사항</span>
-                                <span th:text="${order.delReq}"></span>
+                                <span th:if="${order.reqWrite == ''}" th:text="${order.delReq}"></span>
+                                <span th:unless="${order.reqWrite == ''}" th:text="${order.reqWrite}"></span>
                             </li>
                             <hr style="border-color: grey">
                             <li>

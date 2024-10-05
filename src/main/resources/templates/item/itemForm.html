@@ -39,7 +39,7 @@
 
 <div layout:fragment="content">
     <form role="form" class="row g-3" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
-        <div class="container" id="itemForm">
+        <div class="container" id="itemForm" style="width: 70%;">
             <p class="h2">상품 등록</p>
             <input type="hidden" th:field="*{id}">
             <div class="input-group" style="justify-content: center;">
@@ -70,7 +70,7 @@
                     </div>
                     <input type="text" th:field="*{place}" class="form-control" placeholder="장소를 입력하세요">
                 </div>
-                <p th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}" class="fieldError">Incorrect data</p>
+                <div th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}" class="fieldError">Incorrect data</div>
 
                 <div class="itemInput" style="width: 85%">
                     <div class="input-group-prepend">
@@ -106,8 +106,7 @@
                     </div>
                     <input type="text" th:field="*{stockNumber}" class="form-control" placeholder="재고를 입력하세요">
                 </div>
-                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
-                <p th:if="${#fields.hasErrors('stockNumber')}" th:errors="*{stockNumber}" class="fieldError">Incorrect data</p>
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</div>
 
                 <div class="itemInput" style="width: 85%">
                     <div class="input-group-prepend">
